@@ -27,17 +27,23 @@ function App() {
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button component={Link} to="/about">
+            <ListItem button component={Link} to="/own">
               <ListItemIcon>
                 <PolymerIcon />
               </ListItemIcon>
-              <ListItemText primary="About" />
+              <ListItemText primary="My own" />
             </ListItem>
-            <ListItem button component={Link} to="/users">
+            <ListItem button component={Link} to="/auction">
               <ListItemIcon>
                 <PolymerIcon />
               </ListItemIcon>
-              <ListItemText primary="Users" />
+              <ListItemText primary="Auction" />
+            </ListItem>
+            <ListItem button component={Link} to="/radar">
+              <ListItemIcon>
+                <PolymerIcon />
+              </ListItemIcon>
+              <ListItemText primary="NFT radar" />
             </ListItem>
           </Grid>
           <Grid item xs={10}>
@@ -49,8 +55,9 @@ function App() {
               </Toolbar>
             </AppBar>
             <Switch>
-              <Route path="/about">About</Route>
-              <Route path="/users">Users</Route>
+              <Route path="/own">own</Route>
+              <Route path="/auction">auction</Route>
+              <Route path="/radar">radar</Route>
               <Route path="/">Home</Route>
             </Switch>
           </Grid>
