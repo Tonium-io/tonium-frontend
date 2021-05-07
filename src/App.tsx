@@ -33,6 +33,12 @@ function App() {
               </ListItemIcon>
               <ListItemText primary="About" />
             </ListItem>
+            <ListItem button component={Link} to="/users">
+              <ListItemIcon>
+                <PolymerIcon />
+              </ListItemIcon>
+              <ListItemText primary="Users" />
+            </ListItem>
           </Grid>
           <Grid item xs={10}>
             <AppBar position="sticky">
