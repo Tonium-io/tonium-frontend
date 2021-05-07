@@ -4,6 +4,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import PolymerIcon from '@material-ui/icons/Polymer';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
@@ -16,9 +21,18 @@ function App() {
         <CssBaseline />
         <Grid container spacing={0}>
           <Grid item xs={2}>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-            <Link to="/users">Users</Link>
+            <ListItem button component={Link} to="/">
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem button component={Link} to="/about">
+              <ListItemIcon>
+                <PolymerIcon />
+              </ListItemIcon>
+              <ListItemText primary="About" />
+            </ListItem>
           </Grid>
           <Grid item xs={10}>
             <AppBar position="sticky">
