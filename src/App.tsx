@@ -12,9 +12,21 @@ import PolymerIcon from '@material-ui/icons/Polymer';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
+import { TonClient } from '@tonclient/core';
+import { libWeb } from '@tonclient/lib-web';
+
 import cls from './app.module.scss';
 
+// Application initialization
+
+TonClient.useBinaryLibrary(libWeb);
+
+declare const window: any;
+
 function App() {
+  if (!window.ton) {
+    window.ton = new TonClient();
+  }
   return (
     <Router>
       <div className={cls.app}>
