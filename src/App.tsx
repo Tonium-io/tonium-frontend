@@ -15,6 +15,11 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { TonClient } from '@tonclient/core';
 import { libWeb } from '@tonclient/lib-web';
 
+import Home from './pages/Home/Home';
+import Radar from './pages/Radar/Radar';
+import Auction from './pages/Auction/Auction';
+import Own from './pages/Own/Own';
+
 import cls from './app.module.scss';
 
 // Application initialization
@@ -67,10 +72,18 @@ function App() {
               </Toolbar>
             </AppBar>
             <Switch>
-              <Route path="/own">own</Route>
-              <Route path="/auction">auction</Route>
-              <Route path="/radar">radar</Route>
-              <Route path="/">Home</Route>
+              <Route path="/own">
+                <Own />
+              </Route>
+              <Route path="/auction">
+                <Auction />
+              </Route>
+              <Route path="/radar">
+                <Radar />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
             </Switch>
           </Grid>
         </Grid>
