@@ -1,4 +1,4 @@
-import { TonClient, Signer } from '@tonclient/core';
+import { TonClient } from '@tonclient/core';
 import { Account } from '@tonclient/appkit';
 
 import ExchangerABI from './NFT_market/contracts/Exchanger.abi.json';
@@ -22,19 +22,16 @@ class Tonium {
     controller1: Account;
   };
 
-  signer: Signer;
+  getSigner: Function;
 
   constructor(
     tonClient: TonClient,
-    signer: Function,
+    getSigner: Function,
     contractAdreses: contractAdresesType,
   ) {
     this.contractAdreses = contractAdreses;
     this.tonClient = tonClient;
-    this.signer = {
-      type: 'SigningBox',
-      handle: 1, // todo check what is that
-    };
+    this.getSigner = getSigner;
 
     this.contracts = {
       rootToken: new Account(
@@ -44,7 +41,6 @@ class Tonium {
         },
         {
           address: contractAdreses.rootToken,
-          signer: this.signer,
           client: tonClient,
         },
       ),
@@ -55,7 +51,6 @@ class Tonium {
         },
         {
           address: contractAdreses.exchanger,
-          signer: this.signer,
           client: tonClient,
         },
       ),
@@ -66,7 +61,6 @@ class Tonium {
         },
         {
           address: contractAdreses.controller1,
-          signer: this.signer,
           client: tonClient,
         },
       ),
@@ -77,8 +71,20 @@ class Tonium {
     return this.contractAdreses;
   }
 
-  getRootTokenName() {
+  async getRootTokenName() {
     return this.contracts.rootToken.run('getName', {});
+  }
+
+  async getRootTokenSymbol() {
+    return this.contracts.rootToken.run('getSymbol', {});
+  }
+
+  async getExchangerCommission() {
+    return this.contracts.exchanger.run('commission', {});
+  }
+
+  async getExchangerPairs() {
+    return this.contracts.exchanger.run('pairs', {});
   }
 
   // eslint-disable-next-line class-methods-use-this
