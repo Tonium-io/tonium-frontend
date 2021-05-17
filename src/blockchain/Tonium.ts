@@ -80,7 +80,11 @@ class Tonium {
   }
 
   async getExchangerPairs() {
-    return this.contracts.exchanger.run('pairs', {});
+    return this.contracts.exchanger.run(
+      'pairs',
+      {},
+      { signer: this.getSigner() },
+    );
   }
 }
 
