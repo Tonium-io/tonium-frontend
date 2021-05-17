@@ -1,4 +1,4 @@
-import { TonClient } from '@tonclient/core';
+import { TonClient, Signer } from '@tonclient/core';
 import { Account } from '@tonclient/appkit';
 
 import ExchangerABI from './NFT_market/contracts/Exchanger.abi.json';
@@ -22,7 +22,7 @@ class Tonium {
     controller1: Account;
   };
 
-  signer: Function;
+  signer: Signer;
 
   constructor(
     tonClient: TonClient,
@@ -31,7 +31,10 @@ class Tonium {
   ) {
     this.contractAdreses = contractAdreses;
     this.tonClient = tonClient;
-    this.signer = signer;
+    this.signer = {
+      type: 'SigningBox',
+      handle: 1, // todo check what is that
+    };
 
     this.contracts = {
       rootToken: new Account(
@@ -41,6 +44,8 @@ class Tonium {
         },
         {
           address: contractAdreses.rootToken,
+          signer: this.signer,
+          client: tonClient,
         },
       ),
       exchanger: new Account(
@@ -50,6 +55,8 @@ class Tonium {
         },
         {
           address: contractAdreses.exchanger,
+          signer: this.signer,
+          client: tonClient,
         },
       ),
       controller1: new Account(
@@ -59,6 +66,8 @@ class Tonium {
         },
         {
           address: contractAdreses.controller1,
+          signer: this.signer,
+          client: tonClient,
         },
       ),
     };
