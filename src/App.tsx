@@ -15,6 +15,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { TonClient } from '@tonclient/core';
 import { libWeb } from '@tonclient/lib-web';
 
+import Tonium from './blockchain/Tonium';
+
 import Home from './pages/Home/Home';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -30,7 +32,26 @@ declare const window: any;
 
 function App() {
   if (!window.ton) {
-    window.ton = new TonClient();
+    window.ton = new TonClient({
+      network: {
+        server_address: 'net.ton.dev',
+      },
+    });
+    window.tonium = new Tonium(
+      window.ton,
+      () => {
+        // eslint-disable-next-line no-debugger
+        debugger;
+      },
+      {
+        rootToken:
+          '0:fc9a9607937f05a2cd93161f0dbd3435bed21b9102ea7ef9c6fb6821dbd28a3b',
+        exchanger:
+          '0:f13d40e0913cb98a70ec2b43a922d1b57f4f6032cba9a18f5b6f2fdd842d76ed',
+        controller1:
+          '0:bf8e4c6f7558d504b64aa9c03c3e7d641be62bba56a80304444bfd2d9568a245',
+      },
+    );
   }
   return (
     <Router>

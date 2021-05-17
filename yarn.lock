@@ -1765,7 +1765,14 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-"@tonclient/core@^1.14.2":
+"@tonclient/appkit@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@tonclient/appkit/-/appkit-0.2.0.tgz#8757a1f5d340b3e1e762ab89dcc13f9cd0934b4f"
+  integrity sha512-3YfwifLI1uv1HkNE5yRrIWzw8q3I7fh4diQnLWPq2VSJ6zEiRmgpBXf6rBPzBCfDmdVlRZKWsjW4Bu6IUs719g==
+  dependencies:
+    "@tonclient/core" "^1"
+
+"@tonclient/core@^1", "@tonclient/core@^1.14.2":
   version "1.14.2"
   resolved "https://registry.yarnpkg.com/@tonclient/core/-/core-1.14.2.tgz#d5c195570eaf381aba653eaa14fc330d65fd8d86"
   integrity sha512-7EL7/x3Q619YIEmF2n4qfGoEDav8qQFD0NVgYeJfHDJntEU0MX3jPmapAOW78rD/RecwoeLbxIQ6nTEKEmqmYA==

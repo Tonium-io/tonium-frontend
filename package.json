@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^13.1.8",
+    "@tonclient/appkit": "^0.2.0",
     "@tonclient/core": "^1.14.2",
     "@tonclient/lib-web": "^1.14.2",
     "@types/jest": "^26.0.15",
