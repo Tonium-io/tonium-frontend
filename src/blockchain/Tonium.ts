@@ -1,9 +1,9 @@
 import { TonClient } from '@tonclient/core';
 import { Account } from '@tonclient/appkit';
 
-import RootTokenContractNFAbi from './NFT_market/NFT_token/RootTokenContractNF.abi.json';
 import ExchangerABI from './NFT_market/contracts/Exchanger.abi.json';
 import ConterollerABI from './NFT_market/contracts/Controller.abi.json';
+import RootTokenContractNFAbi from './NFT_market/NFT_token/RootTokenContractNF.abi.json';
 
 type contractAdresesType = {
   rootToken: string;
