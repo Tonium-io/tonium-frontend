@@ -4,6 +4,7 @@ import cls from './Home.module.scss';
 
 const Home = () => {
   // todo home page
+  // eslint-disable-next-line no-console
   console.log('home');
   return <div className={cls.home}> this is home</div>;
 };
