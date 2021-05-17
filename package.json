@@ -3,16 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^13.1.8",
+    "@tonclient/appkit": "^0.2.0",
+    "@tonclient/core": "^1.14.2",
+    "@tonclient/lib-web": "^1.14.2",
     "@types/jest": "^26.0.15",
     "@types/node": "^15.0.2",
-    "@types/react": "^17.0.0",
+    "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "sass": "^1.32.12",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -20,7 +28,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "husky install",
+    "postinstall": "node ./post-install.js"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +49,22 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^7.30.4",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "prettier": "^2.2.1"
+  },
+  "lint-staged": {
+    "*.{js,css,md,jsx,ts,tsx}": "prettier --write"
   }
 }

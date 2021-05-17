@@ -1,0 +1,6 @@
+[submodule "src/blockchain/NFT_market"]
+	path = src/blockchain/NFT_market
+	url = https://notabug.org/Tonium/NFT_market.git
+[submodule "src/blockchain/NFT_token"]
+	path = src/blockchain/NFT_token
+	url = https://notabug.org/Tonium/NFT_token.git
