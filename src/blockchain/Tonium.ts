@@ -67,10 +67,6 @@ class Tonium {
     };
   }
 
-  getCurrentAdresses() {
-    return this.contractAdreses;
-  }
-
   async getRootTokenName() {
     return this.contracts.rootToken.run('getName', {});
   }
@@ -85,11 +81,6 @@ class Tonium {
 
   async getExchangerPairs() {
     return this.contracts.exchanger.run('pairs', {});
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getAbi() {
-    return ConterollerABI;
   }
 }
 
