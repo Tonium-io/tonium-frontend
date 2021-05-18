@@ -24,8 +24,6 @@ abstract class AbstractProvider {
   }
 
   async whenReady() {
-    // eslint-disable-next-line no-debugger
-    debugger;
     if (this.inited) {
       return Promise.resolve();
     }
@@ -38,8 +36,6 @@ abstract class AbstractProvider {
   }
 
   nowReady() {
-    // eslint-disable-next-line no-debugger
-    debugger;
     this.inited = true;
     if (this.readyPromiseResolve) {
       this.readyPromiseResolve(true);

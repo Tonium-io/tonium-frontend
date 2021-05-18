@@ -1,9 +1,9 @@
 import { TonClient } from '@tonclient/core';
 import { Account } from '@tonclient/appkit';
 
-import ExchangerABI from './NFT_market/contracts/Exchanger.abi.json';
-import ConterollerABI from './NFT_market/contracts/Controller.abi.json';
-import RootTokenContractNFAbi from './NFT_token/RootTokenContractNF.abi.json';
+// import ExchangerABI from './NFT_market/contracts/Exchanger.abi.json';
+// import ConterollerABI from './NFT_market/contracts/Controller.abi.json';
+// import RootTokenContractNFAbi from './NFT_token/RootTokenContractNF.abi.json';
 
 type contractAdresesType = {
   rootToken: string;
@@ -16,7 +16,7 @@ class Tonium {
 
   tonClient: TonClient;
 
-  contracts: {
+  contracts!: {
     rootToken: Account;
     exchanger: Account;
     controller1: Account;
@@ -33,38 +33,38 @@ class Tonium {
     this.tonClient = tonClient;
     this.getSigner = getSigner;
 
-    this.contracts = {
-      rootToken: new Account(
-        {
-          abi: RootTokenContractNFAbi,
-          // tvc: '... base64 encoded string ...',
-        },
-        {
-          address: contractAdreses.rootToken,
-          client: tonClient,
-        },
-      ),
-      exchanger: new Account(
-        {
-          abi: ExchangerABI,
-          // tvc: '... base64 encoded string ...',
-        },
-        {
-          address: contractAdreses.exchanger,
-          client: tonClient,
-        },
-      ),
-      controller1: new Account(
-        {
-          abi: ConterollerABI,
-          // tvc: '... base64 encoded string ...',
-        },
-        {
-          address: contractAdreses.controller1,
-          client: tonClient,
-        },
-      ),
-    };
+    // this.contracts = {
+    //   rootToken: new Account(
+    //     {
+    //       abi: RootTokenContractNFAbi,
+    //       // tvc: '... base64 encoded string ...',
+    //     },
+    //     {
+    //       address: contractAdreses.rootToken,
+    //       client: tonClient,
+    //     },
+    //   ),
+    //   exchanger: new Account(
+    //     {
+    //       abi: ExchangerABI,
+    //       // tvc: '... base64 encoded string ...',
+    //     },
+    //     {
+    //       address: contractAdreses.exchanger,
+    //       client: tonClient,
+    //     },
+    //   ),
+    //   controller1: new Account(
+    //     {
+    //       abi: ConterollerABI,
+    //       // tvc: '... base64 encoded string ...',
+    //     },
+    //     {
+    //       address: contractAdreses.controller1,
+    //       client: tonClient,
+    //     },
+    //   ),
+    // };
   }
 
   async getRootTokenName() {

@@ -20,7 +20,17 @@ class ExtraTon extends AbstractProvider {
     this.init();
   }
 
-  async init() {
+  static async timeout(time: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, time);
+    });
+  }
+
+  async init(): Promise<any> {
+    if (!window.freeton) {
+      await ExtraTon.timeout(1000);
+      return this.init();
+    }
     this.provider = await new freeton.providers.ExtensionProvider(
       window.freeton,
     );
@@ -33,6 +43,7 @@ class ExtraTon extends AbstractProvider {
         // eslint-disable-next-line no-console
         return console.error('Contract not found', key);
       }
+
       this.contracts[key] = new freeton.Contract(
         this.provider,
         rawContract.abi,
@@ -41,6 +52,7 @@ class ExtraTon extends AbstractProvider {
       return true;
     });
     this.nowReady();
+    return true;
   }
 
   async run(contractName: string, functionName: string, input?: object) {
@@ -64,8 +76,8 @@ class ExtraTon extends AbstractProvider {
   }
 
   async getNetwork() {
-    const network = (await this.provider.getNetwork().id) as Number;
-    return network;
+    const network = await this.provider.getNetwork();
+    return network.id;
   }
 }
 

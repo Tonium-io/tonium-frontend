@@ -33,17 +33,6 @@ function App() {
 
   window.toniumNFT = toniumNFT;
 
-  if (!window.ton) {
-    //
-    // window.tonium = new Tonium(window.ton, getSigner, {
-    //   rootToken:
-    //     '0:fc9a9607937f05a2cd93161f0dbd3435bed21b9102ea7ef9c6fb6821dbd28a3b',
-    //   exchanger:
-    //     '0:f13d40e0913cb98a70ec2b43a922d1b57f4f6032cba9a18f5b6f2fdd842d76ed',
-    //   controller1:
-    //     '0:bf8e4c6f7558d504b64aa9c03c3e7d641be62bba56a80304444bfd2d9568a245',
-    // });
-  }
   return (
     <Router>
       <div className={cls.app}>
