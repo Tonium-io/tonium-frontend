@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,54 +13,36 @@ import PolymerIcon from '@material-ui/icons/Polymer';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import { TonClient, signerNone } from '@tonclient/core';
-import { libWeb } from '@tonclient/lib-web';
-
-import Tonium from './blockchain/Tonium';
+import ToniumNFT from './blockchain/ToniumNTF';
 
 import Home from './pages/Home/Home';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
 
+import UserWallet from './Components/UserWallet/UserWallet';
+
 import cls from './app.module.scss';
-
-// Application initialization
-
-TonClient.useBinaryLibrary(libWeb);
 
 declare const window: any;
 
 function App() {
   const [signerId, setSignerId] = useState(0);
+
+  const toniumNFT = useMemo(() => new ToniumNFT(), []);
+
+  window.toniumNFT = toniumNFT;
+
   if (!window.ton) {
-    window.ton = new TonClient({
-      network: {
-        server_address: 'https://net.ton.dev', // dev
-      },
-    });
-    //  https://docs.ton.dev/86757ecb2/p/09941f-external-signing/b/65bc29
-    window.ton.crypto
-      .register_signing_box({
-        get_public_key: async () => {
-          // todo maybe here
-        },
-        sing: async (params: any) => {},
-      })
-      .then((result: { handler: number }) => {
-        setSignerId(result.handler);
-      });
-
-    const getSigner = () => signerNone(); // todo maybe another one also
-
-    window.tonium = new Tonium(window.ton, getSigner, {
-      rootToken:
-        '0:fc9a9607937f05a2cd93161f0dbd3435bed21b9102ea7ef9c6fb6821dbd28a3b',
-      exchanger:
-        '0:f13d40e0913cb98a70ec2b43a922d1b57f4f6032cba9a18f5b6f2fdd842d76ed',
-      controller1:
-        '0:bf8e4c6f7558d504b64aa9c03c3e7d641be62bba56a80304444bfd2d9568a245',
-    });
+    //
+    // window.tonium = new Tonium(window.ton, getSigner, {
+    //   rootToken:
+    //     '0:fc9a9607937f05a2cd93161f0dbd3435bed21b9102ea7ef9c6fb6821dbd28a3b',
+    //   exchanger:
+    //     '0:f13d40e0913cb98a70ec2b43a922d1b57f4f6032cba9a18f5b6f2fdd842d76ed',
+    //   controller1:
+    //     '0:bf8e4c6f7558d504b64aa9c03c3e7d641be62bba56a80304444bfd2d9568a245',
+    // });
   }
   return (
     <Router>
@@ -99,6 +81,7 @@ function App() {
                 <Typography component="h1" variant="h6" color="inherit" noWrap>
                   Dashboard
                 </Typography>
+                <UserWallet />
               </Toolbar>
             </AppBar>
             <Switch>
