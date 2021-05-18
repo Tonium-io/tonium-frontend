@@ -96,7 +96,7 @@ class TonSDK extends AbstractProvider {
 
   // eslint-disable-next-line class-methods-use-this
   async getNetwork() {
-    await this.whenReady();
+    //  await this.whenReady();
     // todo
     return 2;
   }
