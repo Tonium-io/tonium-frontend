@@ -26,6 +26,7 @@ class ExtraTon extends AbstractProvider {
     );
     const contracts = ['rootToken', 'exchanger', 'controller'] as const;
     const network = await this.getNetwork();
+
     contracts.forEach((key) => {
       const rawContract = ExtraTon.getContractRaw(key);
       if (!rawContract) {
@@ -43,10 +44,7 @@ class ExtraTon extends AbstractProvider {
   }
 
   async run(contractName: string, functionName: string, input?: object) {
-    console.log(1);
     await this.whenReady();
-    console.log(2);
-
     const result = await this.contracts[contractName].methods[functionName].run(
       input,
     );
