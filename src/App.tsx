@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
-import './App.css';
-import { ContextApp, dispatch, state } from './store/reducer';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -19,7 +18,7 @@ import { TonClient, signerNone } from '@tonclient/core';
 import { libWeb } from '@tonclient/lib-web';
 
 import Tonium from './blockchain/Tonium';
-
+import { ContextApp, reducer, intialState } from './store/reducer';
 import Home from './pages/Home/Home';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -35,6 +34,7 @@ declare const window: any;
 
 function App() {
   const [signerId, setSignerId] = useState(0);
+  const [state, dispatch] = useReducer(reducer, intialState);
   if (!window.ton) {
     window.ton = new TonClient({
       network: {

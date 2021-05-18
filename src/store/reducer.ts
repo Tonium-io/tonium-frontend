@@ -1,9 +1,7 @@
-import React, { useReducer } from "react";
+import React from 'react';
+
 export type StateType = {};
-const intialState = {
-  products: [],
-  shoppingCart: 0,
-};
+export const intialState = {};
 export const ContextApp = React.createContext<{
   state: StateType;
   dispatch: React.Dispatch<any>;
@@ -23,12 +21,10 @@ type ActionMap<M extends { [index: string]: any }> = {
 };
 type Payload = {};
 export type Actions = ActionMap<any>[keyof ActionMap<Payload>];
-const SETTICKET = "SETTICKET";
-const initialValues = {};
+
 export const reducer = (state: StateType, action: Actions) => {
   switch (action.type) {
     default:
       return state;
   }
 };
-export const [state, dispatch] = useReducer(reducer, initialValues);
