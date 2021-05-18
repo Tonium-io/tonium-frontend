@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -19,7 +20,7 @@ import Home from './pages/Home/Home';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
-
+import { ContextApp, reducer, intialState } from './store/reducer';
 import UserWallet from './Components/UserWallet/UserWallet';
 
 import cls from './app.module.scss';
@@ -28,69 +29,75 @@ declare const window: any;
 
 function App() {
   const [signerId, setSignerId] = useState(0);
-
+  const [state, dispatch] = useReducer(reducer, intialState);
   const toniumNFT = useMemo(() => new ToniumNFT(), []);
 
   window.toniumNFT = toniumNFT;
 
   return (
-    <Router>
-      <div className={cls.app}>
-        <CssBaseline />
-        <Grid container spacing={0}>
-          <Grid item xs={2}>
-            <ListItem button component={Link} to="/">
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button component={Link} to="/own">
-              <ListItemIcon>
-                <PolymerIcon />
-              </ListItemIcon>
-              <ListItemText primary="My own" />
-            </ListItem>
-            <ListItem button component={Link} to="/auction">
-              <ListItemIcon>
-                <PolymerIcon />
-              </ListItemIcon>
-              <ListItemText primary="Auction" />
-            </ListItem>
-            <ListItem button component={Link} to="/radar">
-              <ListItemIcon>
-                <PolymerIcon />
-              </ListItemIcon>
-              <ListItemText primary="NFT radar" />
-            </ListItem>
+    <ContextApp.Provider value={{ dispatch, state }}>
+      <Router>
+        <div className={cls.app}>
+          <CssBaseline />
+          <Grid container spacing={0}>
+            <Grid item xs={2}>
+              <ListItem button component={Link} to="/">
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItem>
+              <ListItem button component={Link} to="/own">
+                <ListItemIcon>
+                  <PolymerIcon />
+                </ListItemIcon>
+                <ListItemText primary="My own" />
+              </ListItem>
+              <ListItem button component={Link} to="/auction">
+                <ListItemIcon>
+                  <PolymerIcon />
+                </ListItemIcon>
+                <ListItemText primary="Auction" />
+              </ListItem>
+              <ListItem button component={Link} to="/radar">
+                <ListItemIcon>
+                  <PolymerIcon />
+                </ListItemIcon>
+                <ListItemText primary="NFT radar" />
+              </ListItem>
+            </Grid>
+            <Grid item xs={10}>
+              <AppBar position="sticky">
+                <Toolbar>
+                  <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                  >
+                    Dashboard
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+              <Switch>
+                <Route path="/own">
+                  <Own />
+                </Route>
+                <Route path="/auction">
+                  <Auction />
+                </Route>
+                <Route path="/radar">
+                  <Radar />
+                </Route>
+                <Route path="/">
+                  <Home />
+                </Route>
+              </Switch>
+            </Grid>
           </Grid>
-          <Grid item xs={10}>
-            <AppBar position="sticky">
-              <Toolbar>
-                <Typography component="h1" variant="h6" color="inherit" noWrap>
-                  Dashboard
-                </Typography>
-                <UserWallet />
-              </Toolbar>
-            </AppBar>
-            <Switch>
-              <Route path="/own">
-                <Own />
-              </Route>
-              <Route path="/auction">
-                <Auction />
-              </Route>
-              <Route path="/radar">
-                <Radar />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
-          </Grid>
-        </Grid>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </ContextApp.Provider>
   );
 }
 
