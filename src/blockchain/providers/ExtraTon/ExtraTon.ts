@@ -8,6 +8,8 @@ declare const window: any;
 class ExtraTon extends AbstractProvider {
   provider: any;
 
+  signer: any;
+
   contracts: {
     rootToken?: any;
     exchanger?: any;
@@ -34,6 +36,7 @@ class ExtraTon extends AbstractProvider {
     this.provider = await new freeton.providers.ExtensionProvider(
       window.freeton,
     );
+    this.signer = await this.provider.getSigner();
     const contracts = ['rootToken', 'exchanger', 'controller'] as const;
     const network = await this.getNetwork();
 
@@ -45,7 +48,7 @@ class ExtraTon extends AbstractProvider {
       }
 
       this.contracts[key] = new freeton.Contract(
-        this.provider,
+        this.signer,
         rawContract.abi,
         rawContract.address[network as any],
       );
@@ -65,6 +68,8 @@ class ExtraTon extends AbstractProvider {
 
   async call(contractName: string, functionName: string, input?: object) {
     await this.whenReady();
+    // eslint-disable-next-line no-debugger
+    debugger;
     const result = await this.contracts[contractName].methods[
       functionName
     ].call(input);
