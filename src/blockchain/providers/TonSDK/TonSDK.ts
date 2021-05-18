@@ -10,8 +10,6 @@ class TonSDK extends AbstractProvider {
 
   signerHandle: number = 0;
 
-  inited: Boolean = false;
-
   contracts: {
     rootToken?: any;
     exchanger?: any;
@@ -51,6 +49,7 @@ class TonSDK extends AbstractProvider {
     contracts.forEach((key) => {
       const rawContract = TonSDK.getContractRaw(key);
       if (!rawContract) {
+        // eslint-disable-next-line no-console
         return console.error('Contract not found', key);
       }
       this.contracts[key] = new Account(
@@ -66,10 +65,11 @@ class TonSDK extends AbstractProvider {
       return true;
     });
 
-    this.inited = true;
+    this.nowReady();
   }
 
   async run(contractName: string, functionName: string, input?: object) {
+    await this.whenReady();
     const result = await this.contracts[contractName].runLocal(
       functionName,
       input,
@@ -78,6 +78,7 @@ class TonSDK extends AbstractProvider {
   }
 
   async call(contractName: string, functionName: string, input?: object) {
+    await this.whenReady();
     const result = await this.contracts[contractName].run(functionName, input);
     return result;
   }
@@ -93,8 +94,10 @@ class TonSDK extends AbstractProvider {
     return true;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async getNetwork() {
-    console.log(this.client);
+    await this.whenReady();
+    // todo
     return 2;
   }
 }

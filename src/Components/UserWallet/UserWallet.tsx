@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 
 const UserWallet = () => {
   const onConnectWalletClick = async () => {
+    // eslint-disable-next-line no-console
     console.log('onConnectWalletClick');
   };
 
