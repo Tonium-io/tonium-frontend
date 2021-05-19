@@ -144,6 +144,35 @@ class TonSDK extends AbstractProvider {
     }
     return Number.NaN;
   }
+
+  static getRequiredInitFields() {
+    const client = new TonClient();
+    return [
+      {
+        name: 'mnemonic',
+        description: 'Mnemonic',
+        validator: async (mnemonic: string) =>
+          client.crypto.mnemonic_verify({
+            phrase: mnemonic,
+          }),
+      },
+    ];
+  }
+
+  static getInitActions() {
+    const client = new TonClient();
+
+    return [
+      {
+        name: 'mnemonic',
+        description: 'Generate mnemonic',
+        action: async () => {
+          const mnemonic = await client.crypto.mnemonic_from_random({});
+          return mnemonic.phrase;
+        },
+      },
+    ];
+  }
 }
 
 export default TonSDK;

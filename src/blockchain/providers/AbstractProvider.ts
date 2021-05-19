@@ -60,6 +60,22 @@ abstract class AbstractProvider {
   abstract getAddress(): Promise<String>;
 
   abstract getBallance(): Promise<Number>;
+
+  static getRequiredInitFields(): Array<{
+    name: String;
+    description: String;
+    validator?: Function;
+  }> {
+    return [];
+  }
+
+  static getInitActions(): Array<{
+    name: String;
+    description: String;
+    action?: Function;
+  }> {
+    return [];
+  }
 }
 
 export default AbstractProvider;
