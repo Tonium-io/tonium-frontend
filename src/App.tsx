@@ -30,8 +30,10 @@ declare const window: any;
 function App() {
   const [signerId, setSignerId] = useState(0);
   const [state, dispatch] = useReducer(reducer, intialState);
-  const toniumNFT = useMemo(() => new ToniumNFT(), []);
-
+  // const toniumNFT = useMemo(() => new ToniumNFT(), []);
+  const toniumNFT = new ToniumNFT(
+    'benefit clock effort mushroom milk organ glory bacon stomach morning toy excess entry clay kitten damage sphere three base bind envelope thought valve cat',
+  );
   window.toniumNFT = toniumNFT;
 
   return (

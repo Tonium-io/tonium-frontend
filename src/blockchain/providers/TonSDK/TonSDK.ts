@@ -1,9 +1,58 @@
-import { TonClient, signerSigningBox, signerNone } from '@tonclient/core';
+import {
+  TonClient,
+  signerSigningBox,
+  signerNone,
+  signerKeys,
+} from '@tonclient/core';
 
 import { libWeb } from '@tonclient/lib-web';
 import { Account } from '@tonclient/appkit';
 
 import AbstractProvider from '../AbstractProvider';
+
+// const SEED_PHRASE_WORD_COUNT = 12;
+// const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
+// const HD_PATH = "m/44'/396'/0'/0/0";
+// const seedPhrase = "abandon math mimic master filter design carbon crystal rookie group knife young";
+
+// class dummySigningBox {
+//   mnemonic: string;
+//   client: TonClient;
+//   keys: any;
+//   /**
+//    *
+//    * @param client {TonClient}
+//    */
+//   constructor(client: TonClient,mnemonic: string) {
+//       this.client = client;
+//       this.mnemonic = seedPhrase;
+//   }
+
+//   async ensureKeys() {
+//       if (!this.keys) {
+//           this.keys = (await this.client.crypto.mnemonic_derive_sign_keys({
+//               dictionary: SEED_PHRASE_DICTIONARY_ENGLISH,
+//               word_count: SEED_PHRASE_WORD_COUNT,
+//               phrase: this.mnemonic,
+//               path: HD_PATH,
+//           }));
+//       }
+//       return this.keys;
+//   }
+
+//   async get_public_key() {
+//       return {
+//           public_key: (await this.ensureKeys()).public,
+//       };
+//   }
+
+//   async sign(params : object) {
+//       return (await this.client.crypto.sign({
+//           keys: await this.ensureKeys(),
+//           unsigned: params.unsigned,
+//       }));
+//   }
+// }
 
 class TonSDK extends AbstractProvider {
   client: TonClient;
@@ -18,6 +67,8 @@ class TonSDK extends AbstractProvider {
     controller?: any;
   };
 
+  keys: any;
+
   constructor(mnemonic?: string) {
     super();
     this.contracts = {};
@@ -29,9 +80,25 @@ class TonSDK extends AbstractProvider {
       },
     });
 
+    this.init(mnemonic);
+    console.log(mnemonic);
+  }
+
+  //   async getAddress_controller(): Promise<string> {
+  //     let address = this.address;
+  //     if (address === null) {
+  //         const deployParams = this.client.getParamsOfDeployMessage({
+  //             initFunctionName: null,
+  //         });
+  //         address = (await this.client.abi.encode_message(deployParams)).address;
+  //         this.address = address;
+  //     }
+  //     return address;
+  // }
+
+  async init(mnemonic?: string) {
     if (mnemonic) {
-      this.mnemonic = mnemonic;
-      // todo localstorage and encode it
+      this.keys = signerKeys(await this.keyPairFromPhrase(mnemonic));
     } else {
       // todo grab from local storage and dencode it
       // todo ask pasword from user to decode mnemonic
@@ -44,10 +111,7 @@ class TonSDK extends AbstractProvider {
       // hdkey_xprv_from_mnemonic – Generates an extended master private key that will be the root for all the derived keys
     }
 
-    this.init();
-  }
-
-  async init() {
+    // const signingBox = await signerSigningBox((await this.client.crypto.register_signing_box(signingBox)).handle);
     // const signingBox = await this.client.crypto.register_signing_box({
     //   get_public_key: async () => {
     //     return {
@@ -75,6 +139,7 @@ class TonSDK extends AbstractProvider {
           tvc: rawContract.tvc,
         },
         {
+          signer: this.keys,
           address: rawContract.address[network],
           client: this.client,
         },
@@ -83,6 +148,22 @@ class TonSDK extends AbstractProvider {
     });
 
     this.nowReady();
+  }
+
+  async keyPairFromPhrase(input: string) {
+    const HD_PATH = "m/44'/396'/0'/0/0";
+    const SEED_PHRASE_WORD_COUNT = input.split(' ').length;
+    const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
+
+    // should check 12 or 24 word by raise on another
+
+    const result = await this.client.crypto.mnemonic_derive_sign_keys({
+      dictionary: SEED_PHRASE_DICTIONARY_ENGLISH,
+      word_count: SEED_PHRASE_WORD_COUNT,
+      phrase: input,
+      path: HD_PATH,
+    });
+    return result;
   }
 
   async run(contractName: string, functionName: string, input?: object) {
@@ -119,11 +200,17 @@ class TonSDK extends AbstractProvider {
   }
 
   async getAddress() {
-    if (this.mnemonic) {
-      return '222';
-      // todo grab from mnemonic
-    }
-    return '';
+    // const rawContract = TonSDK.getContractRaw("controller");
+    // const network = await this.getNetwork();
+    // const sign = this.getSigner();
+    const pubkey = this.keys.keys.public;
+    const params = await this.contracts.controller.getParamsOfDeployMessage({
+      initInput: { public_key: `0x${pubkey}` },
+    });
+    console.log(params);
+    const addr = await this.client.abi.encode_message(params);
+
+    return addr.address;
   }
 
   async getBallance() {

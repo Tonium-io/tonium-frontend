@@ -10,9 +10,16 @@ class TiniumNFT {
 
   actions: Actions;
 
-  constructor() {
+  constructor(mnemonic?: string) {
     if (localStorage.getItem('toniumProvider')) {
-      this.setProvider(localStorage.getItem('toniumProvider') as string);
+      if (mnemonic) {
+        this.setProvider(
+          localStorage.getItem('toniumProvider') as string,
+          mnemonic,
+        );
+      } else {
+        this.setProvider(localStorage.getItem('toniumProvider') as string);
+      }
     }
 
     this.actions = new Actions(this.getCurrentProvider);
@@ -26,13 +33,13 @@ class TiniumNFT {
     return this.providers;
   }
 
-  setProvider(providerName: string) {
+  setProvider(providerName: string, mnemonic?: string) {
     if (!this.providers[providerName]) {
       return false;
     }
-    this.provider = new (this.getProviders()[
-      providerName
-    ])() as AbstractProvider;
+    this.provider = new (this.getProviders()[providerName])(
+      mnemonic,
+    ) as AbstractProvider;
     localStorage.setItem('toniumProvider', providerName);
 
     return true;
