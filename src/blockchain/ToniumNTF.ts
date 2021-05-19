@@ -1,71 +1,25 @@
 import ExtraTon from './providers/ExtraTon/ExtraTon';
 import TonSDK from './providers/TonSDK/TonSDK';
 import AbstractProvider from './providers/AbstractProvider';
+import Actions from './actions/Actions';
 
 class TiniumNFT {
   providers: { [key: string]: any } = { ExtraTon, TonSDK };
 
   provider!: AbstractProvider;
 
+  actions: Actions;
+
   constructor() {
     if (localStorage.getItem('toniumProvider')) {
       this.setProvider(localStorage.getItem('toniumProvider') as string);
     }
+
+    this.actions = new Actions(this.getCurrentProvider);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getAllTokkens() {
-    const tokens: [] = [];
-    return tokens;
-  } // получение всех токкенов аккаунта, которые купил и созданных(с разделением по типам)
-
-  // eslint-disable-next-line class-methods-use-this
-  getAllTransactions() {
-    const transactions: [] = [];
-    return transactions;
-  } // получение всех транзакций аккаунта (с разделением по типам)
-
-  // eslint-disable-next-line class-methods-use-this
-  postCreateCollections() {
-    const cpllections: [] = [];
-    return cpllections; // создание коллекции
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  postCreateTokken() {
-    const createdToken: {} = {};
-    return createdToken; // создание токкена
-  }
-
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  putEditCollection(tooken: {}) {
-    const editToken = {};
-    return editToken;
-  } //  редактирование колллекции
-
-  // eslint-disable-next-line class-methods-use-this
-  getAllNFTAuctions() {
-    const aunctions: [] = [];
-    return aunctions; // получение всех аукционов
-  }
-
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  postAunctionMark(auction: {}) {
-    const markAuction = {};
-    return markAuction; // mark auction
-  }
-
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  postAunctionBid(auction: {}) {
-    // eslint-disable-next-line class-methods-use-this, no-unused-vars
-    const bid = {};
-    return auction;
-  } // do bid
-
-  // eslint-disable-next-line class-methods-use-this
-  getAllNFTs() {
-    const nfts: [] = [];
-    return nfts; // получение всех нфтешек для радара
+  getActions() {
+    return this.actions;
   }
 
   getProviders() {
