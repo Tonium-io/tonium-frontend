@@ -8,6 +8,8 @@ import AbstractProvider from '../AbstractProvider';
 class TonSDK extends AbstractProvider {
   client: TonClient;
 
+  private mnemonic!: string;
+
   signerHandle: number = 0;
 
   contracts: {
@@ -16,7 +18,7 @@ class TonSDK extends AbstractProvider {
     controller?: any;
   };
 
-  constructor() {
+  constructor(mnemonic?: string) {
     super();
     this.contracts = {};
     TonClient.useBinaryLibrary(libWeb);
@@ -26,6 +28,21 @@ class TonSDK extends AbstractProvider {
         server_address: 'https://net.ton.dev', // dev
       },
     });
+
+    if (mnemonic) {
+      this.mnemonic = mnemonic;
+      // todo localstorage and encode it
+    } else {
+      // todo grab from local storage and dencode it
+      // todo ask pasword from user to decode mnemonic
+      // below from SDK to operate on mnemonic
+      //       mnemonic_words – Prints the list of words from the specified dictionary
+      // mnemonic_from_random – Generates a random mnemonic from the specified dictionary and word count
+      // mnemonic_from_entropy – Generates mnemonic from pre-generated entropy
+      // mnemonic_verify – The phrase supplied will be checked for word length and validated according to the checksum specified in BIP0039.
+      // mnemonic_derive_sign_keys – Validates the seed phrase, generates master key and then derives the key pair from the master key and the specified path
+      // hdkey_xprv_from_mnemonic – Generates an extended master private key that will be the root for all the derived keys
+    }
 
     this.init();
   }
@@ -99,6 +116,33 @@ class TonSDK extends AbstractProvider {
     //  await this.whenReady();
     // todo
     return 2;
+  }
+
+  async getAddress() {
+    if (this.mnemonic) {
+      return '222';
+      // todo grab from mnemonic
+    }
+    return '';
+  }
+
+  async getBallance() {
+    if (this.getAddress()) {
+      const balance = await this.client.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: await this.getAddress(),
+          },
+        },
+        result: 'balance',
+      });
+
+      if (balance.result?.length) {
+        return balance.result[0].balance;
+      }
+    }
+    return Number.NaN;
   }
 }
 

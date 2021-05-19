@@ -84,6 +84,15 @@ class ExtraTon extends AbstractProvider {
     const network = await this.provider.getNetwork();
     return network.id;
   }
+
+  async getAddress() {
+    return this.signer.wallet.address;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getBallance() {
+    return Number.NaN;
+  }
 }
 
 export default ExtraTon;

@@ -56,6 +56,10 @@ abstract class AbstractProvider {
     functionName: string,
     input?: object,
   ): Promise<any>;
+
+  // abstract getAddress(): Promise<String>;
+
+  // abstract getBallance(): Promise<Number>;
 }
 
 export default AbstractProvider;
