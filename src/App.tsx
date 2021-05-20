@@ -11,7 +11,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PolymerIcon from '@material-ui/icons/Polymer';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
 
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+/* eslint-disable react/jsx-props-no-spreading */
+import { IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 import ToniumNFT from './blockchain/ToniumNTF';
@@ -30,12 +39,43 @@ declare const window: any;
 function App() {
   const [signerId, setSignerId] = useState(0);
   const [state, dispatch] = useReducer(reducer, intialState);
+  const [open, setOpen] = useState(false);
+  const [mnemonic, setMnemonic] = useState(false);
   // const toniumNFT = useMemo(() => new ToniumNFT(), []);
   const toniumNFT = new ToniumNFT(
     'benefit clock effort mushroom milk organ glory bacon stomach morning toy excess entry clay kitten damage sphere three base bind envelope thought valve cat',
   );
   window.toniumNFT = toniumNFT;
+  const handleClose = () => {
+    setMnemonic(false);
+    setOpen(false);
+  };
 
+  const DialogTitle = (props: any) => {
+    const { children, onClose, ...other } = props;
+    return (
+      <MuiDialogTitle disableTypography className={cls.root} {...other}>
+        <Typography variant="h6">{children}</Typography>
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            className={cls.closeButton}
+            onClick={onClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </MuiDialogTitle>
+    );
+  };
+  const login = (name: any): any => {
+    if (name === 'TonSDK') {
+      setMnemonic(true);
+    } else {
+      toniumNFT.setProvider(name);
+      handleClose();
+    }
+  };
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
       <Router>
@@ -68,17 +108,33 @@ function App() {
                 <ListItemText primary="NFT radar" />
               </ListItem>
             </Grid>
+
             <Grid item xs={10}>
               <AppBar position="sticky">
                 <Toolbar>
-                  <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
+                  <Grid item xs={8}>
+                    <Typography
+                      component="h1"
+                      variant="h6"
+                      color="inherit"
+                      noWrap
+                    >
+                      Dashboard
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    style={{ display: 'flex', justifyContent: 'flex-end' }}
                   >
-                    Dashboard
-                  </Typography>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setOpen(true)}
+                    >
+                      Login
+                    </Button>
+                  </Grid>
                 </Toolbar>
               </AppBar>
               <Switch>
@@ -98,6 +154,45 @@ function App() {
             </Grid>
           </Grid>
         </div>
+        <Grid item xs={6}>
+          <Dialog
+            onClose={() => handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
+          >
+            <Grid item xs={12} className={cls.poapup}>
+              <DialogTitle
+                id="customized-dialog-title"
+                onClose={handleClose}
+                className={cls.poapup__title}
+              />
+              <DialogContent className={cls.poapup__content}>
+                {Object.entries(toniumNFT.getProviders()).map((provider) => (
+                  <div key={provider[0]}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      disabled={!provider[1].isAvailable()}
+                      onClick={() => login(provider[0])}
+                    >
+                      {provider[0]}
+                    </Button>
+                  </div>
+                ))}
+              </DialogContent>
+              {mnemonic && (
+                <form autoComplete="off" className={cls.mnemonic}>
+                  {toniumNFT
+                    .getProviders()
+                    .TonSDK.getRequiredInitFields()
+                    .map((m: any) => (
+                      <TextField id={m.name} label={m.description} />
+                    ))}
+                </form>
+              )}
+            </Grid>
+          </Dialog>
+        </Grid>
       </Router>
     </ContextApp.Provider>
   );

@@ -1,7 +1,19 @@
 .app {
   min-height: 100vh;
 }
-
-
-
-
+.poapup {
+  width: 600px;
+  margin-bottom: 50px !important;
+  &__title {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__content {
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+.mnemonic {
+  display: flex;
+  justify-content: center;
+}
