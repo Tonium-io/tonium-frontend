@@ -81,7 +81,6 @@ class TonSDK extends AbstractProvider {
     });
 
     this.init(mnemonic);
-    console.log(mnemonic);
   }
 
   //   async getAddress_controller(): Promise<string> {
@@ -207,7 +206,6 @@ class TonSDK extends AbstractProvider {
     const params = await this.contracts.controller.getParamsOfDeployMessage({
       initInput: { public_key: `0x${pubkey}` },
     });
-    console.log(params);
     const addr = await this.client.abi.encode_message(params);
 
     return addr.address;
