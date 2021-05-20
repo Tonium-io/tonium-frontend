@@ -41,6 +41,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [open, setOpen] = useState(false);
   const [mnemonic, setMnemonic] = useState(false);
+  const [formValues, setFormValues] = useState<any>(null);
   // const toniumNFT = useMemo(() => new ToniumNFT(), []);
   const toniumNFT = new ToniumNFT(
     'benefit clock effort mushroom milk organ glory bacon stomach morning toy excess entry clay kitten damage sphere three base bind envelope thought valve cat',
@@ -154,45 +155,80 @@ function App() {
             </Grid>
           </Grid>
         </div>
-        <Grid item xs={6}>
-          <Dialog
-            onClose={() => handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={open}
-          >
-            <Grid item xs={12} className={cls.poapup}>
-              <DialogTitle
-                id="customized-dialog-title"
-                onClose={handleClose}
-                className={cls.poapup__title}
-              />
-              <DialogContent className={cls.poapup__content}>
-                {Object.entries(toniumNFT.getProviders()).map((provider) => (
-                  <div key={provider[0]}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      disabled={!provider[1].isAvailable()}
-                      onClick={() => login(provider[0])}
-                    >
-                      {provider[0]}
-                    </Button>
-                  </div>
-                ))}
-              </DialogContent>
-              {mnemonic && (
-                <form autoComplete="off" className={cls.mnemonic}>
+
+        <Dialog
+          onClose={() => handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <Grid item xs={12} className={cls.poapup}>
+            <DialogTitle
+              id="customized-dialog-title"
+              onClose={handleClose}
+              className={cls.poapup__title}
+            />
+            <DialogContent className={cls.poapup__content}>
+              {Object.entries(toniumNFT.getProviders()).map((provider) => (
+                <div key={provider[0]}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    disabled={!provider[1].isAvailable()}
+                    onClick={() => login(provider[0])}
+                  >
+                    {provider[0]}
+                  </Button>
+                </div>
+              ))}
+            </DialogContent>
+
+            {mnemonic && (
+              <form
+                autoComplete="off"
+                className={cls.mnemonic}
+                onSubmit={(data) => console.log(data)}
+              >
+                <Grid item xs={8} spacing={3}>
                   {toniumNFT
                     .getProviders()
                     .TonSDK.getRequiredInitFields()
-                    .map((m: any) => (
-                      <TextField id={m.name} label={m.description} />
+                    .map((field: any) => (
+                      <TextField
+                        error={Boolean(field.validate)}
+                        id={field.name}
+                        label={field.description}
+                        fullWidth
+                        value={formValues?.[`${field.name}`]}
+                      />
                     ))}
-                </form>
-              )}
-            </Grid>
-          </Dialog>
-        </Grid>
+                </Grid>
+                <Grid item xs={4} spacing={3}>
+                  {toniumNFT
+                    .getProviders()
+                    .TonSDK.getInitActions()
+                    .map((action: any) => (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        id={action.name}
+                        style={{ height: '100%', marginLeft: 20 }}
+                        onClick={() => {
+                          const nameValue = {};
+                          action.action().then((data: any) => {
+                            nameValue[`${action.name}`] = data;
+                            setFormValues(nameValue);
+                            console.log(formValues);
+                          });
+                        }}
+                      >
+                        {action.description}
+                      </Button>
+                    ))}
+                </Grid>
+              </form>
+            )}
+          </Grid>
+        </Dialog>
       </Router>
     </ContextApp.Provider>
   );
