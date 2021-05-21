@@ -1,7 +1,6 @@
+import ContractNamesType from '../../types/Contract';
 /* eslint-disable no-unused-vars */
 import contracts from '../contracts.json';
-
-type ContractNames = keyof typeof contracts;
 
 abstract class AbstractProvider {
   inited: Boolean = false;
@@ -10,7 +9,7 @@ abstract class AbstractProvider {
 
   private readyPromiseResolve!: any;
 
-  static getContractRaw(name: ContractNames) {
+  static getContractRaw(name: keyof typeof ContractNamesType) {
     return contracts[name];
     // if (contracts[name]) {
     //   return contracts[name];
@@ -49,15 +48,19 @@ abstract class AbstractProvider {
     contractName: string,
     functionName: string,
     input?: object,
+    address?: string,
   ): Promise<any>;
 
   abstract call(
     contractName: string,
     functionName: string,
     input?: object,
+    address?: string,
   ): Promise<any>;
 
   abstract getAddress(): Promise<String>;
+
+  abstract getPublicKey(withLeadingHex: boolean): String;
 
   abstract getBalance(): Promise<Number>;
 
@@ -77,11 +80,11 @@ abstract class AbstractProvider {
     return [];
   }
 
-  // abstract deployContract(
-  //   contractName: string,
-  //   initialParams?: {},
-  //   constructorParams?: {},
-  // ): Promise<string>;
+  abstract deployContract(
+    contractName: keyof typeof ContractNamesType,
+    initialParams?: {},
+    constructorParams?: {},
+  ): Promise<string>;
 }
 
 export default AbstractProvider;
