@@ -59,7 +59,7 @@ abstract class AbstractProvider {
 
   abstract getAddress(): Promise<String>;
 
-  abstract getBallance(): Promise<Number>;
+  abstract getBalance(): Promise<Number>;
 
   static getRequiredInitFields(): Array<{
     name: String;
@@ -76,6 +76,12 @@ abstract class AbstractProvider {
   }> {
     return [];
   }
+
+  // abstract deployContract(
+  //   contractName: string,
+  //   initialParams?: {},
+  //   constructorParams?: {},
+  // ): Promise<string>;
 }
 
 export default AbstractProvider;

@@ -211,7 +211,7 @@ class TonSDK extends AbstractProvider {
     return addr.address;
   }
 
-  async getBallance() {
+  async getBalance() {
     if (this.getAddress()) {
       const balance = await this.client.net.query_collection({
         collection: 'accounts',
@@ -232,6 +232,7 @@ class TonSDK extends AbstractProvider {
 
   static getRequiredInitFields() {
     const client = new TonClient();
+    TonClient.useBinaryLibrary(libWeb);
     return [
       {
         name: 'mnemonic',
@@ -246,6 +247,7 @@ class TonSDK extends AbstractProvider {
 
   static getInitActions() {
     const client = new TonClient();
+    TonClient.useBinaryLibrary(libWeb);
 
     return [
       {
@@ -258,6 +260,10 @@ class TonSDK extends AbstractProvider {
       },
     ];
   }
+
+  // async deployContract(contractName: string, deployParam?: {}) {
+
+  // }
 }
 
 export default TonSDK;

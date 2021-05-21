@@ -69,7 +69,6 @@ class ExtraTon extends AbstractProvider {
   async call(contractName: string, functionName: string, input?: object) {
     await this.whenReady();
     // eslint-disable-next-line no-debugger
-    debugger;
     const result = await this.contracts[contractName].methods[
       functionName
     ].call(input);
@@ -90,8 +89,26 @@ class ExtraTon extends AbstractProvider {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async getBallance() {
+  async getBalance() {
     return Number.NaN;
+  }
+
+  async deployContract(
+    contractName: string,
+    initialParams?: {},
+    constructorParams?: {},
+  ) {
+    const rawContract = ExtraTon.getContractRaw(contractName as any); // todo no any
+    const contract = new freeton.ContractBuilder(
+      this.signer,
+      rawContract.abi,
+      rawContract.tvc,
+    );
+    contract.setInitialParams(initialParams);
+    const realContract = await contract.deploy(constructorParams);
+    console.log(realContract);
+
+    return realContract;
   }
 }
 
