@@ -1,6 +1,8 @@
 import React from 'react';
 
-export type StateType = {};
+export type StateType = {
+  auth: Boolean;
+};
 export const intialState = {
   auth: false,
 };
@@ -38,7 +40,7 @@ export const reducer = (state: StateType, action: Actions) => {
       return state;
   }
 };
-export const login = (dispatch: any) => dispatch({ type: LOGIN });
+export const setLogin = (dispatch: any) => dispatch({ type: LOGIN });
 
 // export const action = {
 //   login: (payload: {}, dispatch: (payload: {}) => void) =>

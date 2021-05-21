@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useReducer } from 'react';
+import React, { useState, useMemo, useReducer, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -40,7 +40,7 @@ import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
 import Wp from './pages/Wp/Wp';
-import { ContextApp, reducer, intialState } from './store/reducer';
+import { ContextApp, reducer, intialState, setLogin } from './store/reducer';
 import cls from './app.module.scss';
 
 import Logo from './img/tonium-logo-dark-text.svg';
@@ -55,7 +55,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [open, setOpen] = useState(false);
   const [mnemonic, setMnemonic] = useState(false);
-  const [formValues, setFormValues] = useState<any>(null);
+  const [formValues, setFormValues] = useState<{} | null>(null);
 
   // const toniumNFT = useMemo(() => new ToniumNFT(), []);
   const toniumNFT = new ToniumNFT(
@@ -84,12 +84,19 @@ function App() {
       </MuiDialogTitle>
     );
   };
+  useEffect(() => {
+    const storageProvider = localStorage.getItem('toniumProvider') as string;
+    if (storageProvider) {
+      setLogin(dispatch);
+    }
+  }, []);
   const login = (name: any): any => {
     if (name === 'TonSDK') {
       setMnemonic(true);
     } else {
       toniumNFT.setProvider(name);
       handleClose();
+      setLogin(dispatch);
     }
   };
   return (
@@ -217,30 +224,40 @@ function App() {
                       <Link to="/wp">What is it?</Link>
                     </div>
 
-                    <Grid
-                      container
-                      spacing={0}
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                      wrap="nowrap"
-                      className={cls.address}
-                    >
-                      <Link to="/wp" className={cls.nick}>
-                        <span>@mrboss</span>
-                        <EditIcon />
-                      </Link>
-                      <form noValidate autoComplete="off">
-                        <TextField label="address" variant="filled" />
-                      </form>
-                      <span className={cls.balance}>
-                        <span>12.23</span>
-                        <img src={CristalIcon} alt="TON" width="20" />{' '}
-                      </span>
-                      <Link to="/wp" className={cls.linkwallet}>
-                        <LinkIcon style={{ fontSize: 30 }} />
-                      </Link>
-                    </Grid>
+                    {state.auth ? (
+                      <Grid
+                        container
+                        spacing={0}
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="center"
+                        wrap="nowrap"
+                        className={cls.address}
+                      >
+                        <Link to="/wp" className={cls.nick}>
+                          <span>@mrboss</span>
+                          <EditIcon />
+                        </Link>
+                        <form noValidate autoComplete="off">
+                          <TextField label="address" variant="filled" />
+                        </form>
+                        <span className={cls.balance}>
+                          <span>12.23</span>
+                          <img src={CristalIcon} alt="TON" width="20" />{' '}
+                        </span>
+                        <Link to="/wp" className={cls.linkwallet}>
+                          <LinkIcon style={{ fontSize: 30 }} />
+                        </Link>
+                      </Grid>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => setOpen(true)}
+                      >
+                        Login
+                      </Button>
+                    )}
 
                     <div className={cls.lang}>
                       <FormControl>
@@ -281,80 +298,131 @@ function App() {
             </Grid>
           </Grid>
         </div>
-
-        <Dialog
-          onClose={() => handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={open}
+        <Grid
+          container
+          xs={12}
+          direction="column"
+          justify="space-around"
+          alignItems="center"
         >
-          <Grid item xs={12} className={cls.poapup}>
-            <DialogTitle
-              id="customized-dialog-title"
-              onClose={handleClose}
-              className={cls.poapup__title}
-            />
-            <DialogContent className={cls.poapup__content}>
-              {Object.entries(toniumNFT.getProviders()).map((provider) => (
-                <div key={provider[0]}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    disabled={!provider[1].isAvailable()}
-                    onClick={() => login(provider[0])}
-                  >
-                    {provider[0]}
-                  </Button>
-                </div>
-              ))}
-            </DialogContent>
+          <Dialog
+            onClose={() => handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
+          >
+            <Grid item xs={12} className={cls.poapup}>
+              <DialogTitle
+                id="customized-dialog-title"
+                onClose={handleClose}
+                className={cls.poapup__title}
+              />
+              <DialogContent className={cls.poapup__content}>
+                {Object.entries(toniumNFT.getProviders()).map((provider) => (
+                  <div key={provider[0]}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      disabled={!provider[1].isAvailable()}
+                      onClick={() => login(provider[0])}
+                    >
+                      {provider[0]}
+                    </Button>
+                  </div>
+                ))}
+              </DialogContent>
 
-            {mnemonic && (
-              <form
-                autoComplete="off"
-                className={cls.mnemonic}
-                onSubmit={(data) => console.log(data)}
-              >
-                <Grid item xs={8} spacing={3}>
-                  {toniumNFT
-                    .getProviders()
-                    .TonSDK.getRequiredInitFields()
-                    .map((field: any) => (
-                      <TextField
-                        error={Boolean(field.validate)}
-                        id={field.name}
-                        label={field.description}
-                        fullWidth
-                        value={formValues?.[`${field.name}`]}
-                      />
-                    ))}
-                </Grid>
-                <Grid item xs={4} spacing={3}>
-                  {toniumNFT
-                    .getProviders()
-                    .TonSDK.getInitActions()
-                    .map((action: any) => (
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        id={action.name}
-                        style={{ height: '100%', marginLeft: 20 }}
-                        onClick={() => {
-                          const nameValue = {};
-                          action.action().then((data: any) => {
-                            nameValue[`${action.name}`] = data;
-                            setFormValues(nameValue);
-                            console.log(formValues);
-                          });
-                        }}
-                      >
-                        {action.description}
-                      </Button>
-                    ))}
-                </Grid>
-              </form>
-            )}
-          </Grid>
-        </Dialog>
+              {mnemonic && (
+                <form
+                  autoComplete="off"
+                  className={cls.mnemonic}
+                  onSubmit={(data) => console.log(data)}
+                >
+                  <Grid
+                    container
+                    xs={12}
+                    direction="row"
+                    justify="center"
+                    style={{ margin: '50px 0' }}
+                  >
+                    <Grid item xs={7}>
+                      {toniumNFT
+                        .getProviders()
+                        .TonSDK.getRequiredInitFields()
+                        .map((field: any) => {
+                          const check = field
+                            .validator(formValues?.[`${field.name}`])
+                            .then((data: {}): any => console.log(data, 'DATA'))
+                            .catch((e: any) => console.log(e, 'Err'));
+
+                          return (
+                            <TextField
+                              error={Boolean(!formValues?.[`${field.name}`])}
+                              InputProps={{
+                                readOnly: true,
+                              }}
+                              key={field.name}
+                              id={field.name}
+                              label={field.description}
+                              fullWidth
+                              value={formValues?.[`${field.name}`] || ''}
+                              helperText={
+                                !formValues?.[`${field.name}`]
+                                  ? 'This field is required'
+                                  : ''
+                              }
+                            />
+                          );
+                        })}
+                    </Grid>
+                    <Grid item xs={3}>
+                      {toniumNFT
+                        .getProviders()
+                        .TonSDK.getInitActions()
+                        .map((action: any) => (
+                          <Button
+                            variant="outlined"
+                            key={action.name}
+                            color="primary"
+                            id={action.name}
+                            style={{ height: '100%', marginLeft: 20 }}
+                            onClick={() => {
+                              const nameValue = { ...formValues };
+                              action
+                                .action()
+                                .then((data: any) => {
+                                  nameValue[`${action.name}`] = data;
+                                  setFormValues(nameValue);
+                                  localStorage.setItem(`${action.name}`, data);
+                                  console.log(formValues);
+                                })
+                                .catch((e: any) => console.error(e.message));
+                            }}
+                          >
+                            {action.description}
+                          </Button>
+                        ))}
+                    </Grid>
+                  </Grid>
+                  <Grid container xs={12} direction="row" justify="center">
+                    <Button
+                      disabled={!formValues}
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      onClick={() => {
+                        toniumNFT.setProvider('TonSDK');
+                        handleClose();
+                        setLogin(dispatch);
+                      }}
+                    >
+                      Login
+                    </Button>
+                  </Grid>
+                </form>
+              )}
+            </Grid>
+          </Dialog>
+        </Grid>
       </Router>
     </ContextApp.Provider>
   );
