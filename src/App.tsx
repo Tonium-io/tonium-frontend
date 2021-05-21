@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useReducer, useEffect } from 'react';
+import React, { useState, useMemo, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -51,19 +51,19 @@ import CristalIcon from './img/cristall.svg';
 declare const window: any;
 
 function App() {
-  const [signerId, setSignerId] = useState(0);
   const [state, dispatch] = useReducer(reducer, intialState);
   const [open, setOpen] = useState(false);
-  const [mnemonic, setMnemonic] = useState(false);
+  const [
+    isAdditionalProviderFieldsRequired,
+    setIsAdditionalProviderFieldsRequired,
+  ] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
   const [formValues, setFormValues] = useState<{} | null>(null);
 
-  // const toniumNFT = useMemo(() => new ToniumNFT(), []);
-  const toniumNFT = new ToniumNFT(
-    'benefit clock effort mushroom milk organ glory bacon stomach morning toy excess entry clay kitten damage sphere three base bind envelope thought valve cat',
-  );
+  const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
   const handleClose = () => {
-    setMnemonic(false);
+    setIsAdditionalProviderFieldsRequired(false);
     setOpen(false);
   };
 
@@ -84,19 +84,14 @@ function App() {
       </MuiDialogTitle>
     );
   };
-  useEffect(() => {
-    const storageProvider = localStorage.getItem('toniumProvider') as string;
-    if (storageProvider) {
-      setLogin(dispatch);
-    }
-  }, []);
-  const login = (name: any): any => {
-    if (name === 'TonSDK') {
-      setMnemonic(true);
+
+  const selectProvider = (name: string) => {
+    if (toniumNFT.getProviders()[name].getRequiredInitFields().length) {
+      setSelectedProvider(name as any);
+      setIsAdditionalProviderFieldsRequired(true);
     } else {
       toniumNFT.setProvider(name);
       handleClose();
-      setLogin(dispatch);
     }
   };
   return (
@@ -317,21 +312,24 @@ function App() {
                 className={cls.poapup__title}
               />
               <DialogContent className={cls.poapup__content}>
-                {Object.entries(toniumNFT.getProviders()).map((provider) => (
-                  <div key={provider[0]}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      disabled={!provider[1].isAvailable()}
-                      onClick={() => login(provider[0])}
-                    >
-                      {provider[0]}
-                    </Button>
-                  </div>
-                ))}
+                Plase select provider (TODO markup)
+                {Object.entries(toniumNFT.getProviders()).map(
+                  ([providerName, provider]) => (
+                    <div key={providerName}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        disabled={!provider.isAvailable()}
+                        onClick={() => selectProvider(providerName)}
+                      >
+                        {providerName}
+                      </Button>
+                    </div>
+                  ),
+                )}
               </DialogContent>
 
-              {mnemonic && (
+              {isAdditionalProviderFieldsRequired && (
                 <form
                   autoComplete="off"
                   className={cls.mnemonic}
@@ -347,20 +345,25 @@ function App() {
                     <Grid item xs={7}>
                       {toniumNFT
                         .getProviders()
-                        .TonSDK.getRequiredInitFields()
+                        [selectedProvider as any].getRequiredInitFields()
                         .map((field: any) => {
                           const check = field
                             .validator(formValues?.[`${field.name}`])
                             .then((data: {}): any => console.log(data, 'DATA'))
                             .catch((e: any) => console.log(e, 'Err'));
-
                           return (
                             <TextField
-                              error={Boolean(!formValues?.[`${field.name}`])}
-                              InputProps={{
-                                readOnly: true,
-                              }}
                               key={field.name}
+                              onChange={(e) => {
+                                setFormValues((fv: {}) => {
+                                  let fvLocal = fv;
+                                  if (!fvLocal) {
+                                    fvLocal = {};
+                                  }
+                                  fvLocal[field.name] = e.target.value;
+                                  return fvLocal;
+                                });
+                              }}
                               id={field.name}
                               label={field.description}
                               fullWidth
@@ -377,7 +380,7 @@ function App() {
                     <Grid item xs={3}>
                       {toniumNFT
                         .getProviders()
-                        .TonSDK.getInitActions()
+                        [selectedProvider as any].getInitActions()
                         .map((action: any) => (
                           <Button
                             variant="outlined"
@@ -392,7 +395,6 @@ function App() {
                                 .then((data: any) => {
                                   nameValue[`${action.name}`] = data;
                                   setFormValues(nameValue);
-                                  localStorage.setItem(`${action.name}`, data);
                                   console.log(formValues);
                                 })
                                 .catch((e: any) => console.error(e.message));
@@ -410,9 +412,12 @@ function App() {
                       color="primary"
                       type="submit"
                       onClick={() => {
-                        toniumNFT.setProvider('TonSDK');
+                        // eslint-disable-next-line no-debugger
+                        toniumNFT.setProvider(
+                          selectedProvider as any,
+                          formValues as {},
+                        );
                         handleClose();
-                        setLogin(dispatch);
                       }}
                     >
                       Login

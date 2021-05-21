@@ -70,7 +70,7 @@ class TonSDK extends AbstractProvider {
 
   keys: any;
 
-  constructor(mnemonic?: string) {
+  constructor(initParams?: { mnemonic?: string }) {
     super();
     // this.contracts = {};
     TonClient.useBinaryLibrary(libWeb);
@@ -81,7 +81,7 @@ class TonSDK extends AbstractProvider {
       },
     });
 
-    this.init(mnemonic);
+    this.init(initParams?.mnemonic);
   }
 
   //   async getAddress_controller(): Promise<string> {
@@ -97,8 +97,14 @@ class TonSDK extends AbstractProvider {
   // }
 
   async init(mnemonic?: string) {
+    if (!mnemonic && localStorage.getItem('tonium_mnemonic')) {
+      // eslint-disable-next-line no-param-reassign
+      mnemonic = localStorage.getItem('tonium_mnemonic') as string;
+    }
+
     if (mnemonic) {
       this.keys = signerKeys(await this.keyPairFromPhrase(mnemonic));
+      localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
       // todo ask pasword from user to decode mnemonic
@@ -148,6 +154,12 @@ class TonSDK extends AbstractProvider {
     // });
 
     this.nowReady();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  logout() {
+    localStorage.removeItem('tonium_mnemonic');
+    return true;
   }
 
   async getContractAtAddress(

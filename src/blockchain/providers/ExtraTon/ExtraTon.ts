@@ -52,6 +52,11 @@ class ExtraTon extends AbstractProvider {
     return true;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  logout() {
+    return true;
+  }
+
   async getContractAtAddress(
     contract: keyof typeof ContractNames,
     address?: string,
