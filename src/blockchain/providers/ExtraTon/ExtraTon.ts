@@ -3,6 +3,8 @@ import freeton from 'freeton';
 
 import AbstractProvider from '../AbstractProvider';
 
+import ContractNames from '../../../types/Contract';
+
 declare const window: any;
 
 class ExtraTon extends AbstractProvider {
@@ -10,15 +12,15 @@ class ExtraTon extends AbstractProvider {
 
   signer: any;
 
-  contracts: {
-    rootToken?: any;
-    exchanger?: any;
-    controller?: any;
-  };
+  // contracts: {
+  //   rootToken?: any;
+  //   exchanger?: any;
+  //   controller?: any;
+  // };
 
   constructor() {
     super();
-    this.contracts = {};
+    // this.contracts = {};
     this.init();
   }
 
@@ -37,41 +39,66 @@ class ExtraTon extends AbstractProvider {
       window.freeton,
     );
     this.signer = await this.provider.getSigner();
-    const contracts = ['rootToken', 'exchanger', 'controller'] as const;
-    const network = await this.getNetwork();
+    // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 
-    contracts.forEach((key) => {
-      const rawContract = ExtraTon.getContractRaw(key);
-      if (!rawContract) {
-        // eslint-disable-next-line no-console
-        return console.error('Contract not found', key);
-      }
+    // // eslint-disable-next-line no-restricted-syntax
+    // for (const contract of contracts){
+    //   // todo fix in future (no time now :( )
+    //   // eslint-disable-next-line no-await-in-loop
+    //   this.contracts[contract] = await this.getContractAtAddress(contract);
+    // }
 
-      this.contracts[key] = new freeton.Contract(
-        this.signer,
-        rawContract.abi,
-        rawContract.address[network as any],
-      );
-      return true;
-    });
     this.nowReady();
     return true;
   }
 
-  async run(contractName: string, functionName: string, input?: object) {
-    await this.whenReady();
-    const result = await this.contracts[contractName].methods[functionName].run(
-      input,
+  async getContractAtAddress(
+    contract: keyof typeof ContractNames,
+    address?: string,
+  ) {
+    const rawContract = ExtraTon.getContractRaw(contract);
+    if (!rawContract) {
+      // eslint-disable-next-line no-console
+      console.error('Contract not found', rawContract);
+      return false;
+    }
+    const network = await this.getNetwork();
+
+    const realAddres = address ?? rawContract.address[network as any];
+
+    const tonContract = new freeton.Contract(
+      this.signer,
+      rawContract.abi,
+      realAddres,
     );
+
+    return tonContract;
+  }
+
+  async run(
+    contractName: keyof typeof ContractNames,
+    functionName: string,
+    input?: object,
+    address?: string,
+  ) {
+    await this.whenReady();
+    const result = (
+      await this.getContractAtAddress(contractName, address)
+    ).methods[functionName].run(input);
     return result;
   }
 
-  async call(contractName: string, functionName: string, input?: object) {
+  async call(
+    contractName: keyof typeof ContractNames,
+    functionName: string,
+    input?: object,
+    address?: string,
+  ) {
     await this.whenReady();
     // eslint-disable-next-line no-debugger
-    const result = await this.contracts[contractName].methods[
-      functionName
-    ].call(input);
+    const result = (
+      await this.getContractAtAddress(contractName, address)
+    ).methods[functionName].call(input);
     return result;
   }
 
@@ -93,6 +120,14 @@ class ExtraTon extends AbstractProvider {
     return Number.NaN;
   }
 
+  getPublicKey(withLeadingHex = false) {
+    let key = this.signer.publicKey;
+    if (withLeadingHex) {
+      key = `0x${key}`;
+    }
+    return key;
+  }
+
   async deployContract(
     contractName: string,
     initialParams?: {},
@@ -105,11 +140,12 @@ class ExtraTon extends AbstractProvider {
       rawContract.tvc,
     );
     contract.setInitialParams(initialParams);
-    const realContract = await contract.deploy(constructorParams);
-    // eslint-disable-next-line no-console
-    console.log(realContract);
+    contract.setInitialAmount('1000000000');
 
-    return realContract;
+    const realContract = await contract.deploy(constructorParams);
+    await realContract.getDeployProcessing().wait();
+
+    return realContract.address;
   }
 }
 
