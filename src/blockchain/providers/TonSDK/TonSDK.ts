@@ -9,6 +9,7 @@ import { libWeb } from '@tonclient/lib-web';
 import { Account } from '@tonclient/appkit';
 
 import AbstractProvider from '../AbstractProvider';
+import ContractNames from '../../../types/Contract';
 
 // const SEED_PHRASE_WORD_COUNT = 12;
 // const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
@@ -61,17 +62,17 @@ class TonSDK extends AbstractProvider {
 
   signerHandle: number = 0;
 
-  contracts: {
-    rootToken?: any;
-    exchanger?: any;
-    controller?: any;
-  };
+  // contracts: {
+  //   rootToken?: any;
+  //   exchanger?: any;
+  //   controller?: any;
+  // };
 
   keys: any;
 
   constructor(mnemonic?: string) {
     super();
-    this.contracts = {};
+    // this.contracts = {};
     TonClient.useBinaryLibrary(libWeb);
 
     this.client = new TonClient({
@@ -123,30 +124,60 @@ class TonSDK extends AbstractProvider {
     // });
     // this.signerHandle = signingBox.handle;
 
-    const contracts = ['rootToken', 'exchanger', 'controller'] as const;
+    // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 
-    const network = await this.getNetwork();
-    contracts.forEach((key) => {
-      const rawContract = TonSDK.getContractRaw(key);
-      if (!rawContract) {
-        // eslint-disable-next-line no-console
-        return console.error('Contract not found', key);
-      }
-      this.contracts[key] = new Account(
-        {
-          abi: rawContract.abi,
-          tvc: rawContract.tvc,
-        },
-        {
-          signer: this.keys,
-          address: rawContract.address[network],
-          client: this.client,
-        },
-      );
-      return true;
-    });
+    // const network = await this.getNetwork();
+    // contracts.forEach((key) => {
+    //   const rawContract = TonSDK.getContractRaw(key);
+    //   if (!rawContract) {
+    //     // eslint-disable-next-line no-console
+    //     return console.error('Contract not found', key);
+    //   }
+    //   this.contracts[key] = new Account(
+    //     {
+    //       abi: rawContract.abi,
+    //       tvc: rawContract.tvc,
+    //     },
+    //     {
+    //       signer: this.keys,
+    //       address: rawContract.address[network],
+    //       client: this.client,
+    //     },
+    //   );
+    //   return true;
+    // });
 
     this.nowReady();
+  }
+
+  async getContractAtAddress(
+    contract: keyof typeof ContractNames,
+    address?: any,
+    initialParams?: {},
+  ) {
+    const rawContract = TonSDK.getContractRaw(contract);
+    if (!rawContract) {
+      // eslint-disable-next-line no-console
+      console.error('Contract not found', contract);
+      return false;
+    }
+    const network = await this.getNetwork();
+
+    const realAddres =
+      address !== 'undefined' ? address : rawContract.address[network as any];
+    const tonContract = new Account(
+      {
+        abi: rawContract.abi,
+        tvc: rawContract.tvc,
+      },
+      {
+        signer: this.keys,
+        address: realAddres,
+        client: this.client,
+        initData: initialParams,
+      },
+    );
+    return tonContract;
   }
 
   async keyPairFromPhrase(input: string) {
@@ -165,18 +196,33 @@ class TonSDK extends AbstractProvider {
     return result;
   }
 
-  async run(contractName: string, functionName: string, input?: object) {
+  async run(
+    contractName: keyof typeof ContractNames,
+    functionName: string,
+    input?: object,
+    address?: string,
+  ) {
     await this.whenReady();
-    const result = await this.contracts[contractName].runLocal(
-      functionName,
-      input,
-    );
+    const contract = (await this.getContractAtAddress(
+      contractName,
+      address,
+    )) as Account;
+    const result = await contract.runLocal(functionName, input || {});
     return result;
   }
 
-  async call(contractName: string, functionName: string, input?: object) {
+  async call(
+    contractName: keyof typeof ContractNames,
+    functionName: string,
+    input?: object,
+    address?: string,
+  ) {
     await this.whenReady();
-    const result = await this.contracts[contractName].run(functionName, input);
+    const contract = (await this.getContractAtAddress(
+      contractName,
+      address,
+    )) as Account;
+    const result = await contract.run(functionName, input || {});
     return result;
   }
 
@@ -203,12 +249,23 @@ class TonSDK extends AbstractProvider {
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
     const pubkey = this.keys.keys.public;
-    const params = await this.contracts.controller.getParamsOfDeployMessage({
+    const constroolerContract = (await this.getContractAtAddress(
+      'controller',
+    )) as Account;
+    const params = await constroolerContract.getParamsOfDeployMessage({
       initInput: { public_key: `0x${pubkey}` },
     });
     const addr = await this.client.abi.encode_message(params);
 
     return addr.address;
+  }
+
+  getPublicKey(withLeadingHex: boolean) {
+    let key = this.keys.keys.public;
+    if (withLeadingHex) {
+      key = `0x${key}`;
+    }
+    return key;
   }
 
   async getBalance() {
@@ -261,9 +318,45 @@ class TonSDK extends AbstractProvider {
     ];
   }
 
-  // async deployContract(contractName: string, deployParam?: {}) {
+  async deployContract(
+    contractName: keyof typeof ContractNames,
+    initialParams?: {},
+    constructorParams?: {},
+  ) {
+    const contract = (await this.getContractAtAddress(
+      contractName,
+      null,
+      initialParams,
+    )) as Account;
 
-  // }
+    const address = await contract.getAddress();
+    let info;
+    try {
+      info = await contract.getAccount();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(`Account with address ${address} isn't exist`);
+      return '';
+    }
+
+    if (info.acc_type === 1) {
+      // active
+      // eslint-disable-next-line no-console
+      console.log(`Account with address ${address} is already deployed`);
+      return address;
+    }
+
+    // const fee = await contract.calcDeployFees();
+
+    const giver = await Account.getGiverForClient(this.client);
+
+    await contract.deploy({
+      initInput: constructorParams,
+      useGiver: giver,
+    });
+
+    return address;
+  }
 }
 
 export default TonSDK;

@@ -129,11 +129,11 @@ class ExtraTon extends AbstractProvider {
   }
 
   async deployContract(
-    contractName: string,
+    contractName: keyof typeof ContractNames,
     initialParams?: {},
     constructorParams?: {},
   ) {
-    const rawContract = ExtraTon.getContractRaw(contractName as any); // todo no any
+    const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
       rawContract.abi,
