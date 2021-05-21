@@ -106,6 +106,7 @@ class ExtraTon extends AbstractProvider {
     );
     contract.setInitialParams(initialParams);
     const realContract = await contract.deploy(constructorParams);
+    // eslint-disable-next-line no-console
     console.log(realContract);
 
     return realContract;
