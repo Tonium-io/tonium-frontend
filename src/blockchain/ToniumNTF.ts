@@ -22,7 +22,7 @@ class TiniumNFT {
       }
     }
 
-    this.actions = new Actions(this.getCurrentProvider);
+    this.actions = new Actions(this.getCurrentProvider.bind(this));
   }
 
   getActions() {
@@ -46,6 +46,7 @@ class TiniumNFT {
   }
 
   getCurrentProvider() {
+    // eslint-disable-next-line no-debugger
     return this.provider;
   }
 }
