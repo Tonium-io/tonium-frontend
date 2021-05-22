@@ -355,12 +355,15 @@ class TonSDK extends AbstractProvider {
       // active
       // eslint-disable-next-line no-console
       console.log(`Account with address ${address} is already deployed`);
-      return address;
+      console.log('byt we going to deploy it');
+      // return address;
     }
 
     // const fee = await contract.calcDeployFees();
 
     const giver = await Account.getGiverForClient(this.client);
+
+    console.log(constructorParams);
 
     await contract.deploy({
       initInput: constructorParams,

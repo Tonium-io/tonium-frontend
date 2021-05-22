@@ -1,8 +1,55 @@
-class Actions {
-  private getCurrentProvider: Function;
+import AbstractProvider from '../providers/AbstractProvider';
 
-  constructor(getCurrentProvider: Function) {
+class Actions {
+  private getCurrentProvider: () => AbstractProvider;
+
+  constructor(getCurrentProvider: () => AbstractProvider) {
     this.getCurrentProvider = getCurrentProvider;
+  }
+
+  async resolveProviderOrThrow() {
+    const provider = await this.getCurrentProvider();
+    if (!provider) {
+      throw new Error('Please init provider first');
+    }
+    return provider;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getUserCollections() {
+    let userNFTs = localStorage.getItem('tonuim_userNFT');
+    if (userNFTs) {
+      userNFTs = JSON.parse(userNFTs);
+    }
+
+    // todo grab info
+  }
+
+  async createUserCollections(name: string, symbol: string) {
+    const provider = await this.resolveProviderOrThrow();
+    const walletContract = await Object.getPrototypeOf(
+      provider,
+    ).constructor.getContractRaw('wallet');
+    const contract = await provider.deployContract(
+      'rootToken',
+      {},
+      {
+        name: name
+          .split('')
+          .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
+          .join(''),
+        symbol: symbol
+          .split('')
+          .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
+          .join(''),
+        tokenURI: '',
+        decimals: 0,
+        root_public_key: provider.getPublicKey(true),
+        wallet_code: walletContract.tvc,
+      },
+    );
+    console.log(contract);
+    return []; // создание коллекции
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -16,12 +63,6 @@ class Actions {
     const transactions: [] = [];
     return transactions;
   } // получение всех транзакций аккаунта (с разделением по типам)
-
-  // eslint-disable-next-line class-methods-use-this
-  postCreateCollections() {
-    const cpllections: [] = [];
-    return cpllections; // создание коллекции
-  }
 
   // eslint-disable-next-line class-methods-use-this
   postCreateTokken() {
