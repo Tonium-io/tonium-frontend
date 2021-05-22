@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useReducer, useEffect } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -55,22 +55,21 @@ declare const window: any;
 
 function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (initRequiredField) {
-  //       await initRequiredField
-  //         .validator(formValues?.[initRequiredField?.name])
-  //         .then((data: any): any => {
-  //           setValidate(data);
-  //         })
-  //         .catch((e: any) => console.error(e, 'Err'));
-  //     }
-  //   })();
-  // }, [initRequiredField]);
+  const [address, setAddress] = useState('');
   const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
-
+  useEffect(() => {
+    if (state.auth) {
+      console.log(state.auth);
+      toniumNFT
+        .getCurrentProvider()
+        .getAddress()
+        .then((data: any) => {
+          console.log(data);
+        });
+    }
+  }, [state.auth]);
+  console.log(toniumNFT.getCurrentProvider().getAddress().then(console.log));
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
       <Router>
@@ -218,6 +217,7 @@ function App() {
                           <TextField
                             label="address"
                             variant="filled"
+                            value={address || ''}
                             InputProps={{
                               readOnly: true,
                             }}

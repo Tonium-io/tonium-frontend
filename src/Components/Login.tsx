@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import cls from '../app.module.scss';
 import { ContextApp, setOpen, setLoad } from '../store/reducer';
+
 /* eslint-disable react/jsx-props-no-spreading */
 const Login = ({ toniumNFT }: any) => {
   const DialogTitle = (props: any) => {
@@ -33,24 +34,31 @@ const Login = ({ toniumNFT }: any) => {
     isAdditionalProviderFieldsRequired,
     setIsAdditionalProviderFieldsRequired,
   ] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState(null);
-  const [formValues, setFormValues] = useState<{} | null>(null);
-  const [requiredInitField, setRequiredInitField] = useState<any>(null);
+  const [selectedProvider, setSelectedProvider] = useState<any>(null);
+  const [formValues, setFormValues] = useState<any>(null);
+  const [validate, setValidate] = useState<any>(null);
+
+  // const [indRequiredInitField, setIndRequiredInitField] = useState<any>(null);
 
   const { state, dispatch } = useContext(ContextApp);
 
   const { open, load }: any = state;
   useEffect(() => {
-    if (requiredInitField) {
-      requiredInitField
-        .validator(formValues?.[requiredInitField.name])
-        .then((data: {}): any => {
-          setLoad(dispatch, true);
-          console.log(data, 'DATA');
-          setLoad(dispatch, false);
-        });
-    }
+    console.log(formValues?.mnemonic);
+
+    toniumNFT
+      .getProviders()
+      .TonSDK.getRequiredInitFields()[0]
+      .validator(formValues?.mnemonic)
+      .then((data: any) => {
+        setLoad(dispatch, true);
+        setValidate(data);
+        setLoad(dispatch, false);
+      })
+      .catch((err: any) => console.error(err));
   }, [formValues]);
+
+  console.log(validate, 'Load');
   const handleClose = () => {
     setIsAdditionalProviderFieldsRequired(false);
     setOpen(dispatch, false);
@@ -101,7 +109,7 @@ const Login = ({ toniumNFT }: any) => {
             <form
               autoComplete="off"
               className={cls.mnemonic}
-              onSubmit={(data) => console.log(data)}
+              onSubmit={(data) => console.log(data, 'DATA')}
             >
               <Grid
                 container
@@ -115,7 +123,6 @@ const Login = ({ toniumNFT }: any) => {
                     .getProviders()
                     [selectedProvider as any].getRequiredInitFields()
                     .map((field: any) => {
-                      setRequiredInitField(field);
                       console.log(field);
                       return (
                         <TextField
@@ -178,9 +185,9 @@ const Login = ({ toniumNFT }: any) => {
                   disabled={!formValues || load}
                   variant="contained"
                   color="primary"
+                  value="submit"
                   type="submit"
                   onClick={() => {
-                    // eslint-disable-next-line no-debugger
                     toniumNFT.setProvider(
                       selectedProvider as any,
                       formValues as {},
