@@ -51,8 +51,11 @@ class TiniumNFT {
     localStorage.setItem('toniumProvider', providerName);
 
     setLogin(this.dispatch, true);
-    console.log('Sucess');
-    toast.success('Sucess');
+
+    toast.success('SUCCESS', {
+      position: 'bottom-right',
+      autoClose: 4000,
+    });
     return true;
   }
 

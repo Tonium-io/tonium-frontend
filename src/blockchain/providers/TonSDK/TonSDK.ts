@@ -260,6 +260,7 @@ class TonSDK extends AbstractProvider {
     // const rawContract = TonSDK.getContractRaw("controller");
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
+    console.log(this, 'THIS');
     const pubkey = this.keys.keys.public;
     const constroolerContract = (await this.getContractAtAddress(
       'controller',

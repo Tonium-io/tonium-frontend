@@ -16,14 +16,14 @@ import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import 'react-toastify/dist/ReactToastify.css';
 
 /* eslint-disable react/jsx-props-no-spreading */
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
 import TextField from '@material-ui/core/TextField';
-
-import LinkIcon from '@material-ui/icons/Link';
+import { ToastContainer } from 'react-toastify';
 
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -60,16 +60,16 @@ function App() {
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
-      console.log(state.auth);
-      toniumNFT
-        .getCurrentProvider()
-        .getAddress()
-        .then((data: any) => {
-          console.log(data);
-        });
+      // console.log(state.auth);
+      // toniumNFT
+      //   .getCurrentProvider()
+      //   .getAddress()
+      //   .then((data: any) => {
+      //     console.log(data);
+      //   });
     }
   }, [state.auth]);
-  console.log(toniumNFT.getCurrentProvider().getAddress().then(console.log));
+
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
       <Router>
@@ -300,6 +300,17 @@ function App() {
         >
           <Login toniumNFT={toniumNFT} />
         </Grid>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Router>
     </ContextApp.Provider>
   );

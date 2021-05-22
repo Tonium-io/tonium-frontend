@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
@@ -172,7 +173,13 @@ const Login = ({ toniumNFT }: any) => {
                               setFormValues(nameValue);
                               setLoad(dispatch, false);
                             })
-                            .catch((e: any) => console.error(e.message));
+                            .catch((e: any) => {
+                              toast.error('ERROR', {
+                                position: 'bottom-right',
+                                autoClose: 4000,
+                              });
+                              console.error(e.message);
+                            });
                         }}
                       >
                         {action.description}
