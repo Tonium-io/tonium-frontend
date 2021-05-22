@@ -1,7 +1,10 @@
+import { toast } from 'react-toastify';
 import ExtraTon from './providers/ExtraTon/ExtraTon';
 import TonSDK from './providers/TonSDK/TonSDK';
 import AbstractProvider from './providers/AbstractProvider';
 import Actions from './actions/Actions';
+
+import { setLogin } from '../store/reducer';
 
 class TiniumNFT {
   providers: { [key: string]: any } = { ExtraTon, TonSDK };
@@ -33,6 +36,7 @@ class TiniumNFT {
   }
 
   providerLogout() {
+    console.log('Log out');
     this.getCurrentProvider().logout();
     localStorage.removeItem('toniumProvider');
   }
@@ -46,8 +50,9 @@ class TiniumNFT {
     ) as AbstractProvider;
     localStorage.setItem('toniumProvider', providerName);
 
-    // todo set state ;
-
+    setLogin(this.dispatch, true);
+    console.log('Sucess');
+    toast.success('Sucess');
     return true;
   }
 

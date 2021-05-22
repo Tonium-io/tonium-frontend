@@ -109,6 +109,9 @@ header {
         color: $red;
       }
     }
+    .logout {
+      margin-left: 20px;
+    }
     .balance {
       margin-left: 10px;
       span,
@@ -169,9 +172,12 @@ header {
   &__title {
     display: flex;
     justify-content: flex-end;
+    h6 {
+      margin: 0 auto;
+    }
   }
   &__content {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
   }
 }
