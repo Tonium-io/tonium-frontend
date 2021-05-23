@@ -25,7 +25,7 @@ class Actions {
     // todo grab info
   }
 
-  async createUserCollections(name: string, symbol: string) {
+  async createUserCollections(name: string, symbol: string, tokenURI = '') {
     const provider = await this.resolveProviderOrThrow();
     const walletContract = await Object.getPrototypeOf(
       provider,
@@ -34,22 +34,23 @@ class Actions {
       'rootToken',
       {},
       {
-        name: name
-          .split('')
-          .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
-          .join(''),
-        symbol: symbol
-          .split('')
-          .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
-          .join(''),
-        tokenURI: '',
-        decimals: 0,
+        name: Actions.stringToHex(name),
+        symbol: Actions.stringToHex(symbol),
+        tokenURI: Actions.stringToHex(tokenURI),
+        decimals: 8,
         root_public_key: provider.getPublicKey(true),
         wallet_code: walletContract.tvc,
       },
     );
     console.log(contract);
     return []; // создание коллекции
+  }
+
+  static stringToHex(string: string) {
+    return string
+      .split('')
+      .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
+      .join('');
   }
 
   // eslint-disable-next-line class-methods-use-this
