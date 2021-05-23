@@ -338,6 +338,48 @@ class TonSDK extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    const rawContract = TonSDK.getContractRaw(contractName);
+    const deployOptions = {
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      deploy_set: {
+        tvc: rawContract.tvc,
+        initial_data: initialParams,
+      },
+      call_set: {
+        function_name: 'constructor',
+        input: constructorParams,
+      },
+      signer: {
+        type: 'Keys',
+        keys: this.keys.keys,
+      },
+    } as const;
+
+    const result = await this.client.abi
+      .encode_message(deployOptions)
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(deployOptions);
+        // eslint-disable-next-line no-console
+        console.error(e);
+      });
+
+    // eslint-disable-next-line no-console
+    console.log(result);
+    // eslint-disable-next-line no-console
+    console.log(deployOptions);
+
+    return '0';
+  }
+
+  async deployContractAppKit(
+    contractName: keyof typeof ContractNames,
+    initialParams?: {},
+    constructorParams?: {},
+  ) {
     const contract = (await this.getContractAtAddress(
       contractName,
       null,
@@ -353,6 +395,8 @@ class TonSDK extends AbstractProvider {
       console.log(`Account with address ${address} isn't exist`);
       return '';
     }
+    // eslint-disable-next-line no-console
+    console.log(info, address);
 
     if (info.acc_type === 1) {
       // active
