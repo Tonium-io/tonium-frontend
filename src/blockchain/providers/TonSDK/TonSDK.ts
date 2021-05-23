@@ -3,6 +3,7 @@ import {
   signerSigningBox,
   signerNone,
   signerKeys,
+  KeyPair,
 } from '@tonclient/core';
 
 import { libWeb } from '@tonclient/lib-web';
@@ -56,7 +57,7 @@ import ContractNames from '../../../types/Contract';
 // }
 
 class TonSDK extends AbstractProvider {
-  client: TonClient;
+  client!: TonClient;
 
   private mnemonic!: string;
 
@@ -97,13 +98,16 @@ class TonSDK extends AbstractProvider {
   // }
 
   async init(mnemonic?: string) {
+    await TonSDK.timeout(1000);
+
     if (!mnemonic && localStorage.getItem('tonium_mnemonic')) {
       // eslint-disable-next-line no-param-reassign
       mnemonic = localStorage.getItem('tonium_mnemonic') as string;
     }
 
     if (mnemonic) {
-      this.keys = signerKeys(await this.keyPairFromPhrase(mnemonic));
+      const keys = await this.keyPairFromPhrase(mnemonic);
+      this.keys = signerKeys(keys as KeyPair);
       localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
@@ -198,7 +202,6 @@ class TonSDK extends AbstractProvider {
     const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
 
     // should check 12 or 24 word by raise on another
-
     const result = await this.client.crypto.mnemonic_derive_sign_keys({
       dictionary: SEED_PHRASE_DICTIONARY_ENGLISH,
       word_count: SEED_PHRASE_WORD_COUNT,
@@ -260,7 +263,6 @@ class TonSDK extends AbstractProvider {
     // const rawContract = TonSDK.getContractRaw("controller");
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
-    console.log(this, 'THIS');
     const pubkey = this.keys.keys.public;
     const constroolerContract = (await this.getContractAtAddress(
       'controller',
@@ -356,6 +358,7 @@ class TonSDK extends AbstractProvider {
       // active
       // eslint-disable-next-line no-console
       console.log(`Account with address ${address} is already deployed`);
+      // eslint-disable-next-line no-console
       console.log('byt we going to deploy it');
       // return address;
     }

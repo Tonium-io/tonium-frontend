@@ -17,6 +17,12 @@ abstract class AbstractProvider {
     // return false;
   }
 
+  static async timeout(time: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, time);
+    });
+  }
+
   static isAvailable() {
     // overwrite
     return false;

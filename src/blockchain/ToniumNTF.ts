@@ -20,8 +20,8 @@ class TiniumNFT {
   constructor(state: any, dispatch: Function) {
     this.state = state;
     this.dispatch = dispatch;
-    if (localStorage.getItem('toniumProvider')) {
-      this.setProvider(localStorage.getItem('toniumProvider') as string);
+    if (localStorage.getItem('tonium_provider')) {
+      this.setProvider(localStorage.getItem('tonium_provider') as string);
     }
 
     this.actions = new Actions(this.getCurrentProvider.bind(this));
@@ -36,9 +36,8 @@ class TiniumNFT {
   }
 
   providerLogout() {
-    console.log('Log out');
     this.getCurrentProvider().logout();
-    localStorage.removeItem('toniumProvider');
+    localStorage.removeItem('tonium_provider');
   }
 
   setProvider(providerName: string, additionaInitParams?: {}) {
@@ -48,7 +47,7 @@ class TiniumNFT {
     this.provider = new (this.getProviders()[providerName])(
       additionaInitParams,
     ) as AbstractProvider;
-    localStorage.setItem('toniumProvider', providerName);
+    localStorage.setItem('tonium_provider', providerName);
 
     setLogin(this.dispatch, true);
 
