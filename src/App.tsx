@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useMemo, useReducer } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,9 +16,15 @@ import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import PanToolIcon from '@material-ui/icons/PanTool';
+import 'react-toastify/dist/ReactToastify.css';
+
+/* eslint-disable react/jsx-props-no-spreading */
 import EditIcon from '@material-ui/icons/Edit';
-import LinkIcon from '@material-ui/icons/Link';
+import Button from '@material-ui/core/Button';
+
 import TextField from '@material-ui/core/TextField';
+import { ToastContainer } from 'react-toastify';
+
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
@@ -27,28 +33,42 @@ import ToniumNFT from './blockchain/ToniumNTF';
 
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
+import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
 import Wp from './pages/Wp/Wp';
-import { ContextApp, reducer, intialState } from './store/reducer';
+import {
+  ContextApp,
+  reducer,
+  intialState,
+  setOpen,
+  setLogin,
+} from './store/reducer';
 import cls from './app.module.scss';
 
 import Logo from './img/tonium-logo-dark-text.svg';
-import CristalIcon from './img/cristall.svg';
 
 // Application initialization
 
 declare const window: any;
 
 function App() {
-  const [signerId, setSignerId] = useState(0);
   const [state, dispatch] = useReducer(reducer, intialState);
-  // const toniumNFT = useMemo(() => new ToniumNFT(), []);
-  const toniumNFT = new ToniumNFT(
-    'benefit clock effort mushroom milk organ glory bacon stomach morning toy excess entry clay kitten damage sphere three base bind envelope thought valve cat',
-  );
+  const [address, setAddress] = useState('');
+  const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
+  useEffect(() => {
+    if (state.auth) {
+      // console.log(state.auth);
+      // toniumNFT
+      //   .getCurrentProvider()
+      //   .getAddress()
+      //   .then((data: any) => {
+      //     console.log(data);
+      //   });
+    }
+  }, [state.auth]);
 
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
@@ -175,30 +195,62 @@ function App() {
                       <Link to="/wp">What is it?</Link>
                     </div>
 
-                    <Grid
-                      container
-                      spacing={0}
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                      wrap="nowrap"
-                      className={cls.address}
-                    >
-                      <Link to="/wp" className={cls.nick}>
-                        <span>@mrboss</span>
-                        <EditIcon />
-                      </Link>
-                      <form noValidate autoComplete="off">
-                        <TextField label="address" variant="filled" />
-                      </form>
-                      <span className={cls.balance}>
-                        <span>12.23</span>
-                        <img src={CristalIcon} alt="TON" width="20" />{' '}
-                      </span>
-                      <Link to="/wp" className={cls.linkwallet}>
-                        <LinkIcon style={{ fontSize: 30 }} />
-                      </Link>
-                    </Grid>
+                    {state.auth ? (
+                      <Grid
+                        container
+                        spacing={0}
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="center"
+                        wrap="nowrap"
+                        className={cls.address}
+                      >
+                        <Link to="/wp" className={cls.nick}>
+                          {/* <span>@mrboss</span> */}
+                          {/* <EditIcon /> */}
+                        </Link>
+                        <form
+                          noValidate
+                          autoComplete="off"
+                          style={{ display: 'flex' }}
+                        >
+                          <TextField
+                            label="address"
+                            variant="filled"
+                            value={address || ''}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                          />
+                        </form>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {
+                            toniumNFT.providerLogout();
+                            setLogin(dispatch, false);
+                          }}
+                          className={cls.logout}
+                        >
+                          Log Out
+                        </Button>
+                        {/* <span className={cls.balance}>
+                          <span>12.23</span>
+                          <img src={CristalIcon} alt="TON" width="20" />{' '}
+                        </span> */}
+                        {/* <Link to="/wp" className={cls.linkwallet}>
+                          <LinkIcon style={{ fontSize: 30 }} />
+                        </Link> */}
+                      </Grid>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => setOpen(dispatch, true)}
+                      >
+                        Login
+                      </Button>
+                    )}
 
                     <div className={cls.lang}>
                       <FormControl>
@@ -239,6 +291,26 @@ function App() {
             </Grid>
           </Grid>
         </div>
+        <Grid
+          container
+          xs={12}
+          direction="column"
+          justify="space-around"
+          alignItems="center"
+        >
+          <Login toniumNFT={toniumNFT} />
+        </Grid>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Router>
     </ContextApp.Provider>
   );

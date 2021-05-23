@@ -60,6 +60,8 @@ abstract class AbstractProvider {
 
   abstract getAddress(): Promise<String>;
 
+  abstract logout(): boolean;
+
   abstract getPublicKey(withLeadingHex: boolean): String;
 
   abstract getBalance(): Promise<Number>;

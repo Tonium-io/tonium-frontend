@@ -1,7 +1,10 @@
+import { toast } from 'react-toastify';
 import ExtraTon from './providers/ExtraTon/ExtraTon';
 import TonSDK from './providers/TonSDK/TonSDK';
 import AbstractProvider from './providers/AbstractProvider';
 import Actions from './actions/Actions';
+
+import { setLogin } from '../store/reducer';
 
 class TiniumNFT {
   providers: { [key: string]: any } = { ExtraTon, TonSDK };
@@ -10,16 +13,15 @@ class TiniumNFT {
 
   actions: Actions;
 
-  constructor(mnemonic?: string) {
+  state: any;
+
+  dispatch: Function;
+
+  constructor(state: any, dispatch: Function) {
+    this.state = state;
+    this.dispatch = dispatch;
     if (localStorage.getItem('toniumProvider')) {
-      if (mnemonic) {
-        this.setProvider(
-          localStorage.getItem('toniumProvider') as string,
-          mnemonic,
-        );
-      } else {
-        this.setProvider(localStorage.getItem('toniumProvider') as string);
-      }
+      this.setProvider(localStorage.getItem('toniumProvider') as string);
     }
 
     this.actions = new Actions(this.getCurrentProvider.bind(this));
@@ -33,15 +35,27 @@ class TiniumNFT {
     return this.providers;
   }
 
-  setProvider(providerName: string, mnemonic?: string) {
+  providerLogout() {
+    console.log('Log out');
+    this.getCurrentProvider().logout();
+    localStorage.removeItem('toniumProvider');
+  }
+
+  setProvider(providerName: string, additionaInitParams?: {}) {
     if (!this.providers[providerName]) {
       return false;
     }
     this.provider = new (this.getProviders()[providerName])(
-      mnemonic,
+      additionaInitParams,
     ) as AbstractProvider;
     localStorage.setItem('toniumProvider', providerName);
 
+    setLogin(this.dispatch, true);
+
+    toast.success('SUCCESS', {
+      position: 'bottom-right',
+      autoClose: 4000,
+    });
     return true;
   }
 
