@@ -367,8 +367,6 @@ class TonSDK extends AbstractProvider {
 
     const giver = await Account.getGiverForClient(this.client);
 
-    console.log(constructorParams);
-
     await contract.deploy({
       initInput: constructorParams,
       useGiver: giver,

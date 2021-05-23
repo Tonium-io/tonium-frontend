@@ -32,16 +32,17 @@ class Actions {
     ).constructor.getContractRaw('wallet');
     const contract = await provider.deployContract(
       'rootToken',
-      {},
       {
         name: Actions.stringToHex(name),
         symbol: Actions.stringToHex(symbol),
         tokenURI: Actions.stringToHex(tokenURI),
-        decimals: 8,
+        decimals: 0,
         root_public_key: provider.getPublicKey(true),
         wallet_code: walletContract.tvc,
       },
+      {},
     );
+    // eslint-disable-next-line no-console
     console.log(contract);
     return []; // создание коллекции
   }
