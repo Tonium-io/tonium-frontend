@@ -33,12 +33,12 @@ class Actions {
     const contract = await provider.deployContract(
       'rootToken',
       {
-        name: Actions.stringToHex(name),
-        symbol: Actions.stringToHex(symbol),
-        tokenURI: Actions.stringToHex(tokenURI),
-        decimals: 0,
-        root_public_key: provider.getPublicKey(true),
-        wallet_code: walletContract.tvc,
+        name_: Actions.stringToHex(name),
+        symbol_: Actions.stringToHex(symbol),
+        tokenURI_: Actions.stringToHex(tokenURI),
+        decimals_: 0,
+        root_public_key_: provider.getPublicKey(true),
+        wallet_code_: walletContract.tvc,
       },
       {},
     );
