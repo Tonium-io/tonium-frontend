@@ -60,13 +60,13 @@ function App() {
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
-      // console.log(state.auth);
-      // toniumNFT
-      //   .getCurrentProvider()
-      //   .getAddress()
-      //   .then((data: any) => {
-      //     console.log(data);
-      //   });
+      console.log(state.auth);
+      toniumNFT
+        .getCurrentProvider()
+        .getAddress()
+        .then((data: any) => {
+          setAddress(data);
+        });
     }
   }, [state.auth]);
 

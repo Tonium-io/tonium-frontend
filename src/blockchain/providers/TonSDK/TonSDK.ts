@@ -104,6 +104,8 @@ class TonSDK extends AbstractProvider {
 
     if (mnemonic) {
       this.keys = signerKeys(await this.keyPairFromPhrase(mnemonic));
+
+      localStorage.setItem('pub_key', this.keys.keys.public);
       localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
@@ -260,8 +262,9 @@ class TonSDK extends AbstractProvider {
     // const rawContract = TonSDK.getContractRaw("controller");
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
-    console.log(this, 'THIS');
-    const pubkey = this.keys.keys.public;
+
+    const pubkey = localStorage.getItem('pub_key');
+
     const constroolerContract = (await this.getContractAtAddress(
       'controller',
     )) as Account;
