@@ -3,6 +3,8 @@ import {
   signerSigningBox,
   signerNone,
   signerKeys,
+  KeyPair,
+  accountForExecutorUninit,
 } from '@tonclient/core';
 
 import { libWeb } from '@tonclient/lib-web';
@@ -56,7 +58,7 @@ import ContractNames from '../../../types/Contract';
 // }
 
 class TonSDK extends AbstractProvider {
-  client: TonClient;
+  client!: TonClient;
 
   private mnemonic!: string;
 
@@ -97,15 +99,16 @@ class TonSDK extends AbstractProvider {
   // }
 
   async init(mnemonic?: string) {
+    await TonSDK.timeout(1000);
+
     if (!mnemonic && localStorage.getItem('tonium_mnemonic')) {
       // eslint-disable-next-line no-param-reassign
       mnemonic = localStorage.getItem('tonium_mnemonic') as string;
     }
 
     if (mnemonic) {
-      this.keys = signerKeys(await this.keyPairFromPhrase(mnemonic));
-
-      localStorage.setItem('pub_key', this.keys.keys.public);
+      const keys = await this.keyPairFromPhrase(mnemonic);
+      this.keys = signerKeys(keys as KeyPair);
       localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
@@ -200,7 +203,6 @@ class TonSDK extends AbstractProvider {
     const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
 
     // should check 12 or 24 word by raise on another
-
     const result = await this.client.crypto.mnemonic_derive_sign_keys({
       dictionary: SEED_PHRASE_DICTIONARY_ENGLISH,
       word_count: SEED_PHRASE_WORD_COUNT,
@@ -221,8 +223,9 @@ class TonSDK extends AbstractProvider {
       contractName,
       address,
     )) as Account;
-    const result = await contract.runLocal(functionName, input || {});
-    return result;
+    const result = (await contract.runLocal(functionName, input || {})) as any;
+
+    return result.decoded?.out_messages[0].value.value0;
   }
 
   async call(
@@ -262,18 +265,17 @@ class TonSDK extends AbstractProvider {
     // const rawContract = TonSDK.getContractRaw("controller");
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
+    const pubkey = this.keys.keys.public;
+    return `0x${pubkey}`;
+    // const constroolerContract = (await this.getContractAtAddress(
+    //   'controller',
+    // )) as Account;
+    // const params = await constroolerContract.getParamsOfDeployMessage({
+    //   initInput: { public_key: `0x${pubkey}` },
+    // });
+    // const addr = await this.client.abi.encode_message(params);
 
-    const pubkey = localStorage.getItem('pub_key');
-
-    const constroolerContract = (await this.getContractAtAddress(
-      'controller',
-    )) as Account;
-    const params = await constroolerContract.getParamsOfDeployMessage({
-      initInput: { public_key: `0x${pubkey}` },
-    });
-    const addr = await this.client.abi.encode_message(params);
-
-    return addr.address;
+    // return addr.address;
   }
 
   getPublicKey(withLeadingHex: boolean) {
@@ -339,6 +341,130 @@ class TonSDK extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    const rawContract = TonSDK.getContractRaw(contractName);
+    const deployOptions = {
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      deploy_set: {
+        tvc: rawContract.tvc,
+        initial_data: initialParams,
+        initial_pubkey: this.keys.keys.public,
+      },
+      call_set: {
+        function_name: 'constructor',
+        input: constructorParams,
+      },
+      signer: {
+        type: 'Keys',
+        keys: this.keys.keys,
+      },
+    } as const;
+
+    const result = await this.client.abi
+      .encode_message(deployOptions)
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(deployOptions);
+        // eslint-disable-next-line no-console
+        console.error(e);
+      });
+
+    if (!result) {
+      // eslint-disable-next-line no-console
+      console.error('Not able to detect address');
+      throw new Error('Not able to detect address');
+    }
+
+    // eslint-disable-next-line no-console
+    console.log(`Future address of the contract will be: ${result.address}`);
+
+    const addressInfo = await this.getAddresInfo(result.address);
+
+    if (addressInfo.isInited) {
+      // eslint-disable-next-line no-console
+      console.error('Address already exists. Please check your code');
+      throw new Error('Address already exists. Please check your code');
+    }
+
+    const executorResult = await this.client.tvm.run_executor({
+      account: accountForExecutorUninit(),
+      abi: { type: 'Contract', value: rawContract.abi },
+      message: result.message,
+    });
+
+    // eslint-disable-next-line no-console
+    console.log(
+      `Total fee to deploy: ${executorResult.fees.total_account_fees}`,
+    );
+
+    if (addressInfo.balance <= executorResult.fees.total_account_fees) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `Account balanse ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfer money here`,
+      );
+
+      // add money here
+      const giver = await Account.getGiverForClient(this.client);
+
+      const giverResult = await giver.sendTo(
+        result.address,
+        executorResult.fees.total_account_fees as any,
+      );
+
+      // eslint-disable-next-line no-console
+      console.log(giverResult);
+    }
+
+    const deployResult = await this.client.processing
+      .process_message({
+        send_events: false,
+        message_encode_params: deployOptions,
+      })
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+        throw new Error(e);
+      });
+
+    // eslint-disable-next-line no-console
+    console.log(`Success: ${deployResult.transaction.account_addr} `);
+
+    return deployResult.transaction.account_addr;
+  }
+
+  async getAddresInfo(address: string) {
+    const answer = {
+      isExist: false,
+      isInited: false,
+      balance: 0,
+    };
+    const { result } = await this.client.net.query_collection({
+      collection: 'accounts',
+      filter: {
+        id: {
+          eq: address,
+        },
+      },
+      result: 'acc_type balance code',
+    });
+    if (result.length === 0) {
+      return answer;
+    }
+
+    return {
+      balance: BigInt(result[0].balance),
+      isExist: true,
+      isInited: !!result[0].acc_type,
+    };
+  }
+
+  async deployContractAppKit(
+    contractName: keyof typeof ContractNames,
+    initialParams?: {},
+    constructorParams?: {},
+  ) {
     const contract = (await this.getContractAtAddress(
       contractName,
       null,
@@ -354,11 +480,14 @@ class TonSDK extends AbstractProvider {
       console.log(`Account with address ${address} isn't exist`);
       return '';
     }
+    // eslint-disable-next-line no-console
+    console.log(info, address);
 
     if (info.acc_type === 1) {
       // active
       // eslint-disable-next-line no-console
       console.log(`Account with address ${address} is already deployed`);
+      // eslint-disable-next-line no-console
       console.log('byt we going to deploy it');
       // return address;
     }
@@ -366,8 +495,6 @@ class TonSDK extends AbstractProvider {
     // const fee = await contract.calcDeployFees();
 
     const giver = await Account.getGiverForClient(this.client);
-
-    console.log(constructorParams);
 
     await contract.deploy({
       initInput: constructorParams,

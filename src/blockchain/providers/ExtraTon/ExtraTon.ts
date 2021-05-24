@@ -24,12 +24,6 @@ class ExtraTon extends AbstractProvider {
     this.init();
   }
 
-  static async timeout(time: number) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, time);
-    });
-  }
-
   async init(): Promise<any> {
     if (!window.freeton) {
       await ExtraTon.timeout(1000);
@@ -145,7 +139,7 @@ class ExtraTon extends AbstractProvider {
       rawContract.tvc,
     );
     contract.setInitialParams(initialParams);
-    contract.setInitialAmount('1000000000');
+    contract.setInitialAmount('10000000000');
 
     const realContract = await contract.deploy(constructorParams);
     await realContract.getDeployProcessing().wait();

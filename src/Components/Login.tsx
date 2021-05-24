@@ -37,7 +37,7 @@ const Login = ({ toniumNFT }: any) => {
   ] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
-  const [validate, setValidate] = useState<any>(null);
+  // const [validate, setValidate] = useState<any>(null);
 
   // const [indRequiredInitField, setIndRequiredInitField] = useState<any>(null);
 
@@ -45,21 +45,23 @@ const Login = ({ toniumNFT }: any) => {
 
   const { open, load }: any = state;
   useEffect(() => {
-    console.log(formValues?.mnemonic);
+    if (!formValues?.mnemonic) {
+      return;
+    }
 
     toniumNFT
       .getProviders()
       .TonSDK.getRequiredInitFields()[0]
       .validator(formValues?.mnemonic)
-      .then((data: any) => {
+      .then(() => {
         setLoad(dispatch, true);
-        setValidate(data);
+        // setValidate(data);
         setLoad(dispatch, false);
       })
+      // eslint-disable-next-line no-console
       .catch((err: any) => console.error(err));
   }, [formValues]);
 
-  console.log(validate, 'Load');
   const handleClose = () => {
     setIsAdditionalProviderFieldsRequired(false);
     setOpen(dispatch, false);
@@ -107,11 +109,7 @@ const Login = ({ toniumNFT }: any) => {
           </DialogContent>
 
           {isAdditionalProviderFieldsRequired && (
-            <form
-              autoComplete="off"
-              className={cls.mnemonic}
-              onSubmit={(data) => console.log(data, 'DATA')}
-            >
+            <form autoComplete="off" className={cls.mnemonic}>
               <Grid
                 container
                 xs={12}
@@ -123,32 +121,29 @@ const Login = ({ toniumNFT }: any) => {
                   {toniumNFT
                     .getProviders()
                     [selectedProvider as any].getRequiredInitFields()
-                    .map((field: any) => {
-                      console.log(field);
-                      return (
-                        <TextField
-                          disabled={load}
-                          error={!formValues?.[field.name]}
-                          key={field.name}
-                          onChange={(e) => {
-                            const newValues = { ...formValues } || {};
+                    .map((field: any) => (
+                      <TextField
+                        disabled={load}
+                        error={!formValues?.[field.name]}
+                        key={field.name}
+                        onChange={(e) => {
+                          const newValues = { ...formValues } || {};
 
-                            newValues[field.name] = e.target.value;
+                          newValues[field.name] = e.target.value;
 
-                            setFormValues(newValues);
-                          }}
-                          value={formValues?.[field.name] || ''}
-                          name={field.name}
-                          label={field.description}
-                          fullWidth
-                          helperText={
-                            !formValues?.[`${field.name}`]
-                              ? 'This field is required'
-                              : ''
-                          }
-                        />
-                      );
-                    })}
+                          setFormValues(newValues);
+                        }}
+                        value={formValues?.[field.name] || ''}
+                        name={field.name}
+                        label={field.description}
+                        fullWidth
+                        helperText={
+                          !formValues?.[`${field.name}`]
+                            ? 'This field is required'
+                            : ''
+                        }
+                      />
+                    ))}
                 </Grid>
                 <Grid item xs={3}>
                   {toniumNFT
@@ -178,7 +173,8 @@ const Login = ({ toniumNFT }: any) => {
                                 position: 'bottom-right',
                                 autoClose: 4000,
                               });
-                              console.error(e.message);
+                              // eslint-disable-next-line no-console
+                              console.error(e);
                             });
                         }}
                       >
