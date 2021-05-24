@@ -4,6 +4,7 @@ import {
   signerNone,
   signerKeys,
   KeyPair,
+  accountForExecutorUninit,
 } from '@tonclient/core';
 
 import { libWeb } from '@tonclient/lib-web';
@@ -347,6 +348,7 @@ class TonSDK extends AbstractProvider {
       deploy_set: {
         tvc: rawContract.tvc,
         initial_data: initialParams,
+        initial_pubkey: this.keys.keys.public,
       },
       call_set: {
         function_name: 'constructor',
@@ -367,12 +369,93 @@ class TonSDK extends AbstractProvider {
         console.error(e);
       });
 
-    // eslint-disable-next-line no-console
-    console.log(result);
-    // eslint-disable-next-line no-console
-    console.log(deployOptions);
+    if (!result) {
+      // eslint-disable-next-line no-console
+      console.error('Not able to detect address');
+      throw new Error('Not able to detect address');
+    }
 
-    return '0';
+    // eslint-disable-next-line no-console
+    console.log(`Future address of the contract will be: ${result.address}`);
+
+    const addressInfo = await this.getAddresInfo(result.address);
+
+    if (addressInfo.isInited) {
+      // eslint-disable-next-line no-console
+      console.error('Address already exists. Please check your code');
+      throw new Error('Address already exists. Please check your code');
+    }
+
+    const executorResult = await this.client.tvm.run_executor({
+      account: accountForExecutorUninit(),
+      abi: { type: 'Contract', value: rawContract.abi },
+      message: result.message,
+    });
+
+    // eslint-disable-next-line no-console
+    console.log(
+      `Total fee to deploy: ${executorResult.fees.total_account_fees}`,
+    );
+
+    if (addressInfo.balance <= executorResult.fees.total_account_fees) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `Account balanse ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfer money here`,
+      );
+
+      // add money here
+      const giver = await Account.getGiverForClient(this.client);
+
+      const giverResult = await giver.sendTo(
+        result.address,
+        executorResult.fees.total_account_fees as any,
+      );
+
+      // eslint-disable-next-line no-console
+      console.log(giverResult);
+    }
+
+    const deployResult = await this.client.processing
+      .process_message({
+        send_events: false,
+        message_encode_params: deployOptions,
+      })
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+        throw new Error(e);
+      });
+
+    // eslint-disable-next-line no-console
+    console.log(`Success: ${deployResult.transaction.account_addr} `);
+
+    return deployResult.transaction.account_addr;
+  }
+
+  async getAddresInfo(address: string) {
+    const answer = {
+      isExist: false,
+      isInited: false,
+      balance: 0,
+    };
+    const { result } = await this.client.net.query_collection({
+      collection: 'accounts',
+      filter: {
+        id: {
+          eq: address,
+        },
+      },
+      result: 'acc_type balance code',
+    });
+    if (result.length === 0) {
+      return answer;
+    }
+
+    return {
+      balance: BigInt(result[0].balance),
+      isExist: true,
+      isInited: !!result[0].acc_type,
+    };
   }
 
   async deployContractAppKit(
