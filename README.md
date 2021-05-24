@@ -1,7 +1,11 @@
 # Getting Started
 
-## add submodules
-
+##
 ```bash
-git submodule update --init --recursive
+yarn install
+yarn start
 ```
+
+## About 
+
+This is early version of NTF malkatplace for FreeTON blockchain
