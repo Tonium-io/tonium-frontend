@@ -17,12 +17,30 @@ class Actions {
 
   // eslint-disable-next-line class-methods-use-this
   async getUserCollections() {
-    let userNFTs = localStorage.getItem('tonuim_userNFT');
-    if (userNFTs) {
-      userNFTs = JSON.parse(userNFTs);
+    let userNFTs = [];
+    if (localStorage.getItem('tonuim_userNFT')) {
+      const newdata = JSON.parse(
+        localStorage.getItem('tonuim_userNFT') as string,
+      );
+      if (newdata) {
+        userNFTs = newdata;
+      }
     }
 
-    // todo grab info
+
+    if (!userNFTs.length){
+      return [];
+    }
+    const promises = []
+    // eslint-disable-next-line no-restricted-syntax
+    for (const collection of userNFTs){
+      promises.push(this.getCollectionData(collection))
+    }
+
+    const result  = await Promise.all(promises);
+
+
+    return result;
   }
 
   async createUserCollections(name: string, symbol: string, tokenURI = '') {
@@ -30,21 +48,63 @@ class Actions {
     const walletContract = await Object.getPrototypeOf(
       provider,
     ).constructor.getContractRaw('wallet');
-    const contract = await provider.deployContract(
-      'rootToken',
-      {},
-      {
-        name: Actions.stringToHex(name),
-        symbol: Actions.stringToHex(symbol),
-        tokenURI: Actions.stringToHex(tokenURI),
-        decimals: 0,
-        root_public_key: provider.getPublicKey(true),
-        wallet_code: walletContract.tvc,
-      },
-    );
-    // eslint-disable-next-line no-console
-    console.log(contract);
-    return []; // создание коллекции
+    const contractAddress = await provider
+      .deployContract(
+        'rootToken',
+        {},
+        {
+          name: Actions.stringToHex(name),
+          symbol: Actions.stringToHex(symbol),
+          tokenURI: Actions.stringToHex(tokenURI),
+          decimals: 0,
+          root_public_key: provider.getPublicKey(true),
+          wallet_code: walletContract.tvc,
+        },
+      )
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      });
+    if (!provider) {
+      return null;
+    }
+
+    if (!contractAddress) {
+      return null;
+    }
+    let userNFTs = [];
+    if (localStorage.getItem('tonuim_userNFT')) {
+      const newdata = JSON.parse(
+        localStorage.getItem('tonuim_userNFT') as string,
+      );
+      if (newdata) {
+        userNFTs = newdata;
+      }
+    }
+
+    userNFTs.push(contractAddress);
+    localStorage.setItem('tonuim_userNFT', JSON.stringify(userNFTs));
+
+    return this.getCollectionData(contractAddress);
+  }
+
+  async getCollectionData(address: string) {
+    const provider = await this.resolveProviderOrThrow();
+
+    const data = await Promise.all([
+      provider.run('rootToken', 'getName', {}, address),
+      provider.run('rootToken', 'getSymbol', {}, address),
+      provider.run('rootToken', 'getTokenURI', {}, address),
+      provider.run('rootToken', 'getTotalSupply', {}, address),
+    ]);
+
+    return {
+      address,
+      name: data[0],
+      symbol: data[1],
+      tokenUri: data[2],
+      totalSupply: data[3],
+    }
   }
 
   static stringToHex(string: string) {

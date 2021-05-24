@@ -223,8 +223,9 @@ class TonSDK extends AbstractProvider {
       contractName,
       address,
     )) as Account;
-    const result = await contract.runLocal(functionName, input || {});
-    return result;
+    const result = (await contract.runLocal(functionName, input || {})) as any;
+
+    return result.decoded?.out_messages[0].value.value0;
   }
 
   async call(
@@ -265,15 +266,16 @@ class TonSDK extends AbstractProvider {
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
     const pubkey = this.keys.keys.public;
-    const constroolerContract = (await this.getContractAtAddress(
-      'controller',
-    )) as Account;
-    const params = await constroolerContract.getParamsOfDeployMessage({
-      initInput: { public_key: `0x${pubkey}` },
-    });
-    const addr = await this.client.abi.encode_message(params);
+    return `0x${pubkey}`;
+    // const constroolerContract = (await this.getContractAtAddress(
+    //   'controller',
+    // )) as Account;
+    // const params = await constroolerContract.getParamsOfDeployMessage({
+    //   initInput: { public_key: `0x${pubkey}` },
+    // });
+    // const addr = await this.client.abi.encode_message(params);
 
-    return addr.address;
+    // return addr.address;
   }
 
   getPublicKey(withLeadingHex: boolean) {
