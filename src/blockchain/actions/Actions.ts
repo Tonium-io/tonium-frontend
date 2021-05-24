@@ -27,18 +27,16 @@ class Actions {
       }
     }
 
-
-    if (!userNFTs.length){
+    if (!userNFTs.length) {
       return [];
     }
-    const promises = []
+    const promises = [];
     // eslint-disable-next-line no-restricted-syntax
-    for (const collection of userNFTs){
-      promises.push(this.getCollectionData(collection))
+    for (const collection of userNFTs) {
+      promises.push(this.getCollectionData(collection));
     }
 
-    const result  = await Promise.all(promises);
-
+    const result = await Promise.all(promises);
 
     return result;
   }
@@ -104,7 +102,7 @@ class Actions {
       symbol: data[1],
       tokenUri: data[2],
       totalSupply: data[3],
-    }
+    };
   }
 
   static stringToHex(string: string) {
