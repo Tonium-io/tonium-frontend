@@ -1,4 +1,5 @@
 import web3Utils from 'web3-utils';
+
 import AbstractProvider from '../providers/AbstractProvider';
 
 declare const window: any;
