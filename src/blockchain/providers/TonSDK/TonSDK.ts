@@ -262,21 +262,29 @@ class TonSDK extends AbstractProvider {
   }
 
   async getAddress() {
-    // const rawContract = TonSDK.getContractRaw("controller");
-    // const network = await this.getNetwork();
-    // const sign = this.getSigner();
-    const pubkey = this.keys.keys.public;
-    return `0x${pubkey}`;
-    // const constroolerContract = (await this.getContractAtAddress(
-    //   'controller',
-    // )) as Account;
-    // const params = await constroolerContract.getParamsOfDeployMessage({
-    //   initInput: { public_key: `0x${pubkey}` },
-    // });
-    // const addr = await this.client.abi.encode_message(params);
+    const contractAddress = (await this.getContractAtAddress(
+      'controller',
+    )) as any;
+    const address = await contractAddress.getAddress();
 
-    // return addr.address;
+    return address;
   }
+  // async getAddress() {
+  // const rawContract = TonSDK.getContractRaw("controller");
+  // const network = await this.getNetwork();
+  // const sign = this.getSigner();
+  // const pubkey = this.keys.keys.public;
+  // return `0x${pubkey}`;
+  // const constroolerContract = (await this.getContractAtAddress(
+  //   'controller',
+  // )) as Account;
+  // const params = await constroolerContract.getParamsOfDeployMessage({
+  //   initInput: { public_key: `0x${pubkey}` },
+  // });
+  // const addr = await this.client.abi.encode_message(params);
+
+  // return addr.address;
+  // }
 
   getPublicKey(withLeadingHex: boolean) {
     let key = this.keys.keys.public;
@@ -284,6 +292,20 @@ class TonSDK extends AbstractProvider {
       key = `0x${key}`;
     }
     return key;
+  }
+
+  async checkAccount() {
+    const checkAccount = await this.client.net.query_collection({
+      collection: 'accounts',
+      filter: {
+        id: {
+          eq: await this.getAddress(),
+        },
+      },
+
+      result: 'acc_type',
+    });
+    return checkAccount?.result[0]?.acc_type;
   }
 
   async getBalance() {

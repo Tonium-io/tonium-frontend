@@ -72,6 +72,8 @@ abstract class AbstractProvider {
 
   abstract getBalance(): Promise<Number>;
 
+  abstract checkAccount(): Promise<Number>;
+
   static getRequiredInitFields(): Array<{
     name: String;
     description: String;

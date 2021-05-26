@@ -41,6 +41,12 @@ class Actions {
     return result;
   }
 
+  async deployContract() {
+    const provider = await this.resolveProviderOrThrow();
+    const contractAddress = await provider.deployContract('controller', {}, {});
+    return contractAddress;
+  }
+
   async createUserCollections(name: string, symbol: string, tokenURI = '') {
     const provider = await this.resolveProviderOrThrow();
     const walletContract = await Object.getPrototypeOf(
@@ -113,6 +119,46 @@ class Actions {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  async postCreateTokken(
+    address: string,
+    name: string,
+    tokenId: string,
+    type: string,
+    tokenData: string,
+  ) {
+    const provider = await this.resolveProviderOrThrow();
+
+    const data = await provider.call(
+      'rootToken',
+      'mint',
+      {
+        tokenId,
+        name: Actions.stringToHex(name),
+        data: Actions.stringToHex(tokenData),
+        type,
+      },
+      address,
+    );
+
+    return data;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async getWallet(address: string) {
+    const provider = await this.resolveProviderOrThrow();
+
+    const data = await provider.run('controller', 'm_wallets', {}, address);
+
+    return data;
+  }
+
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  putEditCollection(address: string, tooken: {}) {
+    const editToken = {};
+    return editToken;
+  } //  редактирование колллекции
+
+  // eslint-disable-next-line class-methods-use-this
   getAllTokkens() {
     const tokens: [] = [];
     return tokens;
@@ -123,18 +169,6 @@ class Actions {
     const transactions: [] = [];
     return transactions;
   } // получение всех транзакций аккаунта (с разделением по типам)
-
-  // eslint-disable-next-line class-methods-use-this
-  postCreateTokken() {
-    const createdToken: {} = {};
-    return createdToken; // создание токкена
-  }
-
-  // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  putEditCollection(tooken: {}) {
-    const editToken = {};
-    return editToken;
-  } //  редактирование колллекции
 
   // eslint-disable-next-line class-methods-use-this
   getAllNFTAuctions() {

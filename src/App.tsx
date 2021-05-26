@@ -23,6 +23,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
 import TextField from '@material-ui/core/TextField';
+import { CircularProgress } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 
 import FormControl from '@material-ui/core/FormControl';
@@ -44,6 +45,8 @@ import {
   intialState,
   setOpen,
   setLogin,
+  setUserCollenctions,
+  setLoad,
 } from './store/reducer';
 import cls from './app.module.scss';
 
@@ -56,20 +59,29 @@ declare const window: any;
 function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [address, setAddress] = useState('');
+  const [typeAcc, setTypeAcc] = useState(0);
   const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
-      console.log(state.auth);
+      toniumNFT.actions.getUserCollections().then((data: any) => {
+        console.log(data);
+        setLoad(dispatch, true);
+        setUserCollenctions(dispatch, data);
+        setLoad(dispatch, false);
+      });
       toniumNFT
         .getCurrentProvider()
-        .getAddress()
+        .checkAccount()
         .then((data: any) => {
-          setAddress(data);
+          setTypeAcc(data);
         });
+      if (typeAcc !== 1) {
+        alert('no money');
+      }
     }
   }, [state.auth]);
-
+  console.log(state, 'Load');
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
       <Router>
@@ -83,6 +95,7 @@ function App() {
             alignItems="stretch"
             className={cls.wrap}
           >
+            {state.load && <CircularProgress />}
             <Grid
               container
               xs={2}

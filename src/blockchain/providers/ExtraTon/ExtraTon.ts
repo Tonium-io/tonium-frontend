@@ -119,6 +119,11 @@ class ExtraTon extends AbstractProvider {
     return Number.NaN;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async checkAccount() {
+    return Number.POSITIVE_INFINITY;
+  }
+
   getPublicKey(withLeadingHex = false) {
     let key = this.signer.publicKey;
     if (withLeadingHex) {
