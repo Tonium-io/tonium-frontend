@@ -5,6 +5,8 @@ import contracts from '../contracts.json';
 abstract class AbstractProvider {
   inited: Boolean = false;
 
+  static description = 'PROVIDE DESCRIPTION';
+
   private readyPromise!: Promise<boolean>;
 
   private readyPromiseResolve!: any;
