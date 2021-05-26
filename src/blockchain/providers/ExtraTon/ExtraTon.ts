@@ -10,6 +10,9 @@ declare const window: any;
 class ExtraTon extends AbstractProvider {
   provider: any;
 
+  static description =
+    'ExtraTon extension. HAVE limitations (deploy contracts). Please use TonSDK instead. Will be fixed in future. Able to perform actions';
+
   signer: any;
 
   // contracts: {
