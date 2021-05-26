@@ -5,6 +5,8 @@ const { https } = require('follow-redirects');
 const tmp = require('tmp');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const AdmZip = require('adm-zip');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const prettier = require('prettier');
 
 const download = async (url) =>
   new Promise((resolve, reject) => {
@@ -50,7 +52,10 @@ const updateContract = async () => {
 
     file.removeCallback();
   }
-  await fs.promises.writeFile('./src/blockchain/contracts.json', contractsData);
+  const jsonfile = prettier.format(JSON.stringify(contractsData), {
+    parser: 'json',
+  });
+  await fs.promises.writeFile('./src/blockchain/contracts.json', jsonfile);
 };
 
 updateContract();
