@@ -34,6 +34,7 @@ import ToniumNFT from './blockchain/ToniumNTF';
 
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
+import CreateCol from './pages/Createcol/Create_col';
 import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -174,15 +175,23 @@ function App() {
                   </Link>
                 </Typography>
                 <Typography>
-                  TONIUM <span>ver 0.MVP</span>
+                  TONIUM <span>ver 0.1 MVP</span>
                 </Typography>
                 <Typography>
-                  <Link to="/wp">Whitepapper</Link>
+                  <Link
+                    to={{
+                      pathname:
+                        'https://drive.google.com/file/d/10ygf_qk5qpa5mJ9VKLdFyuo5X3Me-2iF/',
+                    }}
+                    target="_blank"
+                  >
+                    Whitepapper
+                  </Link>
                 </Typography>
               </div>
             </Grid>
 
-            <Grid item xs={10}>
+            <Grid item xs={10} className={cls.right}>
               <AppBar position="sticky" className={cls.top_panel}>
                 <Toolbar>
                   <Grid
@@ -286,6 +295,9 @@ function App() {
                   </Route>
                   <Route path="/mint">
                     <Mint />
+                  </Route>
+                  <Route path="/createcol">
+                    <CreateCol />
                   </Route>
                   <Route path="/auction">
                     <Auction />

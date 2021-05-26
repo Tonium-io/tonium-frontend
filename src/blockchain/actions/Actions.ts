@@ -1,5 +1,10 @@
+import web3Utils from 'web3-utils';
+
 import AbstractProvider from '../providers/AbstractProvider';
 
+declare const window: any;
+
+window.web3Utils = web3Utils;
 class Actions {
   private getCurrentProvider: () => AbstractProvider;
 
@@ -57,9 +62,9 @@ class Actions {
         'rootToken',
         {},
         {
-          name: Actions.stringToHex(name),
-          symbol: Actions.stringToHex(symbol),
-          tokenURI: Actions.stringToHex(tokenURI),
+          name: web3Utils.utf8ToHex(name).replace('0x', ''),
+          symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
+          tokenURI: web3Utils.utf8ToHex(tokenURI).replace('0x', ''),
           decimals: 0,
           root_public_key: provider.getPublicKey(true),
           wallet_code: walletContract.tvc,
@@ -104,18 +109,11 @@ class Actions {
 
     return {
       address,
-      name: data[0],
-      symbol: data[1],
-      tokenUri: data[2],
-      totalSupply: data[3],
+      name: web3Utils.hexToUtf8(`0x${data[0].value0}`),
+      symbol: web3Utils.hexToUtf8(`0x${data[1].value0}`),
+      tokenUri: web3Utils.hexToUtf8(`0x${data[2].value0}`),
+      totalSupply: data[3].value0,
     };
-  }
-
-  static stringToHex(string: string) {
-    return string
-      .split('')
-      .map((c) => c.charCodeAt(0).toString(16).padStart(2, '0'))
-      .join('');
   }
 
   // eslint-disable-next-line class-methods-use-this
