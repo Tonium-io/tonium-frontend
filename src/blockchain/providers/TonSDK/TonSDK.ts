@@ -225,7 +225,7 @@ class TonSDK extends AbstractProvider {
     )) as Account;
     const result = (await contract.runLocal(functionName, input || {})) as any;
 
-    return result.decoded?.out_messages[0].value.value0;
+    return result.decoded?.out_messages[0].value;
   }
 
   async call(
@@ -240,6 +240,7 @@ class TonSDK extends AbstractProvider {
       address,
     )) as Account;
     const result = await contract.run(functionName, input || {});
+    // todo here also parse some data
     return result;
   }
 
