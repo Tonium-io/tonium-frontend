@@ -62,6 +62,8 @@ class TonSDK extends AbstractProvider {
 
   private mnemonic!: string;
 
+  static description = 'TonSDK based. Fully worked. Recomended to use';
+
   signerHandle: number = 0;
 
   // contracts: {
