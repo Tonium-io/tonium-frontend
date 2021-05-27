@@ -103,7 +103,16 @@ const Login = ({ toniumNFT }: any) => {
                   >
                     {providerName}
                   </Button>
-                  <small>{provider.description}</small>
+                  <div
+                    style={{
+                      marginTop: 20,
+                      display: 'flex',
+                      flex: 1,
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <small>{provider.description}</small>
+                  </div>
                 </div>
               ),
             )}

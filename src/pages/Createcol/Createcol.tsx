@@ -14,14 +14,23 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
+import { Controller, useForm } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
 
 import cls from '../../app.module.scss';
+/* eslint-disable react/jsx-props-no-spreading */
 
-const CreateCol = () => {
-  // todo home page
-  // eslint-disable-next-line no-console
-  console.log('createcol');
+const CreateCol = ({ toniumNFT }: any) => {
+  const {
+    formState: { errors },
+    control,
+    handleSubmit,
+  }: any = useForm();
+
+  const onSubmit = (values: any) => {
+    toniumNFT.actions.createUserCollections(values.name, values.symbol);
+  };
+  console.log(errors, 'Errr');
   return (
     <div>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
@@ -64,15 +73,49 @@ const CreateCol = () => {
             </div>
 
             <div className={cls.create_right}>
-              <form noValidate autoComplete="off">
-                <TextField label="Collection name" variant="outlined" />
-                <TextField
-                  id="standard-multiline-static"
-                  label="Description"
-                  multiline
-                  rows={4}
-                  variant="outlined"
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                style={{ display: 'flex', flexDirection: 'column' }}
+              >
+                <Controller
+                  control={control}
+                  name="name"
+                  rules={{
+                    required: 'This field is required',
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={field.ref}
+                      error={Boolean(errors?.name)}
+                      label="Collection name"
+                      variant="outlined"
+                      helperText={errors?.name ? errors?.name?.message : ''}
+                      {...field}
+                    />
+                  )}
                 />
+
+                <Controller
+                  control={control}
+                  name="symbol"
+                  rules={{
+                    required: 'This field is required',
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={field.ref}
+                      error={Boolean(errors?.symbol)}
+                      id="standard-multiline-static"
+                      multiline
+                      rows={4}
+                      label="Description"
+                      variant="outlined"
+                      helperText={errors?.symbol ? errors?.symbol?.message : ''}
+                      {...field}
+                    />
+                  )}
+                />
+
                 <FormControl component="fieldset">
                   <FormLabel component="legend">
                     Select collection type
@@ -92,10 +135,10 @@ const CreateCol = () => {
                   </RadioGroup>
                 </FormControl>
                 <Button
-                  className={cls.submit}
+                  style={{ background: '#FF00E0', height: 79 }}
+                  type="submit"
                   variant="contained"
-                  component="label"
-                  color="secondary"
+                  color="primary"
                   size="large"
                 >
                   CREATE

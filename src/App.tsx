@@ -23,18 +23,24 @@ import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
 import TextField from '@material-ui/core/TextField';
-import { CircularProgress } from '@material-ui/core';
+
 import { ToastContainer } from 'react-toastify';
 
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  NavLink,
+} from 'react-router-dom';
 
 import ToniumNFT from './blockchain/ToniumNTF';
 
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
-import CreateCol from './pages/Createcol/Create_col';
+import CreateCol from './pages/Createcol/Createcol';
 import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -52,6 +58,8 @@ import {
 import cls from './app.module.scss';
 
 import Logo from './img/tonium-logo-dark-text.svg';
+import Collection from './pages/Collection/Collection';
+import Loader from './Components/Loader';
 
 // Application initialization
 
@@ -60,29 +68,32 @@ declare const window: any;
 function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [address, setAddress] = useState('');
-  const [typeAcc, setTypeAcc] = useState(0);
+
   const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
+      setLoad(dispatch, true);
       toniumNFT.actions.getUserCollections().then((data: any) => {
-        console.log(data);
-        setLoad(dispatch, true);
-        setUserCollenctions(dispatch, data);
+        const newData = data.map((i: any) => ({
+          ...i,
+          img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
+        }));
+        setUserCollenctions(dispatch, newData);
         setLoad(dispatch, false);
       });
       toniumNFT
         .getCurrentProvider()
-        .checkAccount()
+        .getAddress()
         .then((data: any) => {
-          setTypeAcc(data);
+          console.log(data, 'DATA');
+          setAddress(data);
         });
-      if (typeAcc !== 1) {
-        alert('no money');
-      }
     }
   }, [state.auth]);
-  console.log(state, 'Load');
+  if (state.load) {
+    return <Loader />;
+  }
   return (
     <ContextApp.Provider value={{ dispatch, state }}>
       <Router>
@@ -96,7 +107,6 @@ function App() {
             alignItems="stretch"
             className={cls.wrap}
           >
-            {state.load && <CircularProgress />}
             <Grid
               container
               xs={2}
@@ -109,16 +119,18 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_logo}
-                component={Link}
+                component={NavLink}
                 to="/home"
+                // activeClassName={cls.activeLink}
               >
                 <img src={Logo} alt="logo" width="140" />
               </ListItem>
               <ListItem
                 button
                 className={[cls.panel_button, cls.small_button].join(' ')}
-                component={Link}
+                component={NavLink}
                 to="/own"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <StarIcon />
@@ -128,8 +140,9 @@ function App() {
               <ListItem
                 button
                 className={[cls.panel_button, cls.small_button].join(' ')}
-                component={Link}
+                component={NavLink}
                 to="/mint"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <GpsFixedIcon />
@@ -139,8 +152,9 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_button}
-                component={Link}
+                component={NavLink}
                 to="/auction"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <GavelIcon />
@@ -150,8 +164,9 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_button}
-                component={Link}
+                component={NavLink}
                 to="/radar"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <TrackChangesIcon />
@@ -231,6 +246,7 @@ function App() {
                           {/* <span>@mrboss</span> */}
                           {/* <EditIcon /> */}
                         </Link>
+
                         <form
                           noValidate
                           autoComplete="off"
@@ -245,6 +261,7 @@ function App() {
                             }}
                           />
                         </form>
+
                         <Button
                           variant="contained"
                           color="primary"
@@ -256,6 +273,7 @@ function App() {
                         >
                           Log Out
                         </Button>
+
                         {/* <span className={cls.balance}>
                           <span>12.23</span>
                           <img src={CristalIcon} alt="TON" width="20" />{' '}
@@ -293,11 +311,12 @@ function App() {
                   <Route path="/own">
                     <Own />
                   </Route>
-                  <Route path="/mint">
+
+                  <Route exact path="/mint">
                     <Mint />
                   </Route>
                   <Route path="/createcol">
-                    <CreateCol />
+                    <CreateCol toniumNFT={toniumNFT} />
                   </Route>
                   <Route path="/auction">
                     <Auction />
@@ -308,8 +327,11 @@ function App() {
                   <Route path="/wp">
                     <Wp />
                   </Route>
-                  <Route path="/">
+                  <Route exact path="/">
                     <Home />
+                  </Route>
+                  <Route path="/mint/:collection">
+                    <Collection />
                   </Route>
                 </Switch>
               </div>
