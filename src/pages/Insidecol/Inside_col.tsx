@@ -11,19 +11,36 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 
 import cls from '../../app.module.scss';
 
-const Mint = () => {
+const InsideCol = () => {
   // todo home page
   // eslint-disable-next-line no-console
-  console.log('mint');
+  console.log('InsideCol');
   return (
     <div className={cls.mint}>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
         <Link href="/home">Home</Link>
-        <Typography color="textPrimary">NFT Collections</Typography>
+        <Link href="/mint">NFT Collections</Link>
+        <Typography color="textPrimary">Collection #1</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
-        <Typography variant="h1" component="h1" gutterBottom>
-          NFT Collections
+        <Typography
+          variant="h1"
+          component="h1"
+          className={cls.h1_image}
+          gutterBottom
+        >
+          <span className={cls.left}>
+            <Paper>
+              <img
+                style={{ width: 70, height: 40 }}
+                alt="alt"
+                src="https://blog.allo.ua/wp-content/uploads/Glavnaya-kartinka-15.jpg"
+              />
+            </Paper>
+          </span>
+          <span className={cls.right}>
+            Collection #1<span>38D9d1B10727bDc523f0EFb06CcA30E922a96fd6</span>
+          </span>
         </Typography>
 
         <div className={cls.collections}>
@@ -47,36 +64,12 @@ const Mint = () => {
               </Paper>
               <Typography>Test NFT#1</Typography>
             </ListItem>
-            <ListItem button component="a" href="/Insidecol">
-              <Paper className={cls.element}>
-                <div>
-                  <img
-                    style={{ width: 210, height: 118 }}
-                    alt="alt"
-                    src="https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg"
-                  />
-                </div>
-              </Paper>
-              <Typography>Test NFT#2</Typography>
-            </ListItem>
-            <ListItem button component="a" href="/Insidecol">
-              <Paper className={cls.element}>
-                <div>
-                  <img
-                    style={{ width: 210, height: 118 }}
-                    alt="alt"
-                    src="https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg"
-                  />
-                </div>
-              </Paper>
-              <Typography>Test NFT#3</Typography>
-            </ListItem>
-            <ListItem button component="a" href="/Createcol">
+            <ListItem button component="a" href="/Mintnft">
               <Paper className={cls.element}>
                 <div>
                   <div>
                     <AddBoxIcon />
-                    <Typography>Create new</Typography>
+                    <Typography>MINT NFT</Typography>
                   </div>
                 </div>
               </Paper>
@@ -88,4 +81,4 @@ const Mint = () => {
   );
 };
 
-export default Mint;
+export default InsideCol;

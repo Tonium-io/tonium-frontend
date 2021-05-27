@@ -172,7 +172,21 @@ header {
     a{color:inherit;text-transform:uppercase;font-weight:700;color:$red}
   }
   .content_wrap{padding-bottom:40px;border-bottom:#E9E9E9 solid 6px;
-    h1{text-transform:uppercase;font-size:30px;font-weight:700;margin-bottom:40px}
+    h1{text-transform:uppercase;font-size:30px;font-weight:700;margin-bottom:40px;
+      &.h1_image{display:flex;align-items:center;width:100%;wrap:nowrap;
+        &>span{}
+        .left{display:block;width:70px;height:70px;margin-right:20px;flex-basis:70px;
+          div{width:70px;height:70px;display:flex;align-items:center;
+
+              img{}
+
+          }
+        }
+        .right{
+          span{display:block;margin-top:10px;font-size:12px;font-weight:600;color:#AEAEAE}
+        }
+      }
+    }
     .collections{max-width:1600px;
       &>div>a{flex:0 0 200px;flex-wrap:wrap;
         .element{width:200px;
@@ -189,7 +203,7 @@ header {
       
     }
     .createcol{
-      .create_left{
+      .create_left{flex-basis:200px;
         .avatar{height:200px;width:100%;display:flex;align-items:center;
           img{max-width:200px;max-height:200px}
         }

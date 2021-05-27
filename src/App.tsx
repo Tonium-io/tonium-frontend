@@ -34,6 +34,8 @@ import ToniumNFT from './blockchain/ToniumNTF';
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
 import CreateCol from './pages/Createcol/Create_col';
+import InsideCol from './pages/Insidecol/Inside_col';
+import MintNft from './pages/Mintnft/Mint_nft';
 import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -285,6 +287,12 @@ function App() {
                   </Route>
                   <Route path="/createcol">
                     <CreateCol />
+                  </Route>
+                  <Route path="/insidecol">
+                    <InsideCol />
+                  </Route>
+                  <Route path="/mintnft">
+                    <MintNft />
                   </Route>
                   <Route path="/auction">
                     <Auction />
