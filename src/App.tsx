@@ -86,7 +86,6 @@ function App() {
         .getCurrentProvider()
         .getAddress()
         .then((data: any) => {
-          console.log(data, 'DATA');
           setAddress(data);
         });
     }

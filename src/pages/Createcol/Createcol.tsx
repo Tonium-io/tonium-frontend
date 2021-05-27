@@ -30,7 +30,7 @@ const CreateCol = ({ toniumNFT }: any) => {
   const onSubmit = (values: any) => {
     toniumNFT.actions.createUserCollections(values.name, values.symbol);
   };
-  console.log(errors, 'Errr');
+
   return (
     <div>
       <Breadcrumbs separator="›" aria-label="breadcrumb">

@@ -47,7 +47,6 @@ class Actions {
   }
 
   async createUserCollections(name: string, symbol: string, tokenURI = '') {
-    console.log(name, symbol, 'Field');
     const provider = await this.resolveProviderOrThrow();
     const walletContract = await Object.getPrototypeOf(
       provider,
