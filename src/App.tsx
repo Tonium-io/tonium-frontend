@@ -80,13 +80,13 @@ function App() {
           img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
         }));
         setUserCollenctions(dispatch, newData);
-        setLoad(dispatch, false);
       });
       toniumNFT
         .getCurrentProvider()
         .getAddress()
         .then((data: any) => {
           setAddress(data);
+          setLoad(dispatch, false);
         });
     }
   }, [state.auth]);

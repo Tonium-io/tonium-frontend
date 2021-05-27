@@ -290,19 +290,19 @@ class TonSDK extends AbstractProvider {
     return key;
   }
 
-  async checkAccount() {
-    const checkAccount = await this.client.net.query_collection({
-      collection: 'accounts',
-      filter: {
-        id: {
-          eq: await this.getAddress(),
-        },
-      },
+  // async checkAccount() {
+  //   const checkAccount = await this.client.net.query_collection({
+  //     collection: 'accounts',
+  //     filter: {
+  //       id: {
+  //         eq: await this.getAddress(),
+  //       },
+  //     },
 
-      result: 'acc_type',
-    });
-    return checkAccount?.result[0]?.acc_type;
-  }
+  //     result: 'acc_type',
+  //   });
+  //   return checkAccount?.result[0]?.acc_type;
+  // }
 
   async getBalance() {
     if (this.getAddress()) {
