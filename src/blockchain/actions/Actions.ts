@@ -48,6 +48,7 @@ class Actions {
 
   async createUserCollections(name: string, symbol: string, tokenURI = '') {
     const provider = await this.resolveProviderOrThrow();
+
     const walletContract = await Object.getPrototypeOf(
       provider,
     ).constructor.getContractRaw('wallet');

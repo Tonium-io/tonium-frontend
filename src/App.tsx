@@ -23,17 +23,24 @@ import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
 import TextField from '@material-ui/core/TextField';
+
 import { ToastContainer } from 'react-toastify';
 
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  NavLink,
+} from 'react-router-dom';
 
 import ToniumNFT from './blockchain/ToniumNTF';
 
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
-import CreateCol from './pages/Createcol/Create_col';
+import CreateCol from './pages/Createcol/Createcol';
 import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -49,6 +56,8 @@ import {
 import cls from './app.module.scss';
 
 import Logo from './img/tonium-logo-dark-text.svg';
+import Collection from './pages/Collection/Collection';
+import Loader from './Components/Loader';
 
 // Application initialization
 
@@ -57,22 +66,26 @@ declare const window: any;
 function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [address, setAddress] = useState('');
+  const [load, setLoad] = useState(false);
   const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
-      // console.log(state.auth);
-      // toniumNFT
-      //   .getCurrentProvider()
-      //   .getAddress()
-      //   .then((data: any) => {
-      //     console.log(data);
-      //   });
+      setLoad(true);
+      toniumNFT
+        .getCurrentProvider()
+        .getAddress()
+        .then((data: any) => {
+          setAddress(data);
+          setLoad(false);
+        });
     }
   }, [state.auth]);
-
+  if (load) {
+    return <Loader />;
+  }
   return (
-    <ContextApp.Provider value={{ dispatch, state }}>
+    <ContextApp.Provider value={{ dispatch, state, toniumNFT }}>
       <Router>
         <div className={cls.app}>
           <CssBaseline />
@@ -96,16 +109,18 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_logo}
-                component={Link}
+                component={NavLink}
                 to="/home"
+                // activeClassName={cls.activeLink}
               >
                 <img src={Logo} alt="logo" width="140" />
               </ListItem>
               <ListItem
                 button
                 className={[cls.panel_button, cls.small_button].join(' ')}
-                component={Link}
+                component={NavLink}
                 to="/own"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <StarIcon />
@@ -115,8 +130,9 @@ function App() {
               <ListItem
                 button
                 className={[cls.panel_button, cls.small_button].join(' ')}
-                component={Link}
-                to="/mint"
+                component={NavLink}
+                to="/collections"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <GpsFixedIcon />
@@ -126,8 +142,9 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_button}
-                component={Link}
+                component={NavLink}
                 to="/auction"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <GavelIcon />
@@ -137,8 +154,9 @@ function App() {
               <ListItem
                 button
                 className={cls.panel_button}
-                component={Link}
+                component={NavLink}
                 to="/radar"
+                // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
                   <TrackChangesIcon />
@@ -201,7 +219,7 @@ function App() {
                           <option value={20}>Show all</option>
                         </NativeSelect>
                       </FormControl>
-                      <Link to="/wp">What is it?</Link>
+                      <NavLink to="/wp">What is it?</NavLink>
                     </div>
 
                     {state.auth ? (
@@ -214,10 +232,11 @@ function App() {
                         wrap="nowrap"
                         className={cls.address}
                       >
-                        <Link to="/wp" className={cls.nick}>
+                        <NavLink to="/wp" className={cls.nick}>
                           {/* <span>@mrboss</span> */}
                           {/* <EditIcon /> */}
-                        </Link>
+                        </NavLink>
+
                         <form
                           noValidate
                           autoComplete="off"
@@ -232,6 +251,7 @@ function App() {
                             }}
                           />
                         </form>
+
                         <Button
                           variant="contained"
                           color="primary"
@@ -243,6 +263,7 @@ function App() {
                         >
                           Log Out
                         </Button>
+
                         {/* <span className={cls.balance}>
                           <span>12.23</span>
                           <img src={CristalIcon} alt="TON" width="20" />{' '}
@@ -277,26 +298,32 @@ function App() {
 
               <div className={cls.content}>
                 <Switch>
-                  <Route path="/own">
-                    <Own />
-                  </Route>
-                  <Route path="/mint">
-                    <Mint />
-                  </Route>
-                  <Route path="/createcol">
+                  <Route exact path="/collections/new">
                     <CreateCol />
                   </Route>
-                  <Route path="/auction">
+
+                  <Route exact path="/own">
+                    <Own />
+                  </Route>
+
+                  <Route exact path="/collections">
+                    <Mint />
+                  </Route>
+
+                  <Route exact path="/auction">
                     <Auction />
                   </Route>
-                  <Route path="/radar">
+                  <Route exact path="/radar">
                     <Radar />
                   </Route>
-                  <Route path="/wp">
+                  <Route exact path="/wp">
                     <Wp />
                   </Route>
-                  <Route path="/">
+                  <Route exact path="/">
                     <Home />
+                  </Route>
+                  <Route exact path="/collections/:collection">
+                    <Collection />
                   </Route>
                 </Switch>
               </div>
@@ -310,7 +337,7 @@ function App() {
           justify="space-around"
           alignItems="center"
         >
-          <Login toniumNFT={toniumNFT} />
+          <Login />
         </Grid>
         <ToastContainer
           position="bottom-right"

@@ -266,6 +266,7 @@ class TonSDK extends AbstractProvider {
 
   async getAddress() {
     // const rawContract = TonSDK.getContractRaw("controller");
+    await this.whenReady();
     // const network = await this.getNetwork();
     // const sign = this.getSigner();
     const pubkey = this.keys.keys.public;
@@ -288,6 +289,20 @@ class TonSDK extends AbstractProvider {
     }
     return key;
   }
+
+  // async checkAccount() {
+  //   const checkAccount = await this.client.net.query_collection({
+  //     collection: 'accounts',
+  //     filter: {
+  //       id: {
+  //         eq: await this.getAddress(),
+  //       },
+  //     },
+
+  //     result: 'acc_type',
+  //   });
+  //   return checkAccount?.result[0]?.acc_type;
+  // }
 
   async getBalance() {
     if (this.getAddress()) {
@@ -344,6 +359,7 @@ class TonSDK extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
     const deployOptions = {
       abi: {

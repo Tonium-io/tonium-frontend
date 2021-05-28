@@ -114,12 +114,18 @@ class ExtraTon extends AbstractProvider {
   }
 
   async getAddress() {
-    return this.signer.wallet.address;
+    await this.whenReady();
+    return this.signer?.wallet.address;
   }
 
   // eslint-disable-next-line class-methods-use-this
   async getBalance() {
     return Number.NaN;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async checkAccount() {
+    return Number.POSITIVE_INFINITY;
   }
 
   getPublicKey(withLeadingHex = false) {

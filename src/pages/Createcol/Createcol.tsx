@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+import { NavLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 // import ListItem from '@material-ui/core/ListItem';
 // import Skeleton from '@material-ui/lab/Skeleton';
@@ -11,22 +11,58 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import { toast } from 'react-toastify';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
+import { Controller, useForm } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
-
+import Loader from '../../Components/Loader';
+import { ContextApp } from '../../store/reducer';
 import cls from '../../app.module.scss';
 
+/* eslint-disable react/jsx-props-no-spreading */
+
 const CreateCol = () => {
-  // todo home page
-  // eslint-disable-next-line no-console
-  console.log('createcol');
+  const [load, setLoad] = useState(false);
+  const { toniumNFT } = useContext(ContextApp);
+
+  const {
+    formState: { errors },
+    control,
+    handleSubmit,
+  }: any = useForm();
+
+  const onSubmit = (values: any) => {
+    setLoad(true);
+    toniumNFT.actions
+      .createUserCollections(values.name, values.symbol)
+      .then((data: any) => {
+        // eslint-disable-next-line no-console
+        console.log(data, 'Success');
+        toast.success('Success', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+        setLoad(false);
+      })
+      .catch((e: any) => {
+        // eslint-disable-next-line no-console
+        console.error(e.message);
+        toast.error('Error', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+      });
+  };
+  if (load) {
+    return <Loader />;
+  }
+
   return (
     <div>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <Link href="/home">Home</Link>
-        <Link href="/mint">NFT Collections</Link>
+        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/mint">NFT Collections</NavLink>
         <Typography color="textPrimary">Create collection</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
@@ -64,15 +100,49 @@ const CreateCol = () => {
             </div>
 
             <div className={cls.create_right}>
-              <form noValidate autoComplete="off">
-                <TextField label="Collection name" variant="outlined" />
-                <TextField
-                  id="standard-multiline-static"
-                  label="Description"
-                  multiline
-                  rows={4}
-                  variant="outlined"
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                style={{ display: 'flex', flexDirection: 'column' }}
+              >
+                <Controller
+                  control={control}
+                  name="name"
+                  rules={{
+                    required: 'This field is required',
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={field.ref}
+                      error={Boolean(errors?.name)}
+                      label="Collection name"
+                      variant="outlined"
+                      helperText={errors?.name ? errors?.name?.message : ''}
+                      {...field}
+                    />
+                  )}
                 />
+
+                <Controller
+                  control={control}
+                  name="symbol"
+                  rules={{
+                    required: 'This field is required',
+                  }}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={field.ref}
+                      error={Boolean(errors?.symbol)}
+                      id="standard-multiline-static"
+                      multiline
+                      rows={4}
+                      label="Description"
+                      variant="outlined"
+                      helperText={errors?.symbol ? errors?.symbol?.message : ''}
+                      {...field}
+                    />
+                  )}
+                />
+
                 <FormControl component="fieldset">
                   <FormLabel component="legend">
                     Select collection type
@@ -92,10 +162,10 @@ const CreateCol = () => {
                   </RadioGroup>
                 </FormControl>
                 <Button
-                  className={cls.submit}
+                  style={{ background: '#FF00E0', height: 79 }}
+                  type="submit"
                   variant="contained"
-                  component="label"
-                  color="secondary"
+                  color="primary"
                   size="large"
                 >
                   CREATE
