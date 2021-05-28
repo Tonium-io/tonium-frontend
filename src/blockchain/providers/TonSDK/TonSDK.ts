@@ -359,6 +359,7 @@ class TonSDK extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
     const deployOptions = {
       abi: {

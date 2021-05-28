@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 // import Skeleton from '@material-ui/lab/Skeleton';
@@ -21,10 +20,12 @@ const Mint = () => {
   if (state.load) {
     return <Loader />;
   }
+  // eslint-disable-next-line no-console
+  console.log('Mint');
   return (
     <div className={cls.mint}>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <Link href="/home">Home</Link>
+        <NavLink to="/home">Home</NavLink>
         <Typography color="textPrimary">NFT Collections</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
@@ -43,7 +44,7 @@ const Mint = () => {
           >
             {userCollections.map((c: any) => (
               <ListItem button component="a" key={c}>
-                <NavLink to={`collection/${c.address}`}>
+                <NavLink to={`collections/${c.address}`}>
                   <Paper className={cls.element}>
                     <div>
                       <img
@@ -58,7 +59,7 @@ const Mint = () => {
               </ListItem>
             ))}
             <ListItem button component="a">
-              <NavLink to="/createcol">
+              <NavLink to="/collections/new">
                 <Paper className={cls.element}>
                   <div>
                     <div>

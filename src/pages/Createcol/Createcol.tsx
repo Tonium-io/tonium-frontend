@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Link from '@material-ui/core/Link';
+import { NavLink } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 // import ListItem from '@material-ui/core/ListItem';
 // import Skeleton from '@material-ui/lab/Skeleton';
@@ -11,16 +11,18 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-
+import { toast } from 'react-toastify';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Button from '@material-ui/core/Button';
 import { Controller, useForm } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
-
+import Loader from '../../Components/Loader';
 import cls from '../../app.module.scss';
+
 /* eslint-disable react/jsx-props-no-spreading */
 
 const CreateCol = ({ toniumNFT }: any) => {
+  const [load, setLoad] = useState(false);
   const {
     formState: { errors },
     control,
@@ -28,14 +30,36 @@ const CreateCol = ({ toniumNFT }: any) => {
   }: any = useForm();
 
   const onSubmit = (values: any) => {
-    toniumNFT.actions.createUserCollections(values.name, values.symbol);
+    setLoad(true);
+    toniumNFT.actions
+      .createUserCollections(values.name, values.symbol)
+      .then((data: any) => {
+        // eslint-disable-next-line no-console
+        console.log(data, 'Success');
+        toast.success('Success', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+        setLoad(false);
+      })
+      .catch((e: any) => {
+        // eslint-disable-next-line no-console
+        console.error(e.message);
+        toast.error('Error', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+      });
   };
+  if (load) {
+    return <Loader />;
+  }
 
   return (
     <div>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <Link href="/home">Home</Link>
-        <Link href="/mint">NFT Collections</Link>
+        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/mint">NFT Collections</NavLink>
         <Typography color="textPrimary">Create collection</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>

@@ -114,7 +114,8 @@ class ExtraTon extends AbstractProvider {
   }
 
   async getAddress() {
-    return this.signer.wallet.address;
+    await this.whenReady();
+    return this.signer?.wallet.address;
   }
 
   // eslint-disable-next-line class-methods-use-this

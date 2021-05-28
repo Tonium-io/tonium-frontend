@@ -81,6 +81,7 @@ function App() {
         }));
         setUserCollenctions(dispatch, newData);
       });
+
       toniumNFT
         .getCurrentProvider()
         .getAddress()
@@ -140,7 +141,7 @@ function App() {
                 button
                 className={[cls.panel_button, cls.small_button].join(' ')}
                 component={NavLink}
-                to="/mint"
+                to="/collections"
                 // activeClassName={cls.activeLink}
               >
                 <ListItemIcon className={cls.icon}>
@@ -228,7 +229,7 @@ function App() {
                           <option value={20}>Show all</option>
                         </NativeSelect>
                       </FormControl>
-                      <Link to="/wp">What is it?</Link>
+                      <NavLink to="/wp">What is it?</NavLink>
                     </div>
 
                     {state.auth ? (
@@ -241,10 +242,10 @@ function App() {
                         wrap="nowrap"
                         className={cls.address}
                       >
-                        <Link to="/wp" className={cls.nick}>
+                        <NavLink to="/wp" className={cls.nick}>
                           {/* <span>@mrboss</span> */}
                           {/* <EditIcon /> */}
-                        </Link>
+                        </NavLink>
 
                         <form
                           noValidate
@@ -307,29 +308,31 @@ function App() {
 
               <div className={cls.content}>
                 <Switch>
-                  <Route path="/own">
+                  <Route exact path="/collections/new">
+                    <CreateCol toniumNFT={toniumNFT} />
+                  </Route>
+
+                  <Route exact path="/own">
                     <Own />
                   </Route>
 
-                  <Route exact path="/mint">
+                  <Route exact path="/collections">
                     <Mint />
                   </Route>
-                  <Route path="/createcol">
-                    <CreateCol toniumNFT={toniumNFT} />
-                  </Route>
-                  <Route path="/auction">
+
+                  <Route exact path="/auction">
                     <Auction />
                   </Route>
-                  <Route path="/radar">
+                  <Route exact path="/radar">
                     <Radar />
                   </Route>
-                  <Route path="/wp">
+                  <Route exact path="/wp">
                     <Wp />
                   </Route>
                   <Route exact path="/">
                     <Home />
                   </Route>
-                  <Route path="/mint/:collection">
+                  <Route exact path="/collections/:collection">
                     <Collection />
                   </Route>
                 </Switch>
