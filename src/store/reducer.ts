@@ -5,12 +5,13 @@ export type StateType = {
   open: any;
 
   userCollections: any;
+  userCollectionTokens: any;
 };
 export const intialState = {
   auth: false,
   open: false,
-
   userCollections: [],
+  userCollectionTokens: [],
 };
 export const ContextApp = React.createContext<any>({
   state: intialState,
@@ -33,12 +34,13 @@ type Payload = {
   OPEN: {};
 
   SET_USER_COLLECTIONS: {};
+  SET_USER_COLLECTION_TOKENS: {};
 };
 
 export type Actions = ActionMap<Payload>[keyof ActionMap<Payload>];
 const LOGIN = 'LOGIN';
 const OPEN = 'OPEN';
-
+const SET_USER_COLLECTION_TOKENS = 'SET_USER_COLLECTION_TOKENS';
 const SET_USER_COLLECTIONS = 'SET_USER_COLLECTIONS';
 export const reducer = (state: StateType, action: Actions) => {
   switch (action.type) {
@@ -47,6 +49,8 @@ export const reducer = (state: StateType, action: Actions) => {
     case OPEN:
       return { ...state, open: action.payload };
 
+    case SET_USER_COLLECTION_TOKENS:
+      return { ...state, userCollectionTokens: action.payload };
     case SET_USER_COLLECTIONS:
       return { ...state, userCollections: action.payload };
     default:
@@ -57,7 +61,8 @@ export const setLogin = (dispatch: any, payload: any) =>
   dispatch({ type: LOGIN, payload });
 export const setOpen = (dispatch: any, payload: any) =>
   dispatch({ type: OPEN, payload });
-
+export const setUserCollenctionTokens = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_USER_COLLECTION_TOKENS, payload });
 export const setUserCollenctions = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_COLLECTIONS, payload });
 
