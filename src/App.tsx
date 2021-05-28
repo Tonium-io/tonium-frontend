@@ -52,8 +52,6 @@ import {
   intialState,
   setOpen,
   setLogin,
-  setUserCollenctions,
-  setLoad,
 } from './store/reducer';
 import cls from './app.module.scss';
 
@@ -68,34 +66,26 @@ declare const window: any;
 function App() {
   const [state, dispatch] = useReducer(reducer, intialState);
   const [address, setAddress] = useState('');
-
+  const [load, setLoad] = useState(false);
   const toniumNFT = useMemo(() => new ToniumNFT(state, dispatch), []);
   window.toniumNFT = toniumNFT;
   useEffect(() => {
     if (state.auth) {
-      setLoad(dispatch, true);
-      toniumNFT.actions.getUserCollections().then((data: any) => {
-        const newData = data.map((i: any) => ({
-          ...i,
-          img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
-        }));
-        setUserCollenctions(dispatch, newData);
-      });
-
+      setLoad(true);
       toniumNFT
         .getCurrentProvider()
         .getAddress()
         .then((data: any) => {
           setAddress(data);
-          setLoad(dispatch, false);
+          setLoad(false);
         });
     }
   }, [state.auth]);
-  if (state.load) {
+  if (load) {
     return <Loader />;
   }
   return (
-    <ContextApp.Provider value={{ dispatch, state }}>
+    <ContextApp.Provider value={{ dispatch, state, toniumNFT }}>
       <Router>
         <div className={cls.app}>
           <CssBaseline />
@@ -309,7 +299,7 @@ function App() {
               <div className={cls.content}>
                 <Switch>
                   <Route exact path="/collections/new">
-                    <CreateCol toniumNFT={toniumNFT} />
+                    <CreateCol />
                   </Route>
 
                   <Route exact path="/own">
@@ -347,7 +337,7 @@ function App() {
           justify="space-around"
           alignItems="center"
         >
-          <Login toniumNFT={toniumNFT} />
+          <Login />
         </Grid>
         <ToastContainer
           position="bottom-right"

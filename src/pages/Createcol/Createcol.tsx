@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { NavLink } from 'react-router-dom';
@@ -17,12 +17,15 @@ import Button from '@material-ui/core/Button';
 import { Controller, useForm } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
 import Loader from '../../Components/Loader';
+import { ContextApp } from '../../store/reducer';
 import cls from '../../app.module.scss';
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-const CreateCol = ({ toniumNFT }: any) => {
+const CreateCol = () => {
   const [load, setLoad] = useState(false);
+  const { toniumNFT } = useContext(ContextApp);
+
   const {
     formState: { errors },
     control,

@@ -13,7 +13,7 @@ import cls from '../app.module.scss';
 import { ContextApp, setOpen } from '../store/reducer';
 
 /* eslint-disable react/jsx-props-no-spreading */
-const Login = ({ toniumNFT }: any) => {
+const Login = () => {
   const [
     isAdditionalProviderFieldsRequired,
     setIsAdditionalProviderFieldsRequired,
@@ -21,7 +21,7 @@ const Login = ({ toniumNFT }: any) => {
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
   const isMountedRef = useRef<any>(null);
-  const { state, dispatch } = useContext(ContextApp);
+  const { state, dispatch, toniumNFT } = useContext(ContextApp);
 
   useEffect(() => {
     isMountedRef.current = true;

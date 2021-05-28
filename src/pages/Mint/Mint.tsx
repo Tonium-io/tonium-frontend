@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
@@ -9,15 +9,29 @@ import { NavLink } from 'react-router-dom';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 
 import cls from '../../app.module.scss';
-import { ContextApp } from '../../store/reducer';
+import { ContextApp, setUserCollenctions } from '../../store/reducer';
 import Loader from '../../Components/Loader';
 
 const Mint = () => {
   // todo home page
   // eslint-disable-next-line no-console
-  const { state } = useContext(ContextApp);
+  const { state, dispatch, toniumNFT } = useContext(ContextApp);
+  const [load, setLoad] = useState(false);
   const { userCollections }: any = state;
-  if (state.load) {
+  useEffect(() => {
+    if (state.auth) {
+      setLoad(true);
+      toniumNFT.actions.getUserCollections().then((data: any) => {
+        const newData = data.map((i: any) => ({
+          ...i,
+          img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
+        }));
+        setUserCollenctions(dispatch, newData);
+        setLoad(false);
+      });
+    }
+  }, []);
+  if (load) {
     return <Loader />;
   }
   // eslint-disable-next-line no-console
