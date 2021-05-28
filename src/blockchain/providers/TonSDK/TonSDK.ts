@@ -420,7 +420,7 @@ class TonSDK extends AbstractProvider {
     if (addressInfo.balance <= executorResult.fees.total_account_fees) {
       // eslint-disable-next-line no-console
       console.log(
-        `Account balanse ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfer money here`,
+        `Account balance ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfering money here`,
       );
 
       // add money here
