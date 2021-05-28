@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import Loader from '../../Components/Loader';
 import { ContextApp, setNftAuctions } from '../../store/reducer';
 
@@ -40,8 +41,13 @@ const Auction = () => {
       ];
       setNftAuctions(dispatch, payload);
       setLoad(false);
+      toast.success('Success', {
+        position: 'bottom-right',
+        autoClose: 4000,
+      });
     }
   }, []);
+  // eslint-disable-next-line no-console
   console.log(state.nftAuctions, 'AUCTIONS');
   if (load) {
     return <Loader />;

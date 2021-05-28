@@ -7,10 +7,12 @@ import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
 import { NavLink } from 'react-router-dom';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import { toast } from 'react-toastify';
+import { ContextApp, setUserCollenctions } from '../../store/reducer';
+
+import Loader from '../../Components/Loader';
 
 import cls from '../../app.module.scss';
-import { ContextApp, setUserCollenctions } from '../../store/reducer';
-import Loader from '../../Components/Loader';
 
 const Mint = () => {
   // todo home page
@@ -29,6 +31,10 @@ const Mint = () => {
         }));
         setUserCollenctions(dispatch, newData);
         setLoad(false);
+      });
+      toast.success('Success', {
+        position: 'bottom-right',
+        autoClose: 4000,
       });
     }
   }, []);

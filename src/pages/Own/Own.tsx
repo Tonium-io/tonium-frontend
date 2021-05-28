@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import Loader from '../../Components/Loader';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
 
@@ -40,6 +41,10 @@ const Own = () => {
       ];
       setUserAllTokens(dispatch, payload);
       setLoad(false);
+      toast.success('Success', {
+        position: 'bottom-right',
+        autoClose: 4000,
+      });
     }
   }, []);
 
