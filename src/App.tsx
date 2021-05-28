@@ -41,6 +41,8 @@ import ToniumNFT from './blockchain/ToniumNTF';
 import Home from './pages/Home/Home';
 import Mint from './pages/Mint/Mint';
 import CreateCol from './pages/Createcol/Createcol';
+import InsideCol from './pages/Insidecol/Inside_col';
+import MintNft from './pages/Mintnft/MintNft';
 import Login from './Components/Login';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
@@ -324,6 +326,9 @@ function App() {
                   </Route>
                   <Route exact path="/collections/:collection">
                     <Collection />
+                  </Route>
+                  <Route exact path="/collections/:collection/mint-add/">
+                    <Mintnft />
                   </Route>
                 </Switch>
               </div>

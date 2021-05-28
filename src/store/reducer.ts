@@ -11,7 +11,14 @@ export const intialState = {
   auth: false,
   open: false,
   userCollections: [],
-  userCollectionTokens: [],
+  userCollectionTokens: [
+    { name: 'Test1', address: '0:x12312312432534454' },
+    { name: 'Test2', address: '0:x12312332425532535' },
+  ],
+  nftAuctions: [
+    { name: 'Test1', address: '0:x12312312432534454', bided: false },
+    { name: 'Test2', address: '0:x12312332425532535' },
+  ],
 };
 export const ContextApp = React.createContext<any>({
   state: intialState,
