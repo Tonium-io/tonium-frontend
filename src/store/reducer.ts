@@ -3,22 +3,18 @@ import React from 'react';
 export type StateType = {
   auth: any;
   open: any;
-
+  userAllTokens: any;
   userCollections: any;
   userCollectionTokens: any;
+  nftAuctions: any;
 };
 export const intialState = {
   auth: false,
   open: false,
   userCollections: [],
-  userCollectionTokens: [
-    { name: 'Test1', address: '0:x12312312432534454' },
-    { name: 'Test2', address: '0:x12312332425532535' },
-  ],
-  nftAuctions: [
-    { name: 'Test1', address: '0:x12312312432534454', bided: false },
-    { name: 'Test2', address: '0:x12312332425532535' },
-  ],
+  userCollectionTokens: [],
+  userAllTokens: [],
+  nftAuctions: [],
 };
 export const ContextApp = React.createContext<any>({
   state: intialState,
@@ -39,9 +35,10 @@ type ActionMap<M extends { [index: string]: any }> = {
 type Payload = {
   LOGIN: {};
   OPEN: {};
-
   SET_USER_COLLECTIONS: {};
   SET_USER_COLLECTION_TOKENS: {};
+  SET_NFT_AUCTIONS: {};
+  SET_USER_ALL_TOKENS: {};
 };
 
 export type Actions = ActionMap<Payload>[keyof ActionMap<Payload>];
@@ -49,6 +46,8 @@ const LOGIN = 'LOGIN';
 const OPEN = 'OPEN';
 const SET_USER_COLLECTION_TOKENS = 'SET_USER_COLLECTION_TOKENS';
 const SET_USER_COLLECTIONS = 'SET_USER_COLLECTIONS';
+const SET_USER_ALL_TOKENS = 'SET_USER_ALL_TOKENS';
+const SET_NFT_AUCTIONS = 'SET_NFT_AUCTIONS';
 export const reducer = (state: StateType, action: Actions) => {
   switch (action.type) {
     case LOGIN:
@@ -58,6 +57,10 @@ export const reducer = (state: StateType, action: Actions) => {
 
     case SET_USER_COLLECTION_TOKENS:
       return { ...state, userCollectionTokens: action.payload };
+    case SET_USER_ALL_TOKENS:
+      return { ...state, userAllTokens: action.payload };
+    case SET_NFT_AUCTIONS:
+      return { ...state, nftAuctions: action.payload };
     case SET_USER_COLLECTIONS:
       return { ...state, userCollections: action.payload };
     default:
@@ -72,8 +75,7 @@ export const setUserCollenctionTokens = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_COLLECTION_TOKENS, payload });
 export const setUserCollenctions = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_COLLECTIONS, payload });
-
-// export const action = {
-//   login: (payload: {}, dispatch: (payload: {}) => void) =>
-//     dispatch({ type: LOGIN, payload }),
-// };
+export const setUserAllTokens = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_USER_ALL_TOKENS, payload });
+export const setNftAuctions = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_NFT_AUCTIONS, payload });
