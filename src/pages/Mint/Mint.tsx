@@ -16,8 +16,9 @@ const Mint = () => {
   // todo home page
   // eslint-disable-next-line no-console
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
-  const [load, setLoad] = useState(false);
+
   const { userCollections }: any = state;
+  const [load, setLoad] = useState(false);
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
