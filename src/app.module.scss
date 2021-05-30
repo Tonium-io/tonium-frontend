@@ -196,6 +196,39 @@ header {
       font-size: 30px;
       font-weight: 700;
       margin-bottom: 40px;
+      &.h1_image {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        wrap: nowrap;
+        & > span {
+        }
+        .left {
+          display: block;
+          width: 70px;
+          height: 70px;
+          margin-right: 20px;
+          flex-basis: 70px;
+          div {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+
+            img {
+            }
+          }
+        }
+        .right {
+          span {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #aeaeae;
+          }
+        }
+      }
     }
     .collections {
       max-width: 1600px;
@@ -233,6 +266,7 @@ header {
     }
     .createcol {
       .create_left {
+        flex-basis: 200px;
         .avatar {
           height: 200px;
           width: 100%;
@@ -242,10 +276,6 @@ header {
             max-width: 200px;
             max-height: 200px;
           }
-        }
-        label {
-          width: 100%;
-          margin-top: 20px;
         }
       }
       .create_right {
