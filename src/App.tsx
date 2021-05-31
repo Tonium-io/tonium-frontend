@@ -327,7 +327,7 @@ function App() {
                   <Route exact path="/collections/:collection">
                     <Collection />
                   </Route>
-                  <Route exact path="/collections/:collection/mint-add/">
+                  <Route exact path="/collections/:collection/mint-add">
                     <MintNft />
                   </Route>
                 </Switch>

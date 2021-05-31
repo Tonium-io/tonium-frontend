@@ -59,7 +59,7 @@ const Collection = () => {
         </Typography>
         <TableFields
           arrayItems={userCollectionTokens}
-          linkCreator="/collections/new"
+          linkCreator="/collections/:collection/mint-add"
         />
       </div>
     </div>

@@ -47,11 +47,11 @@ const Mint = () => {
     <div className={cls.mint}>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
         <NavLink to="/">Home</NavLink>
-        <Typography color="textPrimary">NFT Collections</Typography>
+        <Typography color="textPrimary">Collections</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
         <Typography variant="h1" component="h1" gutterBottom>
-          NFT Collections
+          Collections
         </Typography>
         <TableFields
           arrayItems={userCollections}

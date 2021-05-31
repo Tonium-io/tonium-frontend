@@ -1,14 +1,4 @@
-import {
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  Paper,
-  Radio,
-  RadioGroup,
-  TextField,
-} from '@material-ui/core';
+import { Button, Grid, Paper, TextField } from '@material-ui/core';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -23,7 +13,7 @@ const CreatorField = ({ onSubmit }: any) => {
     control,
     handleSubmit,
   }: any = useForm();
-  console.log('home');
+
   return (
     <div className={cls.createcol}>
       <Grid
@@ -45,6 +35,7 @@ const CreatorField = ({ onSubmit }: any) => {
             </div>
           </Paper>
           <Button
+            style={{ marginTop: 20 }}
             variant="contained"
             component="label"
             startIcon={<AddBoxIcon />}
@@ -98,22 +89,6 @@ const CreatorField = ({ onSubmit }: any) => {
               )}
             />
 
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Select collection type</FormLabel>
-              <RadioGroup aria-label="coltype" name="coltype">
-                <FormControlLabel
-                  value="female"
-                  control={<Radio />}
-                  label="Base"
-                />
-                <FormControlLabel
-                  value="disabled"
-                  disabled
-                  control={<Radio />}
-                  label="Advanced"
-                />
-              </RadioGroup>
-            </FormControl>
             <Button
               style={{ background: '#FF00E0', height: 79 }}
               type="submit"

@@ -48,9 +48,9 @@ const CreateCol = () => {
   return (
     <div>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <NavLink to="/home">Home</NavLink>
-        <NavLink to="/mint">NFT Collections</NavLink>
-        <Typography color="textPrimary">Create collection</Typography>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/collections"> Collections</NavLink>
+        <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
         <Typography variant="h1" component="h1" gutterBottom>
