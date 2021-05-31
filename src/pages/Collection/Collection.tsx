@@ -1,17 +1,13 @@
-import {
-  Breadcrumbs,
-  Grid,
-  ListItem,
-  Paper,
-  Typography,
-} from '@material-ui/core';
+import { Breadcrumbs, Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
-import AddBoxIcon from '@material-ui/icons/AddBox';
+
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { ContextApp, setUserCollenctionTokens } from '../../store/reducer';
-import cls from './Collection.module.scss';
+
 import Loader from '../../Components/Loader';
+import TableFields from '../../Components/TableFields';
+import cls from '../../app.module.scss';
 
 const Collection = () => {
   const { collection } = useParams<any>();
@@ -19,8 +15,9 @@ const Collection = () => {
   console.log(collection, 'Col');
   // todo radar page
   const { state, dispatch } = useContext(ContextApp);
-  const { userCollections }: any = state;
+  const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
+  const [collName, setCollName] = useState('');
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
@@ -39,6 +36,11 @@ const Collection = () => {
       ];
       setUserCollenctionTokens(dispatch, payload);
       setLoad(false);
+      const nameCol = state.userCollections?.find(
+        (c: any) => c.address === collection,
+      )?.name;
+
+      setCollName(nameCol);
     }
   }, []);
 
@@ -48,53 +50,17 @@ const Collection = () => {
   return (
     <div className={cls.mint}>
       <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <NavLink to="/home">Home</NavLink>
-        <Typography color="textPrimary">{`COLLECTION `}</Typography>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/collections">Collections</NavLink>
       </Breadcrumbs>
       <div className={cls.content_wrap}>
         <Typography variant="h1" component="h1" gutterBottom>
-          {`COLLECTION `}
+          {`Collection ${collName || ''}`}
         </Typography>
-
-        <div className={cls.collections}>
-          <Grid
-            container
-            spacing={1}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-            wrap="nowrap"
-          >
-            {userCollections.map((c: any) => (
-              <ListItem button component="a" key={c}>
-                <NavLink to={`collections/${c.address}`}>
-                  <Paper className={cls.element}>
-                    <div>
-                      <img
-                        style={{ width: 210, height: 118 }}
-                        alt="alt"
-                        src={c.img}
-                      />
-                    </div>
-                  </Paper>
-                </NavLink>
-                <Typography>{c.name}</Typography>
-              </ListItem>
-            ))}
-            <ListItem button component="a">
-              <NavLink to="/collections/new">
-                <Paper className={cls.element}>
-                  <div>
-                    <div>
-                      <AddBoxIcon />
-                      <Typography>Create new</Typography>
-                    </div>
-                  </div>
-                </Paper>
-              </NavLink>
-            </ListItem>
-          </Grid>
-        </div>
+        <TableFields
+          arrayItems={userCollectionTokens}
+          linkCreator="/collections/new"
+        />
       </div>
     </div>
   );
