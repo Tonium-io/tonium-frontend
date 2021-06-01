@@ -2,9 +2,6 @@ import web3Utils from 'web3-utils';
 
 import AbstractProvider from '../providers/AbstractProvider';
 
-declare const window: any;
-
-window.web3Utils = web3Utils;
 class Actions {
   private getCurrentProvider: () => AbstractProvider;
 

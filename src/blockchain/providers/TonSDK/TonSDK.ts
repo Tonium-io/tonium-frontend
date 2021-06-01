@@ -13,6 +13,8 @@ import { Account } from '@tonclient/appkit';
 import AbstractProvider from '../AbstractProvider';
 import ContractNames from '../../../types/Contract';
 
+TonClient.useBinaryLibrary(libWeb);
+
 // const SEED_PHRASE_WORD_COUNT = 12;
 // const SEED_PHRASE_DICTIONARY_ENGLISH = 1;
 // const HD_PATH = "m/44'/396'/0'/0/0";
@@ -77,7 +79,6 @@ class TonSDK extends AbstractProvider {
   constructor(initParams?: { mnemonic?: string }) {
     super();
     // this.contracts = {};
-    TonClient.useBinaryLibrary(libWeb);
 
     this.client = new TonClient({
       network: {
