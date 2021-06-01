@@ -59,23 +59,23 @@ class Actions {
 
   async getInfoTokens(address: string) {
     const provider = await this.getCurrentProvider();
-    const lastMintedToken = await this.getLastMintedToken(address);
-    const result: any = [];
-    Promise.all(
-      new Array(lastMintedToken).map(async (_i, ind) => {
-        const tokenId = ind + 1;
-        debugger;
-        const getInfoToken = await provider.run(
-          'rootToken',
-          'getInfoToken',
-          {
-            tokenId,
-          },
-          address,
-        );
-        result.push(getInfoToken);
-      }),
-    );
+    let lastMintedToken = await this.getLastMintedToken(address);
+    let result: any = [];
+
+    while (lastMintedToken) {
+      const getInfoToken = provider.run(
+        'rootToken',
+        'getInfoToken',
+        {
+          tokenId: lastMintedToken,
+        },
+        address,
+      );
+      result.push(getInfoToken);
+      lastMintedToken -= 1;
+    }
+
+    result = await Promise.all(result);
 
     return result;
   }

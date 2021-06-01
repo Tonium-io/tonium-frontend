@@ -258,13 +258,48 @@ class TonSDK extends AbstractProvider {
     address?: string,
   ) {
     await this.whenReady();
-    const contract = (await this.getContractAtAddress(
-      contractName,
+    const rawContract = TonSDK.getContractRaw(contractName);
+    if (!rawContract) {
+      // eslint-disable-next-line no-console
+      console.error('Contract not found', contractName);
+      return false;
+    }
+    const message = await this.client.abi.encode_message({
       address,
-    )) as Account;
-    const result = (await contract.runLocal(functionName, input || {})) as any;
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      signer: signerNone(),
+      call_set: {
+        function_name: functionName,
+        input,
+      },
+    });
 
+    const boc = await this.client.net.wait_for_collection({
+      collection: 'accounts',
+      filter: { id: { eq: address } },
+      result: 'boc',
+      timeout: 1000,
+    });
+
+    const result = await this.client.tvm.run_tvm({
+      account: boc.result.boc,
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      message: message.message,
+    });
     return result.decoded?.out_messages[0].value;
+    // const contract = (await this.getContractAtAddress(
+    //   contractName,
+    //   address,
+    // )) as Account;
+    // const result = (await contract.runLocal(functionName, input || {},{performAllChecks:true})) as any;
+
+    // return result.decoded?.out_messages[0].value;
   }
 
   async call(
