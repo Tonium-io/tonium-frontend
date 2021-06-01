@@ -116,11 +116,11 @@ class Actions {
 
   async createUserCollections(name: string, symbol: string, tokenURI = '') {
     const provider = await this.resolveProviderOrThrow();
-    await this.deployController();
+
     const walletContract = await Object.getPrototypeOf(
       provider,
     ).constructor.getContractRaw('wallet');
-
+    await this.deployController();
     const contractAddress = await provider
       .deployContract(
         'rootToken',
@@ -190,8 +190,7 @@ class Actions {
       {},
       addressWallet,
     );
-    console.log(wallets, 'Walletss');
-    debugger;
+
     await provider.call(
       'rootToken',
       'grant',

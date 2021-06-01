@@ -25,7 +25,6 @@ const Mint = () => {
     if (state.auth) {
       setLoad(true);
       toniumNFT.actions.getUserCollections().then((data: any) => {
-        console.log(data, 'Collection');
         const newData = data.map((i: any) => ({
           ...i,
           img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
