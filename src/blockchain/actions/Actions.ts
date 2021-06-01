@@ -87,31 +87,6 @@ class Actions {
     return results;
   }
 
-  async getUserCollectionTokkens() {
-    let userNFTs = [];
-    if (localStorage.getItem('tonuim_userNFT')) {
-      const newdata = JSON.parse(
-        localStorage.getItem('tonuim_userNFT') as string,
-      );
-      if (newdata) {
-        userNFTs = newdata;
-      }
-    }
-
-    if (!userNFTs.length) {
-      return [];
-    }
-    const promises = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const collection of userNFTs) {
-      promises.push(this.getCollectionData(collection));
-    }
-
-    const result = await Promise.all(promises);
-
-    return result;
-  }
-
   async deployController() {
     const provider = await this.resolveProviderOrThrow();
     const contractAddress = await provider.deployContract('controller');
