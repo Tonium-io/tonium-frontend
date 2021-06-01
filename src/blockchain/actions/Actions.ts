@@ -60,7 +60,7 @@ class Actions {
   async getInfoTokens(address: string) {
     const provider = await this.getCurrentProvider();
     let lastMintedToken = await this.getLastMintedToken(address);
-    let result: any = [];
+    let results: any = [];
 
     while (lastMintedToken) {
       const getInfoToken = provider.run(
@@ -71,13 +71,20 @@ class Actions {
         },
         address,
       );
-      result.push(getInfoToken);
+      results.push(getInfoToken);
       lastMintedToken -= 1;
     }
 
-    result = await Promise.all(result);
-
-    return result;
+    results = await Promise.all(results);
+    results = results.map((i: any) => {
+      const newResult = {
+        ...i,
+        name: web3Utils.hexToUtf8(`0x${i.name}`),
+        tokenUri: web3Utils.hexToUtf8(`0x${i.tokenUri}`),
+      };
+      return newResult;
+    });
+    return results;
   }
 
   async getUserCollectionTokkens() {

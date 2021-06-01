@@ -21,7 +21,7 @@ const TableFields = ({
         direction="row"
         justify="flex-start"
         alignItems="flex-start"
-        wrap="nowrap"
+        wrap="wrap"
       >
         {arrayItems.map((c: any) => (
           <ListItem button component="a" key={c.name}>

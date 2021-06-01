@@ -12,30 +12,24 @@ import cls from '../../app.module.scss';
 const Collection = () => {
   const { collection } = useParams<any>();
   // eslint-disable-next-line no-console
-  console.log(collection, 'Col');
+
   // todo radar page
-  const { state, dispatch } = useContext(ContextApp);
+  const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
   const [collName, setCollName] = useState('');
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
-      // to do ajax
-      const payload = [
-        {
-          name: 'Test1',
-          address: '0:x12312312432534453',
+      toniumNFT.actions.getInfoTokens(collection).then((data: any) => {
+        const newData = data.map((i: any) => ({
+          ...i,
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-        },
-        {
-          name: 'Test2',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-        },
-      ];
-      setUserCollenctionTokens(dispatch, payload);
-      setLoad(false);
+        }));
+        setUserCollenctionTokens(dispatch, newData);
+        setLoad(false);
+      });
+
       const nameCol = state.userCollections?.find(
         (c: any) => c.address === collection,
       )?.name;
