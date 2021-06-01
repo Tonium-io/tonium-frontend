@@ -62,6 +62,21 @@ class TiniumNFT {
     // eslint-disable-next-line no-debugger
     return this.provider;
   }
+
+  async getApiSignature() {
+    const provider = this.getCurrentProvider();
+    if (!provider) {
+      throw new Error('Please login by provider first');
+    }
+
+    const [network, publicKey] = await Promise.all([
+      provider.getNetwork(),
+      provider.getPublicKey(false),
+    ]);
+    const message = await provider.signMessage({ network, publicKey });
+
+    return `${publicKey}:${message}`;
+  }
 }
 
 export default TiniumNFT;

@@ -99,6 +99,8 @@ abstract class AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ): Promise<string>;
+
+  abstract signMessage(message: {}): Promise<string>;
 }
 
 export default AbstractProvider;

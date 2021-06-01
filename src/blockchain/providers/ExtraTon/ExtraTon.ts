@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 /* eslint-disable no-unused-vars */
 import freeton from 'freeton';
 
@@ -141,6 +142,9 @@ class ExtraTon extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    throw new Error(
+      'Extra ton not supported deploy contract. Please use another provider',
+    );
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
@@ -154,6 +158,14 @@ class ExtraTon extends AbstractProvider {
     await realContract.getDeployProcessing().wait();
 
     return realContract.address;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async signMessage(message: {}) {
+    throw new Error(
+      'Extra ton not supported signMessage Please use another provider',
+    );
+    return 'false';
   }
 }
 

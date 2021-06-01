@@ -558,6 +558,15 @@ class TonSDK extends AbstractProvider {
 
     return address;
   }
+
+  async signMessage(message: {}) {
+    await this.whenReady();
+    const result = await this.client.crypto.sign({
+      unsigned: btoa(JSON.stringify(message)),
+      keys: this.keys.keys,
+    });
+    return result.signed;
+  }
 }
 
 export default TonSDK;
