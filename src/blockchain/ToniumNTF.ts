@@ -4,10 +4,14 @@ import TonSDK from './providers/TonSDK/TonSDK';
 import AbstractProvider from './providers/AbstractProvider';
 import Actions from './actions/Actions';
 
+import Api from '../api/Api';
+
 import { setLogin } from '../store/reducer';
 
 class TiniumNFT {
   providers: { [key: string]: any } = { ExtraTon, TonSDK };
+
+  api: Api;
 
   provider!: AbstractProvider;
 
@@ -25,6 +29,7 @@ class TiniumNFT {
     }
 
     this.actions = new Actions(this.getCurrentProvider.bind(this));
+    this.api = new Api(this.getApiSignature.bind(this));
   }
 
   getActions() {
