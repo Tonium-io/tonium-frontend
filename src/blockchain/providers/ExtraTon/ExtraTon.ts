@@ -161,7 +161,7 @@ class ExtraTon extends AbstractProvider {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async signMessage(message: string) {
+  async signMessage(message: {}) {
     throw new Error(
       'Extra ton not supported signMessage Please use another provider',
     );
