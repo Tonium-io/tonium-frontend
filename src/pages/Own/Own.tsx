@@ -52,8 +52,8 @@ const Own = () => {
     return <Loader />;
   }
   // eslint-disable-next-line no-console
-  console.log(state.userAllTokens);
-  return <div className={cls.own}> this is Own page</div>;
+
+  return <div className={cls.own}>Own page</div>;
 };
 
 export default Own;

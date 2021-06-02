@@ -5,6 +5,8 @@ import contracts from '../contracts.json';
 abstract class AbstractProvider {
   inited: Boolean = false;
 
+  address: string = '';
+
   static description = 'PROVIDE DESCRIPTION';
 
   private readyPromise!: Promise<boolean>;
@@ -66,13 +68,15 @@ abstract class AbstractProvider {
     address?: string,
   ): Promise<any>;
 
-  abstract getAddress(): Promise<String>;
+  abstract getAddress(): Promise<string>;
 
   abstract logout(): boolean;
 
   abstract getPublicKey(withLeadingHex: boolean): String;
 
   abstract getBalance(): Promise<Number>;
+
+  //  abstract getContractAtAddress():
 
   static getRequiredInitFields(): Array<{
     name: String;

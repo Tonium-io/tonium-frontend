@@ -17,29 +17,31 @@ import cls from '../../app.module.scss';
 
 const CreateCol = () => {
   const [load, setLoad] = useState(false);
-  const { toniumNFT } = useContext(ContextApp);
+  const { toniumNFT, state } = useContext(ContextApp);
 
   const onSubmit = (values: any) => {
     setLoad(true);
-    toniumNFT.actions
-      .createUserCollections(values.name, values.symbol)
-      .then((data: any) => {
-        // eslint-disable-next-line no-console
-        console.log(data, 'Success');
-        toast.success('Success', {
-          position: 'bottom-right',
-          autoClose: 4000,
+    if (state.auth) {
+      toniumNFT.actions
+        .createUserCollections(values.name, values.symbol)
+        .then((data: any) => {
+          // eslint-disable-next-line no-console
+          console.log(data, 'Success');
+          toast.success('Success', {
+            position: 'bottom-right',
+            autoClose: 4000,
+          });
+          setLoad(false);
+        })
+        .catch((e: any) => {
+          // eslint-disable-next-line no-console
+          console.error(e.message);
+          toast.error('Error', {
+            position: 'bottom-right',
+            autoClose: 4000,
+          });
         });
-        setLoad(false);
-      })
-      .catch((e: any) => {
-        // eslint-disable-next-line no-console
-        console.error(e.message);
-        toast.error('Error', {
-          position: 'bottom-right',
-          autoClose: 4000,
-        });
-      });
+    }
   };
   if (load) {
     return <Loader />;

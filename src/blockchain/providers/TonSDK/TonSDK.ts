@@ -89,17 +89,53 @@ class TonSDK extends AbstractProvider {
     this.init(initParams?.mnemonic);
   }
 
-  //   async getAddress_controller(): Promise<string> {
-  //     let address = this.address;
-  //     if (address === null) {
-  //         const deployParams = this.client.getParamsOfDeployMessage({
-  //             initFunctionName: null,
-  //         });
-  //         address = (await this.client.abi.encode_message(deployParams)).address;
-  //         this.address = address;
-  //     }
-  //     return address;
-  // }
+  async getAddress(): Promise<string> {
+    const { address } = this;
+
+    if (!address) {
+      await this.whenReady();
+      const rawContract = TonSDK.getContractRaw('controller');
+      const deployOptions = {
+        abi: {
+          type: 'Contract',
+          value: rawContract.abi,
+        },
+        deploy_set: {
+          tvc: rawContract.tvc,
+
+          initial_pubkey: this.keys.keys.public,
+        },
+        call_set: {
+          function_name: 'constructor',
+        },
+        signer: {
+          type: 'Keys',
+          keys: this.keys.keys,
+        },
+      } as const;
+
+      const result = await this.client.abi
+        .encode_message(deployOptions)
+        .catch((e) => {
+          // eslint-disable-next-line no-console
+          console.error(deployOptions);
+          // eslint-disable-next-line no-console
+          console.error(e);
+        });
+
+      if (!result) {
+        // eslint-disable-next-line no-console
+        console.error('Not able to detect address');
+        throw new Error('Not able to detect address');
+      }
+
+      // eslint-disable-next-line no-console
+      console.log(`Future address of the contract will be: ${result.address}`);
+      this.address = result.address;
+    }
+
+    return this.address;
+  }
 
   async init(mnemonic?: string) {
     await TonSDK.timeout(1000);
@@ -222,13 +258,48 @@ class TonSDK extends AbstractProvider {
     address?: string,
   ) {
     await this.whenReady();
-    const contract = (await this.getContractAtAddress(
-      contractName,
+    const rawContract = TonSDK.getContractRaw(contractName);
+    if (!rawContract) {
+      // eslint-disable-next-line no-console
+      console.error('Contract not found', contractName);
+      return false;
+    }
+    const message = await this.client.abi.encode_message({
       address,
-    )) as Account;
-    const result = (await contract.runLocal(functionName, input || {})) as any;
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      signer: signerNone(),
+      call_set: {
+        function_name: functionName,
+        input,
+      },
+    });
 
+    const boc = await this.client.net.wait_for_collection({
+      collection: 'accounts',
+      filter: { id: { eq: address } },
+      result: 'boc',
+      timeout: 1000,
+    });
+
+    const result = await this.client.tvm.run_tvm({
+      account: boc.result.boc,
+      abi: {
+        type: 'Contract',
+        value: rawContract.abi,
+      },
+      message: message.message,
+    });
     return result.decoded?.out_messages[0].value;
+    // const contract = (await this.getContractAtAddress(
+    //   contractName,
+    //   address,
+    // )) as Account;
+    // const result = (await contract.runLocal(functionName, input || {},{performAllChecks:true})) as any;
+
+    // return result.decoded?.out_messages[0].value;
   }
 
   async call(
@@ -265,23 +336,23 @@ class TonSDK extends AbstractProvider {
     return 2;
   }
 
-  async getAddress() {
-    // const rawContract = TonSDK.getContractRaw("controller");
-    await this.whenReady();
-    // const network = await this.getNetwork();
-    // const sign = this.getSigner();
-    const pubkey = this.keys.keys.public;
-    return `0x${pubkey}`;
-    // const constroolerContract = (await this.getContractAtAddress(
-    //   'controller',
-    // )) as Account;
-    // const params = await constroolerContract.getParamsOfDeployMessage({
-    //   initInput: { public_key: `0x${pubkey}` },
-    // });
-    // const addr = await this.client.abi.encode_message(params);
+  // async getAddress() {
+  // const rawContract = TonSDK.getContractRaw("controller");
+  // await this.whenReady();
+  // const network = await this.getNetwork();
+  // const sign = this.getSigner();
+  // const pubkey = this.keys.keys.public;
+  // return `0x${pubkey}`;
+  // const constroolerContract = (await this.getContractAtAddress(
+  //   'controller',
+  // )) as Account;
+  // const params = await constroolerContract.getParamsOfDeployMessage({
+  //   initInput: { public_key: `0x${pubkey}` },
+  // });
+  // const addr = await this.client.abi.encode_message(params);
 
-    // return addr.address;
-  }
+  // return addr.address;
+  // }
 
   getPublicKey(withLeadingHex: boolean) {
     let key = this.keys.keys.public;
