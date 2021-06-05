@@ -1,0 +1,88 @@
+.addImage {
+  width: 165px;
+  height: 165px;
+  background-color: #e9e9e9 !important;
+  border-radius: 0 !important;
+
+  > span {
+    flex-direction: column;
+  }
+}
+
+.uploadFile {
+  width: 165px;
+  height: 47px;
+  background-color: #e9e9e9 !important;
+  border-radius: 0 !important;
+}
+
+.radioGroup {
+  & > label {
+    margin-left: -8px;
+    margin-right: auto;
+  }
+}
+
+.differentPopover {
+  width: 55px;
+  font-size: 9px !important;
+  line-height: 11px !important;
+  text-decoration-line: underline;
+  text-transform: uppercase;
+  color: #ff00e0;
+}
+
+.nameInputHeader,
+.descInputHeader {
+  & > label {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+}
+
+.nameInputHeader {
+  & > div > input {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    text-transform: uppercase;
+    color: #a4a4a4;
+  }
+}
+
+.descInputHeader {
+  & > div > textarea {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    color: #a4a4a4;
+  }
+}
+
+.mintButton {
+  height: 79px;
+  width: 247px;
+  color: #000 !important;
+  background: linear-gradient(180deg, #ff00e0 0%, #ba1fc8 100%);
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cost {
+  display: flex;
+  justify-content: center;
+  width: 247px;
+  margin-top: 10px !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  line-height: 16px !important;
+  text-transform: uppercase;
+  color: #000;
+
+  & > svg {
+    margin: 0 5px;
+  }
+}
