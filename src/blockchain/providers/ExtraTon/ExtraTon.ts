@@ -98,7 +98,6 @@ class ExtraTon extends AbstractProvider {
     address?: string,
   ) {
     await this.whenReady();
-    // eslint-disable-next-line no-debugger
     const result = (
       await this.getContractAtAddress(contractName, address)
     ).methods[functionName].call(input);

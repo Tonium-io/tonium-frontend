@@ -125,11 +125,9 @@ const Login = () => {
                       <TextField
                         error={!formValues?.[field.name]}
                         key={field.name}
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const newValues = { ...formValues } || {};
-
                           newValues[field.name] = e.target.value;
-
                           setFormValues(newValues);
                         }}
                         value={formValues?.[field.name] || ''}
@@ -188,7 +186,30 @@ const Login = () => {
                   color="primary"
                   value="submit"
                   type="submit"
-                  onClick={() => {
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fields = toniumNFT
+                      .getProviders()
+                      [selectedProvider as any].getRequiredInitFields();
+
+                    // eslint-disable-next-line no-restricted-syntax
+                    for (const field of fields) {
+                      if (field.validator) {
+                        // eslint-disable-next-line no-await-in-loop
+                        const result = await field.validator(
+                          formValues[field.name],
+                        );
+                        if (!result.valid) {
+                          e.nativeEvent.stopImmediatePropagation();
+                          toast.error(
+                            `${field.name} not valid. Please check it and try again`,
+                          );
+                          return;
+                        }
+                      }
+                    }
+
                     toniumNFT.setProvider(
                       selectedProvider as any,
                       formValues as {},

@@ -94,6 +94,9 @@ class TonSDK extends AbstractProvider {
 
     if (!address) {
       await this.whenReady();
+      if (!this.keys?.keys?.public) {
+        return '0';
+      }
       const rawContract = TonSDK.getContractRaw('controller');
       const deployOptions = {
         abi: {
@@ -397,7 +400,6 @@ class TonSDK extends AbstractProvider {
 
   static getRequiredInitFields() {
     const client = new TonClient();
-    TonClient.useBinaryLibrary(libWeb);
     return [
       {
         name: 'mnemonic',
@@ -412,7 +414,6 @@ class TonSDK extends AbstractProvider {
 
   static getInitActions() {
     const client = new TonClient();
-    TonClient.useBinaryLibrary(libWeb);
 
     return [
       {
@@ -498,7 +499,9 @@ class TonSDK extends AbstractProvider {
 
       // add money here
       const giver = await Account.getGiverForClient(this.client);
-
+      // eslint-disable-next-line no-console
+      console.log(giver);
+      // eslint-disable-next-line no-console
       const giverResult = await giver.sendTo(
         result.address,
         executorResult.fees.total_account_fees as any,
