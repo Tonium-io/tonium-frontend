@@ -1,3 +1,103 @@
-.own{
-    
+.own {
+  .container {
+    width: 792px;
+    margin-left: 82px;
+    padding: 0;
+    .userName {
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-transform: lowercase;
+      color: #7A7A7A;
+    }
+    .navWrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tokenSpan {
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-transform: uppercase;
+      color: #000000;
+      margin-left: 5px;
+    }
+    .tab {
+      margin: 19px 20px 0 0;
+      text-transform: uppercase;
+      color: #A9A9A9;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 19px;
+      text-decoration: none;
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      opacity: 1;
+    }
+    .wrapTokens {
+      display: flex;
+      flex-wrap: wrap;
+      width: 792px;
+      .tokens {
+        margin: 37px 44px 33px 0;  
+        width: 165px;
+        height: 165px;
+        text-decoration: none;
+        .text {
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 16px;
+          text-transform: uppercase;
+          color: #000000;
+          text-align: center;
+          display: block;
+          padding-top: 8px;
+        }
+        &:nth-child(4),&:nth-child(8) {
+          margin: 37px 0 33px 0;  
+        }
+        .three {
+          width: 165px;
+          height: 165px;
+          padding-top: 50px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 165px 165px;
+          .btnToken {
+            display: none;
+          }
+          &:hover {
+            .btnToken {
+              display: block;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 16px;
+              text-align: center;
+              text-transform: uppercase;
+              text-decoration: none;
+              color: #000;
+              background: #EAEAEA;
+              padding: 7px 67px 6px 67px;
+              margin-bottom: 3px;
+            }
+          }
+        }      
+      }    
+    } 
+  }
+  .history {
+    display: flex;
+    align-items: center;
+    .historyLink {
+      font-size: 12px;
+      line-height: 14px;
+      text-transform: uppercase;
+      color: #FF00E0;
+      padding-left: 10px;
+      text-decoration-line: underline;
+      -webkit-text-decoration-line: underline;
+    } 
+  }
 }
