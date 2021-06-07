@@ -1,17 +1,67 @@
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
 import { Button, Grid, TextField } from '@material-ui/core';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import GetAppIcon from '@material-ui/icons/GetApp';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import Typography from '@material-ui/core/Typography';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { withStyles } from '@material-ui/core/styles';
 
 import StyledRadio from '../StyledRadio';
+import StyledPopover from '../StyledPopover';
 
 import styles from './styles.module.scss';
-import StyledPopover from '../StyledPopover';
-/* eslint-disable react/jsx-props-no-spreading */
+
+const AddImageButton: any = withStyles(() => ({
+  root: {
+    width: 165,
+    height: 165,
+    color: '#000',
+    backgroundColor: '#e9e9e9',
+    cursor: 'pointer',
+    '& > span': {
+      flexDirection: 'column',
+    },
+  },
+}))(Button);
+
+const UploadFileButton: any = withStyles(() => ({
+  root: {
+    backgroundColor: '#e9e9e9',
+    width: 165,
+    height: 47,
+    borderRadius: 0,
+  },
+}))(Button);
+
+const ColorButton = withStyles(() => ({
+  root: {
+    height: 79,
+    width: 247,
+    color: '#000',
+    background: 'linear-gradient(180deg,#ff00e0 0%,#ba1fc8 100%)',
+    boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.25)',
+  },
+}))(Button);
+
+const CostLegend = withStyles(() => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: 247,
+    marginTop: 10,
+    fontWeight: 'bold',
+    fontSize: 14,
+    lineHeight: '16px',
+    textTransform: 'uppercase',
+    color: '#000',
+    '& > svg': {
+      margin: '0 5px',
+    },
+  },
+}))(Typography);
 
 const CreatorFieldV2 = ({ onSubmit }: any) => {
   const {
@@ -40,8 +90,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 required: 'This field is required',
               }}
               render={({ field }) => (
-                <Button
-                  className={styles.addImage}
+                <AddImageButton
                   style={errors?.image ? { border: '2px solid #f44336' } : {}}
                   component="label"
                   {...field}
@@ -54,7 +103,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                     JPG or GIF
                   </Typography>
                   <input type="file" hidden />
-                </Button>
+                </AddImageButton>
               )}
             />
           </Grid>
@@ -69,16 +118,16 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 required: 'This field is required',
               }}
               render={({ field }) => (
-                <Button
-                  className={styles.uploadFile}
+                <UploadFileButton
                   style={
                     errors?.fullFile ? { border: '2px solid #f44336' } : {}
                   }
                   component="label"
+                  {...field}
                 >
                   <GetAppIcon fontSize="large" />
-                  <input type="file" hidden {...field} />
-                </Button>
+                  <input type="file" hidden />
+                </UploadFileButton>
               )}
             />
           </Grid>
@@ -137,7 +186,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                   inputRef={field.ref}
                   fullWidth
                   error={Boolean(errors?.name)}
-                  label="set the name/title"
+                  label="Set the name/title"
                   helperText={errors?.name ? errors?.name?.message : ''}
                   {...field}
                 />
@@ -156,7 +205,6 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                   className={styles.descInputHeader}
                   inputRef={field.ref}
                   error={Boolean(errors?.symbol)}
-                  id="standard-multiline-static"
                   multiline
                   fullWidth
                   rows={4}
@@ -168,17 +216,16 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
             />
           </Grid>
           <Grid item>
-            <Button
-              className={styles.mintButton}
+            <ColorButton
               type="submit"
               variant="contained"
               color="primary"
               size="large"
             >
               MINT NFT
-            </Button>
+            </ColorButton>
 
-            <Typography className={styles.cost}>
+            <CostLegend>
               2
               <svg
                 width="20"
@@ -195,7 +242,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 />
               </svg>
               COST
-            </Typography>
+            </CostLegend>
           </Grid>
         </Grid>
       </Grid>
