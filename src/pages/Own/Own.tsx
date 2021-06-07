@@ -1,14 +1,91 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Breadcrumbs, Container } from '@material-ui/core';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
+import { NavLink } from 'react-router-dom';
+import HistoryIcon from '../../img/history.svg';
 import Loader from '../../Components/Loader';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
 
 import cls from './Own.module.scss';
 
+type TokenItemType = {
+  name: string;
+  address: string;
+  img: string;
+  marked: boolean;
+};
+
+interface StyledTabProps {
+  label: string;
+}
+
+interface TabPanelProps {
+  children: React.ReactNode;
+  index: any;
+  value: any;
+}
+
+const TabPanel = (props: TabPanelProps) => {
+  const { children, value, index } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+    >
+      {value === index && <div className={cls.tab}>{children}</div>}
+    </div>
+  );
+};
+
+// eslint-disable-next-line arrow-body-style
+const a11yProps = (index: any) => {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+};
+
+const AntTab = withStyles(
+  (theme: Theme) =>
+    createStyles({
+      root: {
+        margin: '19px 20px 0 0',
+        textTransform: 'uppercase',
+        color: '#A9A9A9',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        lineHeight: '19px',
+        textDecoration: 'none',
+        minWidth: 0,
+        minHeight: 0,
+        padding: 0,
+        opacity: 1,
+        '&$selected': {
+          color: '#000',
+          fontWeight: theme.typography.fontWeightMedium,
+        },
+      },
+      selected: {},
+    }),
+  // eslint-disable-next-line react/jsx-props-no-spreading
+)((props: StyledTabProps) => <Tab disableRipple {...props} />);
+
 const Own = () => {
   const { state, dispatch } = useContext(ContextApp);
-
+  // eslint-disable-next-line no-unused-vars
+  const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setValue(newValue);
+  };
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
@@ -27,13 +104,37 @@ const Own = () => {
           marked: true,
         },
         {
-          name: 'Test22',
+          name: 'Test3',
           address: '0:x12312332425532535',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           bided: true,
         },
         {
-          name: 'Test21',
+          name: 'Test4',
+          address: '0:x12312332425532535',
+          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          my: true,
+        },
+        {
+          name: 'Test5',
+          address: '0:x12312332425532535',
+          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          my: true,
+        },
+        {
+          name: 'Test6',
+          address: '0:x12312332425532535',
+          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          my: true,
+        },
+        {
+          name: 'Test7',
+          address: '0:x12312332425532535',
+          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          my: true,
+        },
+        {
+          name: 'Test8',
           address: '0:x12312332425532535',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
@@ -52,8 +153,80 @@ const Own = () => {
     return <Loader />;
   }
   // eslint-disable-next-line no-console
+  return (
+    <div className={cls.own}>
+      <Container className={cls.container}>
+        <Breadcrumbs separator="›" aria-label="breadcrumb">
+          <NavLink to="/">Home</NavLink>
+        </Breadcrumbs>
 
-  return <div className={cls.own}>Own page</div>;
+        <span className={cls.userName}>
+          @lordofnft
+          <span className={cls.tokenSpan}>tokens</span>
+        </span>
+
+        <div className={cls.navWrap}>
+          <Tabs
+            TabIndicatorProps={{
+              style: {
+                height: '6px',
+                background: ' #FF00E0',
+              },
+            }}
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs example"
+          >
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <AntTab label="All" {...a11yProps(0)} />
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <AntTab label="Minted" {...a11yProps(1)} />
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <AntTab label="Auction" {...a11yProps(2)} />
+          </Tabs>
+
+          <div className={cls.history}>
+            <img src={HistoryIcon} alt="History" />
+            <NavLink to="#" className={cls.historyLink}>
+              Transaction history
+            </NavLink>
+          </div>
+        </div>
+
+        <TabPanel value={value} index={0}>
+          <div className={cls.wrapTokens}>
+            {state.userAllTokens.map((item: TokenItemType) => (
+              <NavLink to="#" className={cls.tokens}>
+                <div
+                  className={cls.three}
+                  style={{ backgroundImage: `url(${item.img})` }}
+                >
+                  <NavLink to="#" className={cls.btnToken}>
+                    Sell
+                  </NavLink>
+                  <NavLink to="#" className={cls.btnToken}>
+                    Send
+                  </NavLink>
+                  <NavLink to="#" className={cls.btnToken}>
+                    Edit
+                  </NavLink>
+                </div>
+                <span className={cls.text}>{item.name}</span>
+              </NavLink>
+            ))}
+          </div>
+        </TabPanel>
+
+        <TabPanel value={value} index={1}>
+          <h2>Minted</h2>
+        </TabPanel>
+
+        <TabPanel value={value} index={2}>
+          <h2>Auction</h2>
+        </TabPanel>
+      </Container>
+    </div>
+  );
 };
 
 export default Own;
