@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 // import Skeleton from '@material-ui/lab/Skeleton';
 
 import { toast } from 'react-toastify';
+import CreatorFieldV2 from '../../Components/CreatorFieldV2';
 import { ContextApp } from '../../store/reducer';
 import Loader from '../../Components/Loader';
-import CreatorField from '../../Components/CreatorField';
 import cls from '../../app.module.scss';
 
 const MintNft = () => {
@@ -54,10 +54,10 @@ const MintNft = () => {
       </Breadcrumbs>
       <div className={cls.content_wrap}>
         <Typography variant="h1" component="h1" gutterBottom>
-          Mint NFT
+          Mint NFT to the collection &quot;{collection}&quot;
         </Typography>
 
-        <CreatorField onSubmit={onSubmit} />
+        <CreatorFieldV2 onSubmit={onSubmit} />
       </div>
     </div>
   );
