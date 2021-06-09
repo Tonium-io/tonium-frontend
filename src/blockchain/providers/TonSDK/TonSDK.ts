@@ -380,19 +380,21 @@ class TonSDK extends AbstractProvider {
   // }
 
   async getBalance() {
-    if (this.getAddress()) {
+    const address = await this.getAddress();
+    if (address) {
       const balance = await this.client.net.query_collection({
         collection: 'accounts',
         filter: {
           id: {
-            eq: await this.getAddress(),
+            eq: address,
           },
         },
         result: 'balance',
       });
 
       if (balance.result?.length) {
-        return balance.result[0].balance;
+        const bln = balance.result[0].balance;
+        return bln / 1000000000;
       }
     }
     return Number.NaN;
@@ -427,8 +429,27 @@ class TonSDK extends AbstractProvider {
     ];
   }
 
+  async sendMoney(address: string, value: number) {
+    const rawContract = TonSDK.getContractRaw('controller');
+
+    const acc = new Account(
+      {
+        abi: rawContract.abi,
+        tvc: rawContract.tvc,
+      },
+      { signer: this.keys, client: this.client },
+    );
+
+    return acc.run('sendValue', {
+      dest: address,
+      amount: (value + 0.01) * 1_000_000_000,
+      bounce: false,
+    });
+  }
+
   async deployContract(
     contractName: keyof typeof ContractNames,
+    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {
@@ -474,17 +495,29 @@ class TonSDK extends AbstractProvider {
 
     const addressInfo = await this.getAddresInfo(result.address);
 
-    if (addressInfo.isInited) {
-      // eslint-disable-next-line no-console
-      console.error('Address already exists. Please check your code');
-      throw new Error('Address already exists. Please check your code');
-    }
-
     const executorResult = await this.client.tvm.run_executor({
       account: accountForExecutorUninit(),
       abi: { type: 'Contract', value: rawContract.abi },
       message: result.message,
     });
+
+    if (addressInfo.isInited) {
+      // eslint-disable-next-line no-console
+      // console.error('Address already exists. Please check your code');
+      // throw new Error('Address already exists. Please check your code');
+      if (
+        Number(addressInfo.balance) <=
+        Number(executorResult.fees.total_account_fees)
+      ) {
+        const difference =
+          Number(executorResult.fees.total_account_fees) -
+          Number(addressInfo.balance);
+        const fees = difference / 1000000000;
+        noMoneyFallback(result.address, fees, contractName === 'controller');
+      }
+
+      return result.address;
+    }
 
     // eslint-disable-next-line no-console
     console.log(
@@ -497,18 +530,13 @@ class TonSDK extends AbstractProvider {
         `Account balance ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfering money here`,
       );
 
-      // add money here
-      const giver = await Account.getGiverForClient(this.client);
-      // eslint-disable-next-line no-console
-      console.log(giver);
-      // eslint-disable-next-line no-console
-      const giverResult = await giver.sendTo(
-        result.address,
-        executorResult.fees.total_account_fees as any,
-      );
+      const difference =
+        Number(executorResult.fees.total_account_fees) -
+        Number(addressInfo.balance);
+      const fees = difference / 1000000000;
+      noMoneyFallback(result.address, fees, contractName === 'controller');
 
-      // eslint-disable-next-line no-console
-      console.log(giverResult);
+      throw new Error('Not enough money');
     }
 
     const deployResult = await this.client.processing

@@ -87,43 +87,38 @@ class Actions {
     return results;
   }
 
-  async deployController() {
-    const provider = await this.resolveProviderOrThrow();
-    const contractAddress = await provider.deployContract('controller');
-    return contractAddress;
-  }
-
-  async createUserCollections(name: string, symbol: string, tokenURI = '') {
+  async createUserCollections(
+    name: string,
+    symbol: string,
+    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
+    tokenURI = '',
+  ) {
     const provider = await this.resolveProviderOrThrow();
 
     const walletContract = await Object.getPrototypeOf(
       provider,
     ).constructor.getContractRaw('wallet');
-    await this.deployController();
-    const contractAddress = await provider
-      .deployContract(
-        'rootToken',
-        {},
-        {
-          name: web3Utils.utf8ToHex(name).replace('0x', ''),
-          symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
-          tokenURI: web3Utils.utf8ToHex(tokenURI).replace('0x', ''),
-          decimals: 0,
-          root_public_key: provider.getPublicKey(true),
-          wallet_code: walletContract.tvc,
-        },
-      )
-      .catch((e) => {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      });
-    if (!provider) {
-      return null;
-    }
+
+    await provider.deployContract('controller', noMoneyFallback);
+
+    const contractAddress = await provider.deployContract(
+      'rootToken',
+      noMoneyFallback,
+      {},
+      {
+        name: web3Utils.utf8ToHex(name).replace('0x', ''),
+        symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
+        tokenURI: web3Utils.utf8ToHex(tokenURI).replace('0x', ''),
+        decimals: 0,
+        root_public_key: provider.getPublicKey(true),
+        wallet_code: walletContract.tvc,
+      },
+    );
 
     if (!contractAddress) {
       return null;
     }
+
     let userNFTs = [];
     if (localStorage.getItem('tonuim_userNFT')) {
       const newdata = JSON.parse(
@@ -234,10 +229,10 @@ class Actions {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  putEditCollection(tooken: {}) {
-    const editToken = {};
-    return editToken;
-  } //  редактирование колллекции
+  // putEditCollection(tooken: {}) {
+  //   const editToken = {};
+  //   return editToken;
+  // } //  редактирование колллекции
 
   // eslint-disable-next-line class-methods-use-this
   getAllNFTAuctions() {
@@ -246,17 +241,17 @@ class Actions {
   }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  postAunctionMark(auction: {}) {
-    const markAuction = {};
-    return markAuction; // mark auction
-  }
+  // postAunctionMark(auction: {}) {
+  //   const markAuction = {};
+  //   return markAuction; // mark auction
+  // }
 
   // eslint-disable-next-line class-methods-use-this, no-unused-vars
-  postAunctionBid(auction: {}) {
-    // eslint-disable-next-line class-methods-use-this, no-unused-vars
-    const bid = {};
-    return auction;
-  } // do bid
+  // postAunctionBid(auction: {}) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  // const bid = {};
+  // return auction;
+  // } // do bid
 
   // eslint-disable-next-line class-methods-use-this
   getAllNFTs() {

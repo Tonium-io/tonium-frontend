@@ -4,7 +4,7 @@ import cls from '../app.module.scss';
 
 const Loader = () => (
   <div className={cls.loader}>
-    <CircularProgress />
+    <CircularProgress className={cls.progress} />
   </div>
 );
 

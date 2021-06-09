@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 
 import Loader from '../../Components/Loader';
-import { ContextApp } from '../../store/reducer';
+import { ContextApp, setSendMoneyDialog } from '../../store/reducer';
 
 import CreatorField from '../../Components/CreatorField';
 
@@ -17,13 +17,21 @@ import cls from '../../app.module.scss';
 
 const CreateCol = () => {
   const [load, setLoad] = useState(false);
-  const { toniumNFT, state } = useContext(ContextApp);
+  const { toniumNFT, state, dispatch } = useContext(ContextApp);
+
+  const noMoneyFallback = (
+    addr: string,
+    value: number,
+    controller: boolean,
+  ) => {
+    setSendMoneyDialog(dispatch, { visible: true, addr, value, controller });
+  };
 
   const onSubmit = (values: any) => {
-    setLoad(true);
     if (state.auth) {
+      setLoad(true);
       toniumNFT.actions
-        .createUserCollections(values.name, values.symbol)
+        .createUserCollections(values.name, values.symbol, noMoneyFallback)
         .then((data: any) => {
           // eslint-disable-next-line no-console
           console.log(data, 'Success');
@@ -31,7 +39,6 @@ const CreateCol = () => {
             position: 'bottom-right',
             autoClose: 4000,
           });
-          setLoad(false);
         })
         .catch((e: any) => {
           // eslint-disable-next-line no-console
@@ -40,6 +47,9 @@ const CreateCol = () => {
             position: 'bottom-right',
             autoClose: 4000,
           });
+        })
+        .finally(() => {
+          setLoad(false);
         });
     }
   };
@@ -49,6 +59,7 @@ const CreateCol = () => {
 
   return (
     <div>
+      {load && <Loader />}
       <Breadcrumbs separator="›" aria-label="breadcrumb">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/collections"> Collections</NavLink>
