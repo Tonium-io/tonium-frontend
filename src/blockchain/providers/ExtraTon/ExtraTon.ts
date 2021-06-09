@@ -11,8 +11,7 @@ declare const window: any;
 class ExtraTon extends AbstractProvider {
   provider: any;
 
-  static description =
-    'ExtraTon extension. HAVE limitations (deploy contracts). Please use TonSDK instead. Will be fixed in future. Able to perform actions';
+  static description = 'ExtraTon extension';
 
   signer: any;
 
@@ -149,17 +148,15 @@ class ExtraTon extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
-    throw new Error(
-      'Extra ton not supported deploy contract. Please use another provider',
-    );
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
       rawContract.abi,
       rawContract.tvc,
     );
+    contract.setInitialPublicKey(await this.getPublicKey());
     contract.setInitialParams(initialParams);
-    contract.setInitialAmount('10000000000');
+    contract.setInitialAmount('500000000');
 
     const realContract = await contract.deploy(constructorParams);
     await realContract.getDeployProcessing().wait();
