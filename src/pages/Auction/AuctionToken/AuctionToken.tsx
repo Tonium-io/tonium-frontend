@@ -6,8 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../../Components/Loader';
 import CristallIcon from '../../../img/cristall.svg';
-import TimeIcon from '../../../img/time.svg';
-import DateIcon from '../../../img/date.svg';
+
 import { ContextApp, setNftAuctions } from '../../../store/reducer';
 
 import cls from './AuctionToken.module.scss';
@@ -16,7 +15,6 @@ type TokenItemType = {
   name: string;
   address: string;
   img: string;
-  description: string;
   minted: boolean;
 };
 
@@ -24,9 +22,30 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '46px',
+        margin: theme.typography,
+        width: '100%',
         borderBottom: '1px solid #FF00E0',
+        tableLayout: 'fixed',
+      },
+      ' & :before': {
+        content: 'none',
+      },
+      ' & :after': {
+        content: 'none',
+      },
+      '& :nth-child(1)': {
+        fontWeight: 'bold',
+        fontSize: '14px',
+        lineHeight: '16px',
+        color: '#000000',
+      },
+    },
+    date: {
+      '& .MuiTextField-root': {
+        margin: theme.typography,
+        width: '100%',
+        borderBottom: '1px solid #FF00E0',
+        tableLayout: 'fixed',
       },
       ' & :before': {
         content: 'none',
@@ -52,7 +71,6 @@ const AuctionToken = () => {
           name: 'auction TEST TOKEN #1',
           address: '38D9d1B10727bDc523f0EFb06CcA30E922a96fd6',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          description: 'Description',
           minted: true,
         },
       ];
@@ -86,17 +104,18 @@ const AuctionToken = () => {
             <span className={cls.token}>{item.address}</span>
 
             <div className={cls.WrapItem}>
-              <div
-                className={cls.three}
-                style={{ backgroundImage: `url(${item.img})` }}
-              />
+              <div className={cls.three} />
 
               <div className={cls.item}>
                 <div className={cls.WrapDescription}>
                   <h2 className={cls.subtitle}>Description</h2>
-                  <span className={`${cls.description} ${cls.wrapdesc}`}>
-                    {item.description}
-                  </span>
+                  <form noValidate className={classes.root} autoComplete="off">
+                    <TextField
+                      className={cls.wrapdesc}
+                      id="standard-basic"
+                      placeholder="Description"
+                    />
+                  </form>
                 </div>
 
                 <div className={cls.WrapPrice}>
@@ -145,6 +164,7 @@ const AuctionToken = () => {
                     <form noValidate className={cls.FormTime}>
                       <TextField
                         id="time"
+                        type="time"
                         className={classes.root}
                         defaultValue="00:00"
                         InputLabelProps={{
@@ -154,18 +174,17 @@ const AuctionToken = () => {
                           step: 300,
                         }}
                       />
-                      <img src={TimeIcon} alt="Time" />
                     </form>
                     <form noValidate className={cls.FormDate}>
                       <TextField
                         id="date"
+                        type="date"
                         className={classes.root}
                         defaultValue="2021-12-12"
                         InputLabelProps={{
                           shrink: true,
                         }}
                       />
-                      <img src={DateIcon} alt="Date" />
                     </form>
                   </div>
                   <NavLink to="#" className={cls.btn}>

@@ -3,7 +3,6 @@
     "browser": true,
     "es2021": true
   },
-
   "extends": [
     "react-app/jest",
     "plugin:react/recommended",
@@ -18,17 +17,33 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
   "rules": {
     "no-debugger": "off",
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/*.test.js", "**/*.spec.js"] }
+      {
+        "devDependencies": [
+          "**/*.test.js",
+          "**/*.spec.js"
+        ]
+      }
     ],
-
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
-    "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -36,7 +51,8 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/resolver": {

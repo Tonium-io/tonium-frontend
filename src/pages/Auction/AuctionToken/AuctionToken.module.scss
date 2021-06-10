@@ -30,6 +30,7 @@
       .three {
         width: 165px;
         height: 165px;
+        background-image: url('../../../img/Token.jpg');
         background-repeat: no-repeat;
         background-position: center;
         background-size: 165px 165px;
@@ -40,11 +41,6 @@
         .WrapDescription {
           margin-bottom: 20px;
           height: 53px;
-          .wrapdesc {
-            max-width: 353px;
-            border-bottom: 1px solid #FF00E0;
-            padding-bottom: 12px;
-          }
         }
         .WrapPrice {
           display: flex;
@@ -58,14 +54,12 @@
               font-size: 18px;
               line-height: 21px;
               color: #000000;
-              &::after, &::before {
-                content: none;
-              }
             }
           }
           .price {
             margin: 0 28px 22px 0;
             form {
+              width: 75px;
               display: flex;
               align-items: center;
               img {
@@ -76,6 +70,7 @@
           .step {
               margin-bottom: 22px;
             form {
+              width: 71px;
               display: flex;
               align-items: center;
               font-weight: bold;
@@ -91,14 +86,11 @@
             display: flex;
             align-items: center;
             .FormTime {
-              display: flex;
-              align-items: center;
-              flex-direction: row-reverse;
-              border-bottom: 1px solid #FF00E0;
-              width: 58px;
               margin-right: 23px;
               input {
-                width: 37px;
+                border-bottom: 1px solid #FF00E0;
+                flex-direction: row-reverse;
+                width: 76px;
               }
               img {
                 margin-right: 3px;
@@ -106,19 +98,17 @@
             }
             .FormDate {
               width: 92px;
-              display: flex;
-              align-items: center;
-              flex-direction: row-reverse;
-              border-bottom: 1px solid #FF00E0;
               img {
                 margin-right: 3px;
               }
             }
             input {
+              border-bottom: 1px solid #FF00E0;
               font-weight: bold;
               font-size: 14px;
               line-height: 16px;
               color: #000000;
+              flex-direction: row-reverse;
             }
           }
           .btn {
