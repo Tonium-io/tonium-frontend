@@ -439,7 +439,6 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-
     return acc.run('sendValue', {
       dest: address,
       amount: (value + 0.01) * 1_000_000_000,
@@ -449,12 +448,16 @@ class TonSDK extends AbstractProvider {
 
   async deployContract(
     contractName: keyof typeof ContractNames,
-    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
+    const randomPublicKey = (
+      await this.client.crypto.generate_random_sign_keys()
+    ).public;
+
     const deployOptions = {
       abi: {
         type: 'Contract',
@@ -463,7 +466,10 @@ class TonSDK extends AbstractProvider {
       deploy_set: {
         tvc: rawContract.tvc,
         initial_data: initialParams,
-        initial_pubkey: this.keys.keys.public,
+        initial_pubkey:
+          contractName === 'rootToken'
+            ? randomPublicKey
+            : this.keys.keys.public,
       },
       call_set: {
         function_name: 'constructor',
@@ -501,21 +507,15 @@ class TonSDK extends AbstractProvider {
       message: result.message,
     });
 
-    if (addressInfo.isInited) {
-      // eslint-disable-next-line no-console
-      // console.error('Address already exists. Please check your code');
-      // throw new Error('Address already exists. Please check your code');
-      if (
-        Number(addressInfo.balance) <=
-        Number(executorResult.fees.total_account_fees)
-      ) {
-        const difference =
-          Number(executorResult.fees.total_account_fees) -
-          Number(addressInfo.balance);
-        const fees = difference / 1000000000;
-        noMoneyFallback(result.address, fees, contractName === 'controller');
-      }
+    const addressBalance = Number(addressInfo.balance);
+    const executorFees = Number(executorResult.fees.total_account_fees);
 
+    if (addressInfo.isInited) {
+      // if (addressBalance <= executorFees) {
+      //   const difference = executorFees - addressBalance;
+      //   const fees = difference / 1000000000;
+      //   noMoneyFallback(result.address, fees);
+      // }
       return result.address;
     }
 
@@ -524,19 +524,36 @@ class TonSDK extends AbstractProvider {
       `Total fee to deploy: ${executorResult.fees.total_account_fees}`,
     );
 
-    if (addressInfo.balance <= executorResult.fees.total_account_fees) {
+    if (addressBalance <= executorFees) {
       // eslint-disable-next-line no-console
       console.log(
         `Account balance ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfering money here`,
       );
-
-      const difference =
-        Number(executorResult.fees.total_account_fees) -
-        Number(addressInfo.balance);
+      const difference = executorFees - addressBalance;
       const fees = difference / 1000000000;
-      noMoneyFallback(result.address, fees, contractName === 'controller');
 
-      throw new Error('Not enough money');
+      if (contractName === 'controller') {
+        noMoneyFallback(result.address, fees);
+        throw new Error('Not enough money');
+      }
+
+      const controllerBalance = await this.getBalance();
+      const controllerAddress = await this.getAddress();
+
+      const executorFeesInDec = executorFees / 1_000_000_000;
+      if (controllerBalance < executorFeesInDec) {
+        noMoneyFallback(
+          controllerAddress,
+          executorFeesInDec - controllerBalance,
+        );
+        throw new Error('Not enough money');
+      } else {
+        try {
+          await this.sendMoney(result.address, fees);
+        } catch (e) {
+          throw new Error('Not enough money');
+        }
+      }
     }
 
     const deployResult = await this.client.processing

@@ -144,7 +144,7 @@ class ExtraTon extends AbstractProvider {
 
   async deployContract(
     contractName: keyof typeof ContractNames,
-    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {

@@ -16,7 +16,6 @@ export const intialState = {
     open: false,
     addr: '',
     value: '',
-    controller: false,
   },
   userCollections: [],
   userCollectionTokens: [],

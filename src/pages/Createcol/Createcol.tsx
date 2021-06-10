@@ -19,12 +19,8 @@ const CreateCol = () => {
   const [load, setLoad] = useState(false);
   const { toniumNFT, state, dispatch } = useContext(ContextApp);
 
-  const noMoneyFallback = (
-    addr: string,
-    value: number,
-    controller: boolean,
-  ) => {
-    setSendMoneyDialog(dispatch, { visible: true, addr, value, controller });
+  const noMoneyFallback = (addr: string, value: number) => {
+    setSendMoneyDialog(dispatch, { visible: true, addr, value });
   };
 
   const onSubmit = (values: any) => {
@@ -53,12 +49,9 @@ const CreateCol = () => {
         });
     }
   };
-  if (load) {
-    return <Loader />;
-  }
 
   return (
-    <div>
+    <>
       {load && <Loader />}
       <Breadcrumbs separator="›" aria-label="breadcrumb">
         <NavLink to="/">Home</NavLink>
@@ -72,7 +65,7 @@ const CreateCol = () => {
 
         <CreatorField onSubmit={onSubmit} />
       </div>
-    </div>
+    </>
   );
 };
 

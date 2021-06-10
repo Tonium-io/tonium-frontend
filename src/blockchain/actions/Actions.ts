@@ -90,7 +90,7 @@ class Actions {
   async createUserCollections(
     name: string,
     symbol: string,
-    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
+    noMoneyFallback: (addr: string, value: number) => void,
     tokenURI = '',
   ) {
     const provider = await this.resolveProviderOrThrow();

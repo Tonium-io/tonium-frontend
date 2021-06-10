@@ -3,7 +3,7 @@ import { AddBox } from '@material-ui/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import cls from '../app.module.scss';
+import cls from '../../app.module.scss';
 
 const TableFields = ({
   arrayItems,
@@ -49,7 +49,7 @@ const TableFields = ({
         </ListItem>
       ))}
       {linkCreator && (
-        <ListItem button component="a">
+        <ListItem button>
           <NavLink to={linkCreator}>
             <Paper className={cls.element}>
               <div>

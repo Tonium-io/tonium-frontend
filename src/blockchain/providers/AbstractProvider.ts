@@ -96,7 +96,7 @@ abstract class AbstractProvider {
 
   abstract deployContract(
     contractName: keyof typeof ContractNamesType,
-    noMoneyFallback: (addr: string, value: number, controller: boolean) => void,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ): Promise<string>;
