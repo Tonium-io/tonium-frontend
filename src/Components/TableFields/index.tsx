@@ -20,7 +20,7 @@ const TableFields = ({
       wrap="wrap"
     >
       {arrayItems.map((c: any) => (
-        <ListItem button component="a" key={c.name}>
+        <ListItem button key={c.name}>
           {clickCollectionsUrl ? (
             <NavLink to={`${clickCollectionsUrl}/${c.address}`}>
               <Paper className={cls.element}>
