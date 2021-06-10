@@ -93,6 +93,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 <AddImageButton
                   style={errors?.image ? { border: '2px solid #f44336' } : {}}
                   component="label"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...field}
                 >
                   <AddBoxIcon fontSize="large" />
@@ -123,6 +124,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                     errors?.fullFile ? { border: '2px solid #f44336' } : {}
                   }
                   component="label"
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...field}
                 >
                   <GetAppIcon fontSize="large" />
@@ -140,6 +142,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 required: 'This field is required',
               }}
               render={({ field }) => (
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 <RadioGroup className={styles.radioGroup} {...field}>
                   <FormControlLabel
                     value="blockchain"
@@ -188,6 +191,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                   error={Boolean(errors?.name)}
                   label="Set the name/title"
                   helperText={errors?.name ? errors?.name?.message : ''}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...field}
                 />
               )}
@@ -210,6 +214,7 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                   rows={4}
                   label="Description"
                   helperText={errors?.symbol ? errors?.symbol?.message : ''}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...field}
                 />
               )}

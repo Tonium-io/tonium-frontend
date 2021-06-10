@@ -1,9 +1,10 @@
 .auction {
   .container {
-    width: 792px;
+    max-width: 792px;
     margin-left: 82px;
     padding: 0;
     .title {
+      width: 200px;
       font-weight: bold;
       font-size: 28px;
       line-height: 33px;
@@ -18,9 +19,9 @@
     .wrapTokens {
       display: flex;
       flex-wrap: wrap;
-      width: 792px;
+      max-width: 792px;
       .tokens {
-        margin: 37px 44px 33px 0;  
+        margin: 37px 44px 50px 0;  
         width: 165px;
         height: 165px;
         text-decoration: none;
@@ -99,5 +100,21 @@
         }      
       }    
     } 
+  }
+}
+@media screen and (max-width: 768px) {
+  .auction {
+    .container {
+      margin-left: 0;
+      .wrapTokens {
+        justify-content: space-evenly;
+        .tokens {
+          margin-right: 20px;
+          &:nth-child(4),&:nth-child(8) {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
   }
 }
