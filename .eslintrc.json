@@ -22,6 +22,9 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-unused-vars": "off",
+    "react/prop-types": "off",
+    "@typescript-eslint/no-unused-vars": "error",
     "no-debugger": "off",
     "import/no-extraneous-dependencies": [
       "error",

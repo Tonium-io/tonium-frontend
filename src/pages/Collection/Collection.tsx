@@ -18,10 +18,11 @@ const Collection = () => {
   const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
   const [collName, setCollName] = useState('');
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
-      toniumNFT.actions.getInfoTokens(collection).then((data: any) => {
+      toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
         const newData = data.map((i: any) => ({
           ...i,
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
@@ -38,25 +39,25 @@ const Collection = () => {
     }
   }, []);
 
-  if (load) {
-    return <Loader />;
-  }
   return (
-    <div className={cls.mint}>
-      <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/collections">Collections</NavLink>
-      </Breadcrumbs>
-      <div className={cls.content_wrap}>
-        <Typography variant="h1" component="h1" gutterBottom>
-          {`Collection ${collName || ''}`}
-        </Typography>
-        <TableFields
-          arrayItems={userCollectionTokens}
-          linkCreator={`/collections/${collection}/mint-add`}
-        />
+    <>
+      {load && <Loader />}
+      <div className={cls.mint}>
+        <Breadcrumbs separator="›" aria-label="breadcrumb">
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/collections">Collections</NavLink>
+        </Breadcrumbs>
+        <div className={cls.content_wrap}>
+          <Typography variant="h1" component="h1" gutterBottom>
+            {`Collection ${collName || ''}`}
+          </Typography>
+          <TableFields
+            arrayItems={userCollectionTokens}
+            linkCreator={`/collections/${collection}/mint-add`}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

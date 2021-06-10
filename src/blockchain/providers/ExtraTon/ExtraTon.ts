@@ -135,8 +135,16 @@ class ExtraTon extends AbstractProvider {
     return key;
   }
 
+  // todo full function
+  async sendMoney(address: string, value: number) {
+    const key = this.signer.publicKey;
+    const result = address || value || key;
+    return !!result;
+  }
+
   async deployContract(
     contractName: keyof typeof ContractNames,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {
@@ -159,7 +167,7 @@ class ExtraTon extends AbstractProvider {
   // eslint-disable-next-line class-methods-use-this
   async signMessage(message: {}) {
     throw new Error(
-      'Extra ton not supported signMessage Please use another provider',
+      `Extra ton not supported signMessage Please use another provider ${message}`,
     );
     return 'false';
   }

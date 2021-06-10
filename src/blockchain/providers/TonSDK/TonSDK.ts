@@ -380,19 +380,21 @@ class TonSDK extends AbstractProvider {
   // }
 
   async getBalance() {
-    if (this.getAddress()) {
+    const address = await this.getAddress();
+    if (address) {
       const balance = await this.client.net.query_collection({
         collection: 'accounts',
         filter: {
           id: {
-            eq: await this.getAddress(),
+            eq: address,
           },
         },
         result: 'balance',
       });
 
       if (balance.result?.length) {
-        return balance.result[0].balance;
+        const bln = balance.result[0].balance;
+        return bln / 1000000000;
       }
     }
     return Number.NaN;
@@ -427,13 +429,35 @@ class TonSDK extends AbstractProvider {
     ];
   }
 
+  async sendMoney(address: string, value: number) {
+    const rawContract = TonSDK.getContractRaw('controller');
+
+    const acc = new Account(
+      {
+        abi: rawContract.abi,
+        tvc: rawContract.tvc,
+      },
+      { signer: this.keys, client: this.client },
+    );
+    return acc.run('sendValue', {
+      dest: address,
+      amount: (value + 0.01) * 1_000_000_000,
+      bounce: false,
+    });
+  }
+
   async deployContract(
     contractName: keyof typeof ContractNames,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
+    const randomPublicKey = (
+      await this.client.crypto.generate_random_sign_keys()
+    ).public;
+
     const deployOptions = {
       abi: {
         type: 'Contract',
@@ -442,7 +466,10 @@ class TonSDK extends AbstractProvider {
       deploy_set: {
         tvc: rawContract.tvc,
         initial_data: initialParams,
-        initial_pubkey: this.keys.keys.public,
+        initial_pubkey:
+          contractName === 'rootToken'
+            ? randomPublicKey
+            : this.keys.keys.public,
       },
       call_set: {
         function_name: 'constructor',
@@ -474,41 +501,59 @@ class TonSDK extends AbstractProvider {
 
     const addressInfo = await this.getAddresInfo(result.address);
 
-    if (addressInfo.isInited) {
-      // eslint-disable-next-line no-console
-      console.error('Address already exists. Please check your code');
-      throw new Error('Address already exists. Please check your code');
-    }
-
     const executorResult = await this.client.tvm.run_executor({
       account: accountForExecutorUninit(),
       abi: { type: 'Contract', value: rawContract.abi },
       message: result.message,
     });
 
+    const addressBalance = Number(addressInfo.balance);
+    const executorFees = Number(executorResult.fees.total_account_fees);
+
+    if (addressInfo.isInited) {
+      // if (addressBalance <= executorFees) {
+      //   const difference = executorFees - addressBalance;
+      //   const fees = difference / 1000000000;
+      //   noMoneyFallback(result.address, fees);
+      // }
+      return result.address;
+    }
+
     // eslint-disable-next-line no-console
     console.log(
       `Total fee to deploy: ${executorResult.fees.total_account_fees}`,
     );
 
-    if (addressInfo.balance <= executorResult.fees.total_account_fees) {
+    if (addressBalance <= executorFees) {
       // eslint-disable-next-line no-console
       console.log(
         `Account balance ${addressInfo.balance} less then total fee to deploy: ${executorResult.fees.total_account_fees}. Transfering money here`,
       );
+      const difference = executorFees - addressBalance;
+      const fees = difference / 1000000000;
 
-      // add money here
-      const giver = await Account.getGiverForClient(this.client);
-      // eslint-disable-next-line no-console
-      console.log(giver);
-      // eslint-disable-next-line no-console
-      const giverResult = await giver.sendTo(
-        result.address,
-        executorResult.fees.total_account_fees as any,
-      );
+      if (contractName === 'controller') {
+        noMoneyFallback(result.address, fees);
+        throw new Error('Not enough money');
+      }
 
-      // eslint-disable-next-line no-console
-      console.log(giverResult);
+      const controllerBalance = await this.getBalance();
+      const controllerAddress = await this.getAddress();
+
+      const executorFeesInDec = executorFees / 1_000_000_000;
+      if (controllerBalance < executorFeesInDec) {
+        noMoneyFallback(
+          controllerAddress,
+          executorFeesInDec - controllerBalance,
+        );
+        throw new Error('Not enough money');
+      } else {
+        try {
+          await this.sendMoney(result.address, fees);
+        } catch (e) {
+          throw new Error('Not enough money');
+        }
+      }
     }
 
     const deployResult = await this.client.processing

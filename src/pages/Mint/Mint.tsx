@@ -15,12 +15,10 @@ import Loader from '../../Components/Loader';
 import cls from '../../app.module.scss';
 
 const Mint = () => {
-  // todo home page
-  // eslint-disable-next-line no-console
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
-
   const { userCollections }: any = state;
   const [load, setLoad] = useState(false);
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
@@ -38,28 +36,27 @@ const Mint = () => {
       });
     }
   }, []);
-  if (load) {
-    return <Loader />;
-  }
-  // eslint-disable-next-line no-console
-  console.log('Mint');
+
   return (
-    <div className={cls.mint}>
-      <Breadcrumbs separator="›" aria-label="breadcrumb">
-        <NavLink to="/">Home</NavLink>
-        <Typography color="textPrimary">Collections</Typography>
-      </Breadcrumbs>
-      <div className={cls.content_wrap}>
-        <Typography variant="h1" component="h1" gutterBottom>
-          Collections
-        </Typography>
-        <TableFields
-          arrayItems={userCollections}
-          linkCreator="/collections/new"
-          clickCollectionsUrl="collections"
-        />
+    <>
+      {load && <Loader />}
+      <div className={cls.mint}>
+        <Breadcrumbs separator="›" aria-label="breadcrumb">
+          <NavLink to="/">Home</NavLink>
+          <Typography color="textPrimary">Collections</Typography>
+        </Breadcrumbs>
+        <div className={cls.content_wrap}>
+          <Typography variant="h1" component="h1" gutterBottom>
+            Collections
+          </Typography>
+          <TableFields
+            arrayItems={userCollections}
+            linkCreator="/collections/new"
+            clickCollectionsUrl="collections"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
