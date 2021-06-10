@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader from '../../../Components/Loader';
-import CristallIcon from '../../../img/cristall.svg';
+import Loader from '../../Components/Loader';
+import CristallIcon from '../../img/cristall.svg';
+import { ContextApp, setNftAuctions } from '../../store/reducer';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 
-import { ContextApp, setNftAuctions } from '../../../store/reducer';
-
-import cls from './AuctionToken.module.scss';
+import cls from './styles.module.scss';
 
 type TokenItemType = {
   name: string;
@@ -92,7 +92,7 @@ const AuctionToken = () => {
   return (
     <div className={cls.auction}>
       <Container className={cls.container}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
+        <Breadcrumbs>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/">...</NavLink>
           <NavLink to="../auction">sexy beast</NavLink>

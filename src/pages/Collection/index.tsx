@@ -1,12 +1,13 @@
-import { Breadcrumbs, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { ContextApp, setUserCollenctionTokens } from '../../store/reducer';
+import { ContextApp, setUserCollectionTokens } from '../../store/reducer';
 
 import Loader from '../../Components/Loader';
 import TableFields from '../../Components/TableFields';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 import cls from '../../app.module.scss';
 
 const Collection = () => {
@@ -27,7 +28,7 @@ const Collection = () => {
           ...i,
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
         }));
-        setUserCollenctionTokens(dispatch, newData);
+        setUserCollectionTokens(dispatch, newData);
         setLoad(false);
       });
 
@@ -42,20 +43,18 @@ const Collection = () => {
   return (
     <>
       {load && <Loader />}
-      <div className={cls.mint}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/collections">Collections</NavLink>
-        </Breadcrumbs>
-        <div className={cls.content_wrap}>
-          <Typography variant="h1" component="h1" gutterBottom>
-            {`Collection ${collName || ''}`}
-          </Typography>
-          <TableFields
-            arrayItems={userCollectionTokens}
-            linkCreator={`/collections/${collection}/mint-add`}
-          />
-        </div>
+      <Breadcrumbs>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/collections">Collections</NavLink>
+      </Breadcrumbs>
+      <div className={cls.content_wrap}>
+        <Typography variant="h1" component="h1" gutterBottom>
+          {`Collection ${collName || ''}`}
+        </Typography>
+        <TableFields
+          arrayItems={userCollectionTokens}
+          linkCreator={`/collections/${collection}/mint-add`}
+        />
       </div>
     </>
   );

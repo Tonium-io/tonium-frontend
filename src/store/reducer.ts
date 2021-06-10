@@ -9,7 +9,7 @@ export type StateType = {
   userCollectionTokens: any;
   nftAuctions: any;
 };
-export const intialState = {
+export const initialState = {
   auth: false,
   open: false,
   sendMoneyDialog: {
@@ -23,7 +23,7 @@ export const intialState = {
   nftAuctions: [],
 };
 export const ContextApp = React.createContext<any>({
-  state: intialState,
+  state: initialState,
   dispatch: () => null,
 });
 
@@ -77,15 +77,16 @@ export const reducer = (state: StateType, action: Actions) => {
       return state;
   }
 };
+
 export const setLogin = (dispatch: any, payload: any) =>
   dispatch({ type: LOGIN, payload });
 export const setOpen = (dispatch: any, payload: any) =>
   dispatch({ type: OPEN, payload });
 export const setSendMoneyDialog = (dispatch: any, payload: any) =>
   dispatch({ type: SET_SEND_MONEY_DIALOG, payload });
-export const setUserCollenctionTokens = (dispatch: any, payload: any) =>
+export const setUserCollectionTokens = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_COLLECTION_TOKENS, payload });
-export const setUserCollenctions = (dispatch: any, payload: any) =>
+export const setUserCollections = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_COLLECTIONS, payload });
 export const setUserAllTokens = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_ALL_TOKENS, payload });
