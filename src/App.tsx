@@ -17,6 +17,7 @@ import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
 import Wp from './pages/Wp/Wp';
 import Collection from './pages/Collection/Collection';
+import AuctionToken from './pages/Auction/AuctionToken/AuctionToken';
 import Login from './Components/Login';
 import SendMoneyDialog from './Components/SendMoneyDialog';
 
@@ -44,6 +45,9 @@ function App() {
             </Route>
             <Route exact path="/auction">
               <Auction />
+            </Route>
+            <Route exact path="/auction/auction_token">
+              <AuctionToken />
             </Route>
             <Route exact path="/radar">
               <Radar />

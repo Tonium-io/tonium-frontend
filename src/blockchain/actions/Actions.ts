@@ -62,6 +62,8 @@ class Actions {
     let lastMintedToken = await this.getLastMintedToken(address);
     let results: any = [];
 
+    if (lastMintedToken === '0') return results;
+
     while (lastMintedToken) {
       const getInfoToken = provider.run(
         'rootToken',

@@ -22,7 +22,9 @@ const TableFields = ({
       {arrayItems.map((c: any) => (
         <ListItem button key={c.name}>
           {clickCollectionsUrl ? (
-            <NavLink to={`${clickCollectionsUrl}/${c.address}`}>
+            <NavLink
+              to={`${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
+            >
               <Paper className={cls.element}>
                 <div>
                   <img
