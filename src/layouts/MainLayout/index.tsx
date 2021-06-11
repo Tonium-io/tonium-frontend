@@ -11,7 +11,7 @@ import styles from './styles.module.scss';
 interface MainProps {
   children: ReactNode;
 }
-
+// eslint-disable-next-line react/prop-types
 const MainLayout: React.FC<MainProps> = ({ children }) => (
   <Grid
     container
