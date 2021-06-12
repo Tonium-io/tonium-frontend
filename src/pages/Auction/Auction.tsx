@@ -83,7 +83,7 @@ const Auction = () => {
   const [load, setLoad] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    setValue(newValue); // eslint-disable-next-line no-unused-vars
   };
 
   useEffect(() => {

@@ -41,9 +41,6 @@ function App() {
             <Route exact path="/own">
               <Own />
             </Route>
-            <Route exact path="/own/transaction">
-              <Transaction />
-            </Route>
             <Route exact path="/collections">
               <Mint />
             </Route>
