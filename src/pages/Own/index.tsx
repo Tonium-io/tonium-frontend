@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Container } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { toast } from 'react-toastify';
-import { NavLink } from 'react-router-dom';
+
 import HistoryIcon from '../../img/history.svg';
 import Loader from '../../Components/Loader';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 
-import cls from './Own.module.scss';
+import cls from './styles.module.scss';
 
 type TokenItemType = {
   name: string;
@@ -43,42 +45,36 @@ const TabPanel = (props: TabPanelProps) => {
   );
 };
 
-// eslint-disable-next-line arrow-body-style
-const a11yProps = (index: any) => {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-};
+const a11yProps = (index: any) => ({
+  id: `simple-tab-${index}`,
+  'aria-controls': `simple-tabpanel-${index}`,
+});
 
-const AntTab = withStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        margin: '19px 20px 0 0',
-        textTransform: 'uppercase',
-        color: '#A9A9A9',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        lineHeight: '19px',
-        textDecoration: 'none',
-        minWidth: 0,
-        minHeight: 0,
-        padding: 0,
-        opacity: 1,
-        '&$selected': {
-          color: '#000',
-          fontWeight: theme.typography.fontWeightMedium,
-        },
+const AntTab = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      margin: '19px 20px 0 0',
+      textTransform: 'uppercase',
+      color: '#A9A9A9',
+      fontWeight: 'bold',
+      fontSize: '16px',
+      lineHeight: '19px',
+      textDecoration: 'none',
+      minWidth: 0,
+      minHeight: 0,
+      padding: 0,
+      opacity: 1,
+      '&$selected': {
+        color: '#000',
+        fontWeight: theme.typography.fontWeightMedium,
       },
-      selected: {},
-    }),
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    },
+    selected: {},
+  }),
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const Own = () => {
   const { state, dispatch } = useContext(ContextApp);
-  // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
 
@@ -156,7 +152,7 @@ const Own = () => {
   return (
     <div className={cls.own}>
       <Container className={cls.container}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
+        <Breadcrumbs>
           <NavLink to="/">Home</NavLink>
         </Breadcrumbs>
 
@@ -177,11 +173,8 @@ const Own = () => {
             onChange={handleChange}
             aria-label="simple tabs example"
           >
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <AntTab label="All" {...a11yProps(0)} />
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <AntTab label="Minted" {...a11yProps(1)} />
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <AntTab label="Auction" {...a11yProps(2)} />
           </Tabs>
 

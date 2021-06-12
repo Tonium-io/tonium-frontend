@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import PanToolIcon from '@material-ui/icons/PanTool';
-import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { NavLink } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
@@ -11,8 +10,9 @@ import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 
 import { ContextApp, setLogin, setOpen } from '../../../../store/reducer';
-import cls from '../../../../app.module.scss';
 import Loader from '../../../../Components/Loader';
+
+import styles from './styles.module.scss';
 
 const Header: React.FC = () => {
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
@@ -39,20 +39,14 @@ const Header: React.FC = () => {
   return (
     <>
       {load && <Loader global />}
-      <AppBar position="sticky" className={cls.top_panel}>
+      <AppBar position="sticky" className={styles.header}>
         <Toolbar>
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-            wrap="nowrap"
-            className={cls.header}
-          >
-            <div className={cls.whitelist}>
-              <PanToolIcon style={{ fontSize: 14 }} />
-              <FormControl>
+          <Grid container alignItems="center" wrap="nowrap">
+            <Grid container spacing={1} item alignItems="center">
+              <Grid item>
+                <PanToolIcon style={{ fontSize: 14, marginTop: 5 }} />
+              </Grid>
+              <Grid item>
                 <NativeSelect
                   name="whitelist"
                   inputProps={{ 'aria-label': 'whitelist' }}
@@ -60,71 +54,72 @@ const Header: React.FC = () => {
                   <option value={10}>Main Whitelist</option>
                   <option value={20}>Show all</option>
                 </NativeSelect>
-              </FormControl>
-              <NavLink to="/wp">What is it?</NavLink>
-            </div>
+              </Grid>
+              <Grid item>
+                <NavLink className={styles.whatIsItLink} to="/wp">
+                  What is it?
+                </NavLink>
+              </Grid>
+            </Grid>
 
             {state.auth ? (
               <Grid
                 container
-                spacing={2}
+                item
+                spacing={1}
                 direction="row"
-                justify="flex-start"
                 alignItems="center"
                 wrap="nowrap"
-                className={cls.address}
               >
-                <NavLink to="/wp" className={cls.nick}>
-                  {/* <span>@mrboss</span> */}
-                  {/* <EditIcon /> */}
-                </NavLink>
-
-                <TextField
-                  label="Balance (rubys)"
-                  variant="filled"
-                  value={balance || ''}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-                <TextField
-                  label="address"
-                  variant="filled"
-                  value={address || ''}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-
+                <Grid item>
+                  <TextField
+                    label="Balance (rubys)"
+                    variant="filled"
+                    value={balance || ''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    label="address"
+                    variant="filled"
+                    value={address || ''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      toniumNFT.providerLogout();
+                      setLogin(dispatch, false);
+                    }}
+                  >
+                    Log Out
+                  </Button>
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid item>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => {
-                    toniumNFT.providerLogout();
-                    setLogin(dispatch, false);
-                  }}
-                  className={cls.logout}
+                  onClick={() => setOpen(dispatch, true)}
                 >
-                  Log Out
+                  Login
                 </Button>
               </Grid>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setOpen(dispatch, true)}
-              >
-                Login
-              </Button>
             )}
-
-            <div className={cls.lang}>
-              <FormControl>
-                <NativeSelect name="lang" inputProps={{ 'aria-label': 'lang' }}>
-                  <option value={10}>EN</option>
-                </NativeSelect>
-              </FormControl>
-            </div>
+            <Grid container item justify="flex-end">
+              <NativeSelect name="lang" inputProps={{ 'aria-label': 'lang' }}>
+                <option value={10}>EN</option>
+              </NativeSelect>
+            </Grid>
           </Grid>
         </Toolbar>
       </AppBar>

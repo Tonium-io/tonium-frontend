@@ -1,6 +1,6 @@
 import React from 'react';
 
-import cls from './Wp.module.scss';
+import cls from './styles.module.scss';
 
 const Wp = () => {
   // todo home page

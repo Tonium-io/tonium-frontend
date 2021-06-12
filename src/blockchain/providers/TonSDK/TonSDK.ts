@@ -439,9 +439,10 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
+    const amount = Math.floor((value + 0.01) * 1_000_000_000);
     return acc.run('sendValue', {
       dest: address,
-      amount: (value + 0.01) * 1_000_000_000,
+      amount,
       bounce: false,
     });
   }
@@ -551,7 +552,7 @@ class TonSDK extends AbstractProvider {
         try {
           await this.sendMoney(result.address, fees);
         } catch (e) {
-          throw new Error('Not enough money');
+          throw new Error(e);
         }
       }
     }

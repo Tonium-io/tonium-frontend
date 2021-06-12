@@ -10,7 +10,7 @@ import TimeIcon from '../../img/time.svg';
 import Loader from '../../Components/Loader';
 import { ContextApp, setNftAuctions } from '../../store/reducer';
 
-import cls from './Auction.module.scss';
+import cls from './styles.module.scss';
 
 type TokenItemType = {
   name: string;
@@ -52,29 +52,27 @@ const a11yProps = (index: any) => {
   };
 };
 
-const AntTab = withStyles(
-  (theme: Theme) =>
-    createStyles({
-      root: {
-        margin: '19px 20px 0 0',
-        textTransform: 'uppercase',
-        color: '#A9A9A9',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        lineHeight: '19px',
-        textDecoration: 'none',
-        minWidth: 0,
-        minHeight: 0,
-        padding: 0,
-        opacity: 1,
-        '&$selected': {
-          color: '#000',
-          fontWeight: theme.typography.fontWeightMedium,
-        },
+const AntTab = withStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      margin: '19px 20px 0 0',
+      textTransform: 'uppercase',
+      color: '#A9A9A9',
+      fontWeight: 'bold',
+      fontSize: '16px',
+      lineHeight: '19px',
+      textDecoration: 'none',
+      minWidth: 0,
+      minHeight: 0,
+      padding: 0,
+      opacity: 1,
+      '&$selected': {
+        color: '#000',
+        fontWeight: theme.typography.fontWeightMedium,
       },
-      selected: {},
-    }),
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    },
+    selected: {},
+  }),
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const Auction = () => {

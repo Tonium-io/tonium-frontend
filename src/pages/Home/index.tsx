@@ -1,6 +1,6 @@
 import React from 'react';
 
-import cls from './Home.module.scss';
+import cls from './styles.module.scss';
 
 const Home = () => {
   // todo home page

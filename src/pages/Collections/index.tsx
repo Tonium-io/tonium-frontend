@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 
 // import Skeleton from '@material-ui/lab/Skeleton';
@@ -8,13 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
-import { ContextApp, setUserCollenctions } from '../../store/reducer';
+import { ContextApp, setUserCollections } from '../../store/reducer';
 import TableFields from '../../Components/TableFields';
 import Loader from '../../Components/Loader';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from '../../app.module.scss';
 
-const Mint = () => {
+const Collections = () => {
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const { userCollections }: any = state;
   const [load, setLoad] = useState(false);
@@ -27,7 +27,7 @@ const Mint = () => {
           ...i,
           img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
         }));
-        setUserCollenctions(dispatch, newData);
+        setUserCollections(dispatch, newData);
         setLoad(false);
       });
       toast.success('Success', {
@@ -40,24 +40,23 @@ const Mint = () => {
   return (
     <>
       {load && <Loader />}
-      <div className={cls.mint}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          <NavLink to="/">Home</NavLink>
-          <Typography color="textPrimary">Collections</Typography>
-        </Breadcrumbs>
-        <div className={cls.content_wrap}>
-          <Typography variant="h1" component="h1" gutterBottom>
-            Collections
-          </Typography>
-          <TableFields
-            arrayItems={userCollections}
-            linkCreator="/collections/new"
-            clickCollectionsUrl="collections"
-          />
-        </div>
+
+      <Breadcrumbs>
+        <NavLink to="/">Home</NavLink>
+        <Typography color="textPrimary">Collections</Typography>
+      </Breadcrumbs>
+      <div className={cls.content_wrap}>
+        <Typography variant="h1" component="h1" gutterBottom>
+          Collections
+        </Typography>
+        <TableFields
+          arrayItems={userCollections}
+          linkCreator="/collections/new"
+          clickCollectionsUrl="collections"
+        />
       </div>
     </>
   );
 };
 
-export default Mint;
+export default Collections;
