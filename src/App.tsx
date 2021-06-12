@@ -15,7 +15,6 @@ import MintNft from './pages/Mintnft/MintNft';
 import Radar from './pages/Radar/Radar';
 import Auction from './pages/Auction/Auction';
 import Own from './pages/Own/Own';
-import Transaction from './pages/Own/Transaction/Transaction';
 import Wp from './pages/Wp/Wp';
 import Collection from './pages/Collection/Collection';
 import AuctionToken from './pages/Auction/AuctionToken/AuctionToken';
@@ -40,9 +39,6 @@ function App() {
             </Route>
             <Route exact path="/own">
               <Own />
-            </Route>
-            <Route exact path="/own/transaction">
-              <Transaction />
             </Route>
             <Route exact path="/collections">
               <Mint />
