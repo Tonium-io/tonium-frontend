@@ -1,5 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
@@ -9,10 +10,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
-import cls from '../app.module.scss';
-import { ContextApp, setOpen } from '../store/reducer';
 
-/* eslint-disable react/jsx-props-no-spreading */
+import { ContextApp, setOpen } from '../../store/reducer';
+
+import styles from './styles.module.scss';
+
 const Login = () => {
   const [
     isAdditionalProviderFieldsRequired,
@@ -37,14 +39,10 @@ const Login = () => {
   const DialogTitle = (props: any) => {
     const { children, onClose, ...other } = props;
     return (
-      <MuiDialogTitle disableTypography className={cls.root} {...other}>
+      <MuiDialogTitle disableTypography {...other}>
         <Typography variant="h6">{children}</Typography>
         {onClose ? (
-          <IconButton
-            aria-label="close"
-            className={cls.closeButton}
-            onClick={onClose}
-          >
+          <IconButton aria-label="close" onClick={onClose}>
             <CloseIcon />
           </IconButton>
         ) : null}
@@ -73,15 +71,15 @@ const Login = () => {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <Grid item xs={12} className={cls.poapup}>
+        <Grid item xs={12} className={styles.popup}>
           <DialogTitle
             id="customized-dialog-title"
+            className={styles.title}
             onClose={handleClose}
-            className={cls.poapup__title}
           >
             Please select provider
           </DialogTitle>
-          <DialogContent className={cls.poapup__content}>
+          <DialogContent className={styles.content}>
             {Object.entries(toniumNFT.getProviders()).map(
               ([providerName, provider]: any) => (
                 <div key={providerName}>
@@ -109,7 +107,7 @@ const Login = () => {
           </DialogContent>
 
           {isAdditionalProviderFieldsRequired && (
-            <form autoComplete="off" className={cls.mnemonic}>
+            <form autoComplete="off">
               <Grid
                 container
                 xs={12}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -81,7 +81,7 @@ const Auction = () => {
   const { state, dispatch } = useContext(ContextApp);
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
-
+  // eslint-disable-next-line no-unused-vars
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -134,10 +134,6 @@ const Auction = () => {
   return (
     <div className={cls.auction}>
       <Container className={cls.container}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
-          <NavLink to="/">Home</NavLink>
-        </Breadcrumbs>
-
         <h1 className={cls.title}>NFT auction</h1>
 
         <div className={cls.navWrap}>
@@ -165,7 +161,7 @@ const Auction = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.nftAuctions.map((item: TokenItemType) => (
-              <NavLink to="#" className={cls.tokens}>
+              <NavLink to="/auction/auction_token" className={cls.tokens}>
                 <div
                   className={cls.three}
                   style={{ backgroundImage: `url(${item.img})` }}

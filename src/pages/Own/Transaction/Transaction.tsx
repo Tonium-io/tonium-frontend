@@ -5,17 +5,21 @@ import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import { NavLink } from 'react-router-dom';
-import HistoryIcon from '../../img/history.svg';
-import Loader from '../../Components/Loader';
-import { ContextApp, setUserAllTokens } from '../../store/reducer';
+import Loader from '../../../Components/Loader';
+import BackIcon from '../../../img/back.svg';
+import AddIcon from '../../../img/add.svg';
+import ArrowIcon from '../../../img/arrow.svg';
+import HammerIcon from '../../../img/hammer.svg';
+import { ContextApp, setUserAllTokens } from '../../../store/reducer';
 
-import cls from './Own.module.scss';
+import cls from './Transaction.module.scss';
 
 type TokenItemType = {
   name: string;
   address: string;
-  img: string;
-  marked: boolean;
+  action: string;
+  minted: string;
+  transfer: string;
 };
 
 interface StyledTabProps {
@@ -76,7 +80,7 @@ const AntTab = withStyles(
   // eslint-disable-next-line react/jsx-props-no-spreading
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
-const Own = () => {
+const Transaction = () => {
   const { state, dispatch } = useContext(ContextApp);
   // eslint-disable-next-line no-unused-vars
   const [value, setValue] = useState(0);
@@ -92,52 +96,20 @@ const Own = () => {
       // to do ajax
       const payload = [
         {
-          name: 'Test1',
-          address: '0:x12312312432534453',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          marked: true,
+          name: 'sexy beast#1',
+          address:
+            '0:2eddab8c2a6b560d100ab6e04ef3f973d9bcb2e4e22d3bff6cdf4f5a4e827a20',
+          minted: 'minted',
+          action: 'bid win',
+          transfer: 'transfer',
         },
         {
-          name: 'Test2',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          marked: true,
-        },
-        {
-          name: 'Test3',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          bided: true,
-        },
-        {
-          name: 'Test4',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test5',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test6',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test7',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test8',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
+          name: 'sexy beast#1',
+          address:
+            '0:2eddab8c2a6b560d100ab6e04ef3f973d9bcb2e4e22d3bff6cdf4f5a4e827a20',
+          minted: 'minted',
+          action: 'bid win',
+          transfer: 'transfer',
         },
       ];
       setUserAllTokens(dispatch, payload);
@@ -154,7 +126,7 @@ const Own = () => {
   }
   // eslint-disable-next-line no-console
   return (
-    <div className={cls.own}>
+    <div className={cls.transaction}>
       <Container className={cls.container}>
         <Breadcrumbs separator="›" aria-label="breadcrumb">
           <NavLink to="/">Home</NavLink>
@@ -185,10 +157,10 @@ const Own = () => {
             <AntTab label="Auction" {...a11yProps(2)} />
           </Tabs>
 
-          <div className={cls.history}>
-            <img src={HistoryIcon} alt="History" />
-            <NavLink to="/own/transaction" className={cls.historyLink}>
-              Transaction history
+          <div className={cls.back}>
+            <img src={BackIcon} alt="Back" />
+            <NavLink to="/own" className={cls.BackLink}>
+              Back
             </NavLink>
           </div>
         </div>
@@ -196,23 +168,54 @@ const Own = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.userAllTokens.map((item: TokenItemType) => (
-              <NavLink to="#" className={cls.tokens}>
-                <div
-                  className={cls.three}
-                  style={{ backgroundImage: `url(${item.img})` }}
-                >
-                  <NavLink to="#" className={cls.btnToken}>
-                    Sell
-                  </NavLink>
-                  <NavLink to="#" className={cls.btnToken}>
-                    Send
-                  </NavLink>
-                  <NavLink to="#" className={cls.btnToken}>
-                    Edit
-                  </NavLink>
-                </div>
-                <span className={cls.text}>{item.name}</span>
-              </NavLink>
+              <div className={cls.WrapHistory}>
+                <span className={cls.WrapSpan}>
+                  <span>
+                    <img src={AddIcon} alt="add" />
+                    <span className={cls.action}>{item.minted}</span>
+                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.where}>by</span>
+                    <span className={cls.UserAdres}>{`${item.address.substring(
+                      0,
+                      8,
+                    )}...${item.address.substring(61, 66)}`}</span>
+                  </span>
+                  <span className={cls.date}>17:01 14.05.2021</span>
+                </span>
+
+                <span className={cls.WrapSpan}>
+                  <span>
+                    <img src={ArrowIcon} alt="add" />
+                    <span className={cls.action}>{item.action}</span>
+                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.where}>by</span>
+                    <span className={cls.UserAdres}>{`${item.address.substring(
+                      0,
+                      8,
+                    )}...${item.address.substring(61, 66)}`}</span>
+                  </span>
+                  <span className={cls.date}>17:01 14.05.2021</span>
+                </span>
+
+                <span className={cls.WrapSpan}>
+                  <span>
+                    <img src={HammerIcon} alt="add" />
+                    <span className={cls.action}>{item.transfer}</span>
+                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.where}>from</span>
+                    <span className={cls.UserAdres}>{`${item.address.substring(
+                      0,
+                      8,
+                    )}...${item.address.substring(61, 66)}`}</span>
+                    <span className={cls.where}>to</span>
+                    <span className={cls.UserAdres}>{`${item.address.substring(
+                      0,
+                      8,
+                    )}...${item.address.substring(61, 66)}`}</span>
+                  </span>
+                  <span className={cls.date}>17:01 14.05.2021</span>
+                </span>
+              </div>
             ))}
           </div>
         </TabPanel>
@@ -229,4 +232,4 @@ const Own = () => {
   );
 };
 
-export default Own;
+export default Transaction;
