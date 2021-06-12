@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 interface MainProps {
   children: ReactNode;
 }
+
 const MainLayout: React.FC<MainProps> = ({ children }) => (
   <Grid
     container
