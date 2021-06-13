@@ -144,11 +144,10 @@ class Actions {
     data = '',
   ) {
     const provider = await this.resolveProviderOrThrow();
-
-    const addressWallet = await provider.getAddress();
+    // const addressWallet = await provider.getAddress();
 
     const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
-    const ourData = await provider.call(
+    return provider.call(
       'rootToken',
       'mint',
       {
@@ -159,25 +158,23 @@ class Actions {
       },
       address,
     );
-
-    const wallets = await provider.run(
-      'controller',
-      'm_wallets',
-      {},
-      addressWallet,
-    );
-
-    await provider.call(
-      'rootToken',
-      'grant',
-      {
-        dest: wallets.m_wallets[address],
-        tokenId: currentMintedToken,
-        grams: 0,
-      },
-      address,
-    );
-    return ourData;
+    // const wallets = await provider.run(
+    //   'controller',
+    //   'm_wallets',
+    //   {},
+    //   addressWallet,
+    // );
+    //
+    // await provider.call(
+    //   'rootToken',
+    //   'grant',
+    //   {
+    //     dest: wallets.m_wallets[address],
+    //     tokenId: currentMintedToken,
+    //     grams: 0,
+    //   },
+    //   address,
+    // );
   }
 
   async getCollectionData(address: string) {

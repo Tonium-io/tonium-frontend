@@ -439,7 +439,7 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-    const amount = Math.floor((value + 0.01) * 1_000_000_000);
+    const amount = Math.floor((value + 0.2) * 1_000_000_000);
     return acc.run('sendValue', {
       dest: address,
       amount,

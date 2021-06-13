@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 // import ListItem from '@material-ui/core/ListItem';
 // import Skeleton from '@material-ui/lab/Skeleton';
@@ -16,6 +16,7 @@ import Breadcrumbs from '../../Components/Breadcrumbs';
 import cls from '../../app.module.scss';
 
 const CreateCol = () => {
+  const history = useHistory();
   const [load, setLoad] = useState(false);
   const { toniumNFT, state, dispatch } = useContext(ContextApp);
 
@@ -35,6 +36,7 @@ const CreateCol = () => {
             position: 'bottom-right',
             autoClose: 4000,
           });
+          history.push('/collections/');
         })
         .catch((e: any) => {
           // eslint-disable-next-line no-console
