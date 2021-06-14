@@ -1,0 +1,120 @@
+.auction {
+  .container {
+    max-width: 792px;
+    margin-left: 82px;
+    padding: 0;
+    .title {
+      width: 200px;
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-transform: uppercase;
+      color: #000000;
+    }
+    .navWrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wrapTokens {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 792px;
+      .tokens {
+        margin: 37px 44px 50px 0;  
+        width: 165px;
+        height: 165px;
+        text-decoration: none;
+        .wrapDescription {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          cursor: default;
+          .time {
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 16px;
+            text-transform: uppercase;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            img {
+              margin-right: 5px;
+            }
+          }
+          .description {
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            margin-top: 3px;
+            img {
+              width: 15px;
+              height: 12px;
+              margin: 0 8px 0 3px;
+            }
+          }
+        }
+        .text {
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 16px;
+          text-transform: uppercase;
+          color: #000000;
+          text-align: center;
+          display: block;
+          padding-top: 8px;
+        }
+        &:nth-child(4),&:nth-child(8) {
+          margin: 37px 0 33px 0;  
+        }
+        .three {
+          width: 165px;
+          height: 165px;
+          padding-top: 50px;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: 165px 165px;
+          .btnToken {
+            display: none;
+          }
+          &:hover {
+            .btnToken {
+              display: block;
+              font-weight: bold;
+              font-size: 14px;
+              line-height: 16px;
+              text-align: center;
+              text-transform: uppercase;
+              text-decoration: none;
+              color: #000;
+              background: #EAEAEA;
+              padding: 7px 67px 6px 67px;
+              margin-bottom: 3px;
+            }
+          }
+        }      
+      }    
+    } 
+  }
+}
+@media screen and (max-width: 768px) {
+  .auction {
+    .container {
+      margin-left: 0;
+      .wrapTokens {
+        justify-content: space-evenly;
+        .tokens {
+          margin-right: 20px;
+          &:nth-child(4),&:nth-child(8) {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+}
