@@ -11,7 +11,7 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
 import CreateCol from './pages/Createcol';
-import MintNft from './pages/Mintnft';
+import MintNft from './pages/MintNft';
 import Auction from './pages/Auction';
 import Own from './pages/Own';
 import Transaction from './pages/Transaction';
