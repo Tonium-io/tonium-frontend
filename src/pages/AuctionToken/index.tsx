@@ -130,7 +130,7 @@ const AuctionToken = () => {
                         id="standard-number"
                         type="number"
                         className={cls.FormPrice}
-                        defaultValue="200"
+                        defaultValue="2000000"
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -149,7 +149,7 @@ const AuctionToken = () => {
                       <TextField
                         id="standard-number"
                         type="number"
-                        defaultValue="20"
+                        defaultValue="200"
                         className={cls.FormPrice}
                         InputLabelProps={{
                           shrink: true,

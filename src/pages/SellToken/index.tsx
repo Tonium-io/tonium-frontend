@@ -130,7 +130,7 @@ const SellToken = () => {
                         id="standard-number"
                         type="number"
                         className={cls.FormPrice}
-                        defaultValue="200"
+                        defaultValue="200000"
                         InputLabelProps={{
                           shrink: true,
                         }}

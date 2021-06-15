@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -11,6 +11,7 @@ import AddIcon from '../../img/add.svg';
 import ArrowIcon from '../../img/arrow.svg';
 import HammerIcon from '../../img/hammer.svg';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from './styles.module.scss';
 
@@ -128,7 +129,7 @@ const Transaction = () => {
   return (
     <div className={cls.transaction}>
       <Container className={cls.container}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb">
           <NavLink to="/">Home</NavLink>
         </Breadcrumbs>
 
