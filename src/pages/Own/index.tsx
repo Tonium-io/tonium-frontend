@@ -180,7 +180,7 @@ const Own = () => {
 
           <div className={cls.history}>
             <img src={HistoryIcon} alt="History" />
-            <NavLink to="#" className={cls.historyLink}>
+            <NavLink to="/own/transaction" className={cls.historyLink}>
               Transaction history
             </NavLink>
           </div>

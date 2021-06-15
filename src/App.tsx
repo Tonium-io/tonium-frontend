@@ -11,9 +11,10 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
 import CreateCol from './pages/Createcol';
-import MintNft from './pages/MintNft';
+import MintNft from './pages/Mintnft';
 import Auction from './pages/Auction';
 import Own from './pages/Own';
+import Transaction from './pages/Transaction';
 import Wp from './pages/Wp';
 import Collection from './pages/Collection';
 import AuctionToken from './pages/AuctionToken';
@@ -34,6 +35,9 @@ function App() {
           <Switch>
             <Route exact path="/own">
               <Own />
+            </Route>
+            <Route exact path="/own/transaction">
+              <Transaction />
             </Route>
             <Route exact path="/auction">
               <Auction />
