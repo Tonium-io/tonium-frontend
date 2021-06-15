@@ -11,8 +11,7 @@ declare const window: any;
 class ExtraTon extends AbstractProvider {
   provider: any;
 
-  static description =
-    'ExtraTon extension. HAVE limitations (deploy contracts). Please use TonSDK instead. Will be fixed in future. Able to perform actions';
+  static description = 'ExtraTon extension';
 
   signer: any;
 
@@ -136,22 +135,28 @@ class ExtraTon extends AbstractProvider {
     return key;
   }
 
+  // todo full function
+  async sendMoney(address: string, value: number) {
+    const key = this.signer.publicKey;
+    const result = address || value || key;
+    return !!result;
+  }
+
   async deployContract(
     contractName: keyof typeof ContractNames,
+    noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
   ) {
-    throw new Error(
-      'Extra ton not supported deploy contract. Please use another provider',
-    );
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
       rawContract.abi,
       rawContract.tvc,
     );
+    contract.setInitialPublicKey(await this.getPublicKey());
     contract.setInitialParams(initialParams);
-    contract.setInitialAmount('10000000000');
+    contract.setInitialAmount('500000000');
 
     const realContract = await contract.deploy(constructorParams);
     await realContract.getDeployProcessing().wait();
@@ -162,7 +167,7 @@ class ExtraTon extends AbstractProvider {
   // eslint-disable-next-line class-methods-use-this
   async signMessage(message: {}) {
     throw new Error(
-      'Extra ton not supported signMessage Please use another provider',
+      `Extra ton not supported signMessage Please use another provider ${message}`,
     );
     return 'false';
   }
