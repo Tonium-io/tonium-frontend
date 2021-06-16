@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Breadcrumbs, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -11,6 +11,7 @@ import AddIcon from '../../img/add.svg';
 import ArrowIcon from '../../img/arrow.svg';
 import HammerIcon from '../../img/hammer.svg';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
+import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from './styles.module.scss';
 
@@ -128,7 +129,7 @@ const Transaction = () => {
   return (
     <div className={cls.transaction}>
       <Container className={cls.container}>
-        <Breadcrumbs separator="›" aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb">
           <NavLink to="/">Home</NavLink>
         </Breadcrumbs>
 
@@ -159,7 +160,7 @@ const Transaction = () => {
 
           <div className={cls.back}>
             <img src={BackIcon} alt="Back" />
-            <NavLink to="/own" className={cls.BackLink}>
+            <NavLink to="/own" className={cls.backLink}>
               Back
             </NavLink>
           </div>
@@ -168,14 +169,14 @@ const Transaction = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.userAllTokens.map((item: TokenItemType) => (
-              <div className={cls.WrapHistory}>
-                <span className={cls.WrapSpan}>
+              <div className={cls.wrapHistory}>
+                <span className={cls.wrapSpan}>
                   <span>
                     <img src={AddIcon} alt="add" />
                     <span className={cls.action}>{item.minted}</span>
-                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>by</span>
-                    <span className={cls.UserAdres}>{`${item.address.substring(
+                    <span className={cls.userAdres}>{`${item.address.substring(
                       0,
                       8,
                     )}...${item.address.substring(61, 66)}`}</span>
@@ -183,13 +184,13 @@ const Transaction = () => {
                   <span className={cls.date}>17:01 14.05.2021</span>
                 </span>
 
-                <span className={cls.WrapSpan}>
+                <span className={cls.wrapSpan}>
                   <span>
                     <img src={ArrowIcon} alt="add" />
                     <span className={cls.action}>{item.action}</span>
-                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>by</span>
-                    <span className={cls.UserAdres}>{`${item.address.substring(
+                    <span className={cls.userAdres}>{`${item.address.substring(
                       0,
                       8,
                     )}...${item.address.substring(61, 66)}`}</span>
@@ -197,18 +198,18 @@ const Transaction = () => {
                   <span className={cls.date}>17:01 14.05.2021</span>
                 </span>
 
-                <span className={cls.WrapSpan}>
+                <span className={cls.wrapSpan}>
                   <span>
                     <img src={HammerIcon} alt="add" />
                     <span className={cls.action}>{item.transfer}</span>
-                    <span className={cls.TokenName}>{item.name}</span>
+                    <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>from</span>
-                    <span className={cls.UserAdres}>{`${item.address.substring(
+                    <span className={cls.userAdres}>{`${item.address.substring(
                       0,
                       8,
                     )}...${item.address.substring(61, 66)}`}</span>
                     <span className={cls.where}>to</span>
-                    <span className={cls.UserAdres}>{`${item.address.substring(
+                    <span className={cls.userAdres}>{`${item.address.substring(
                       0,
                       8,
                     )}...${item.address.substring(61, 66)}`}</span>

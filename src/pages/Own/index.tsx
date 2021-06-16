@@ -194,7 +194,7 @@ const Own = () => {
                   className={cls.three}
                   style={{ backgroundImage: `url(${item.img})` }}
                 >
-                  <NavLink to="#" className={cls.btnToken}>
+                  <NavLink to="/own/sell" className={cls.btnToken}>
                     Sell
                   </NavLink>
                   <NavLink to="#" className={cls.btnToken}>
