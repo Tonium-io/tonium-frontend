@@ -137,11 +137,9 @@ const SellToken = () => {
                     </div>
                   </form>
                 </div>
-
-                <NavLink to="#" className={cls.btn}>
-                  {' '}
-                  sell{' '}
-                </NavLink>
+                <button type="button" className={cls.btn}>
+                  sell
+                </button>
               </div>
             </div>
           </div>

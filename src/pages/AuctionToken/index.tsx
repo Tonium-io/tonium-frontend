@@ -107,91 +107,81 @@ const AuctionToken = () => {
               <div className={cls.three} />
 
               <div className={cls.item}>
-                <div className={cls.wrapDescription}>
-                  <h2 className={cls.subtitle}>Description</h2>
-                  <form noValidate className={classes.root} autoComplete="off">
-                    <TextField
-                      className={cls.wrapdesc}
-                      id="standard-basic"
-                      placeholder="Description"
-                    />
-                  </form>
-                </div>
+                <h2 className={cls.subtitle}>Description</h2>
+                <form noValidate className={classes.root} autoComplete="off">
+                  <TextField
+                    className={cls.wrapdesc}
+                    id="standard-basic"
+                    placeholder="Description"
+                  />
 
-                <div className={cls.wrapPrice}>
-                  <div className={cls.price}>
-                    <h2 className={cls.subtitle}>SET start PRICE</h2>
-                    <form
-                      className={classes.root}
-                      noValidate
-                      autoComplete="off"
-                    >
-                      <TextField
-                        id="standard-number"
-                        type="number"
-                        className={cls.formPrice}
-                        defaultValue="2000000"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                      <img src={CristallIcon} alt="Cristall" />
-                    </form>
-                  </div>
+                  <div className={cls.wrapPrice}>
+                    <div className={cls.price}>
+                      <h2 className={cls.subtitle}>SET start PRICE</h2>
+                      <div className={`${classes.root} ${cls.wrapFormPrice}`}>
+                        <TextField
+                          id="standard-number"
+                          type="number"
+                          className={cls.formPrice}
+                          defaultValue="2000000"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                        <img src={CristallIcon} alt="Cristall" />
+                      </div>
+                    </div>
 
-                  <div className={cls.step}>
-                    <h2 className={cls.subtitle}>SET STEP</h2>
-                    <form
-                      className={classes.root}
-                      noValidate
-                      autoComplete="off"
-                    >
-                      <TextField
-                        id="standard-number"
-                        type="number"
-                        defaultValue="200"
-                        className={cls.formPrice}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                      <img src={CristallIcon} alt="Cristall" />
-                    </form>
-                  </div>
+                    <div className={cls.step}>
+                      <h2 className={cls.subtitle}>SET STEP</h2>
+                      <div className={`${classes.root} ${cls.wrapFormPrice}`}>
+                        <TextField
+                          id="standard-number"
+                          type="number"
+                          defaultValue="200"
+                          className={cls.formPrice}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                        <img src={CristallIcon} alt="Cristall" />
+                      </div>
+                    </div>
 
-                  <h2 className={cls.subtitle}>SET finish date and time</h2>
-                  <div className={cls.date}>
-                    <form noValidate className={cls.formTime}>
-                      <TextField
-                        id="time"
-                        type="time"
-                        className={classes.root}
-                        defaultValue="00:00"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        inputProps={{
-                          step: 300,
-                        }}
-                      />
-                    </form>
-                    <form noValidate className={cls.formDate}>
-                      <TextField
-                        id="date"
-                        type="date"
-                        className={classes.root}
-                        defaultValue="2021-12-12"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </form>
+                    <h2 className={cls.subtitle}>SET finish date and time</h2>
+                    <div className={cls.date}>
+                      <div className={cls.formTime}>
+                        <TextField
+                          id="time"
+                          type="time"
+                          className={classes.root}
+                          defaultValue="00:00"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          inputProps={{
+                            step: 300,
+                          }}
+                        />
+                      </div>
+                      <div className={cls.formDate}>
+                        <TextField
+                          id="date"
+                          type="date"
+                          className={classes.root}
+                          defaultValue="2021-12-12"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <button type="button" className={cls.btn}>
+                      {' '}
+                      start AUCTION{' '}
+                    </button>
                   </div>
-                  <NavLink to="#" className={cls.btn}>
-                    {' '}
-                    start AUCTION{' '}
-                  </NavLink>
-                </div>
+                </form>
               </div>
             </div>
           </div>
