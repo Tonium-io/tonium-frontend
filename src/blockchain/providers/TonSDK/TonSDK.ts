@@ -11,7 +11,7 @@ import { libWeb } from '@tonclient/lib-web';
 import { Account } from '@tonclient/appkit';
 
 import AbstractProvider from '../AbstractProvider';
-import ContractNames from '../../../types/Contract';
+import { ContractNames } from '../../../constants';
 
 TonClient.useBinaryLibrary(libWeb);
 

@@ -38,16 +38,29 @@ const TableFields = ({
           ) : (
             <Paper className={cls.element}>
               <div>
-                <img
-                  style={{ width: 210, height: 118 }}
-                  alt="alt"
-                  src={c.img}
-                />
+                {c.image && (
+                  <img
+                    style={{ width: 210, height: 150 }}
+                    alt={c.name}
+                    src={c.image}
+                  />
+                )}
+                {!c.image && (
+                  <img
+                    style={{ width: 210, height: 150 }}
+                    alt={c.name}
+                    src={
+                      c.tokenData
+                        ? `https://ipfs.io/ipfs/${c.tokenData.image}`
+                        : c.img
+                    }
+                  />
+                )}
               </div>
             </Paper>
           )}
           <Typography>{c.name}</Typography>
-          <Typography>{c.symbol}</Typography>
+          <Typography>{c.tokenData?.description}</Typography>
         </ListItem>
       ))}
       {linkCreator && (

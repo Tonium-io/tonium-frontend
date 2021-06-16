@@ -3,8 +3,7 @@
 import freeton from 'freeton';
 
 import AbstractProvider from '../AbstractProvider';
-
-import ContractNames from '../../../types/Contract';
+import { ContractNames } from '../../../constants';
 
 declare const window: any;
 
