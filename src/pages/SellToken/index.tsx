@@ -99,15 +99,15 @@ const SellToken = () => {
         </Breadcrumbs>
 
         {state.nftAuctions.map((item: TokenItemType) => (
-          <div className={cls.WrapToken}>
-            <span className={cls.TokenName}>{item.name}</span>
+          <div className={cls.wrapToken}>
+            <span className={cls.tokenName}>{item.name}</span>
             <span className={cls.token}>{item.address}</span>
 
-            <div className={cls.WrapItem}>
+            <div className={cls.wrapItem}>
               <div className={cls.three} />
 
               <div className={cls.item}>
-                <div className={cls.WrapDescription}>
+                <div className={cls.wrapDescription}>
                   <h2 className={cls.subtitle}>Description</h2>
                   <form noValidate className={classes.root} autoComplete="off">
                     <TextField
@@ -115,35 +115,33 @@ const SellToken = () => {
                       id="standard-basic"
                       placeholder="Description"
                     />
+
+                    <div className={cls.wrapPrice}>
+                      <div className={cls.price}>
+                        <h2 className={`${cls.subtitle} ${cls.setPrice}`}>
+                          SET PRICE
+                        </h2>
+                        <div className={`${classes.root} ${cls.wrapRoot}`}>
+                          <TextField
+                            id="standard-number"
+                            type="number"
+                            className={cls.formPrice}
+                            defaultValue="200000"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                          />
+                          <img src={CristallIcon} alt="Cristall" />
+                        </div>
+                      </div>
+                    </div>
                   </form>
                 </div>
 
-                <div className={cls.WrapPrice}>
-                  <div className={cls.price}>
-                    <h2 className={cls.subtitle}>SET PRICE</h2>
-                    <form
-                      className={classes.root}
-                      noValidate
-                      autoComplete="off"
-                    >
-                      <TextField
-                        id="standard-number"
-                        type="number"
-                        className={cls.FormPrice}
-                        defaultValue="200000"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                      <img src={CristallIcon} alt="Cristall" />
-                    </form>
-                  </div>
-
-                  <NavLink to="#" className={cls.btn}>
-                    {' '}
-                    sell{' '}
-                  </NavLink>
-                </div>
+                <NavLink to="#" className={cls.btn}>
+                  {' '}
+                  sell{' '}
+                </NavLink>
               </div>
             </div>
           </div>

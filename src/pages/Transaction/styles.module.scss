@@ -25,7 +25,7 @@
       .back {
         display: flex;
         align-items: center;
-        .BackLink {
+        .backLink {
           font-size: 12px;
           line-height: 14px;
           text-transform: uppercase;
@@ -37,9 +37,9 @@
       }
     }
     .wrapTokens {
-      .WrapHistory {
+      .wrapHistory {
         width: 100%;
-        .WrapSpan {
+        .wrapSpan {
           display: flex;
           justify-content: space-between;
           margin-bottom: 15px;
@@ -58,7 +58,7 @@
               color: #000;
               margin-right: 5px;
             }
-            .TokenName {
+            .tokenName {
               color: #FF00E0;
               margin-right: 5px;
             }
@@ -67,7 +67,7 @@
               text-transform: none;
               margin-right: 5px;
             }
-            .UserAdres {
+            .userAdres {
               margin-right: 5px;
             }
           }
@@ -104,8 +104,8 @@
   .transaction {
     .container {
       .wrapTokens {
-        .WrapHistory {
-          .WrapSpan {
+        .wrapHistory {
+          .wrapSpan {
             span, img {
               padding-bottom: 5px;
             }

@@ -99,15 +99,15 @@ const AuctionToken = () => {
         </Breadcrumbs>
 
         {state.nftAuctions.map((item: TokenItemType) => (
-          <div className={cls.WrapToken}>
-            <span className={cls.TokenName}>{item.name}</span>
+          <div className={cls.wrapToken}>
+            <span className={cls.tokenName}>{item.name}</span>
             <span className={cls.token}>{item.address}</span>
 
-            <div className={cls.WrapItem}>
+            <div className={cls.wrapItem}>
               <div className={cls.three} />
 
               <div className={cls.item}>
-                <div className={cls.WrapDescription}>
+                <div className={cls.wrapDescription}>
                   <h2 className={cls.subtitle}>Description</h2>
                   <form noValidate className={classes.root} autoComplete="off">
                     <TextField
@@ -118,7 +118,7 @@ const AuctionToken = () => {
                   </form>
                 </div>
 
-                <div className={cls.WrapPrice}>
+                <div className={cls.wrapPrice}>
                   <div className={cls.price}>
                     <h2 className={cls.subtitle}>SET start PRICE</h2>
                     <form
@@ -129,7 +129,7 @@ const AuctionToken = () => {
                       <TextField
                         id="standard-number"
                         type="number"
-                        className={cls.FormPrice}
+                        className={cls.formPrice}
                         defaultValue="2000000"
                         InputLabelProps={{
                           shrink: true,
@@ -150,7 +150,7 @@ const AuctionToken = () => {
                         id="standard-number"
                         type="number"
                         defaultValue="200"
-                        className={cls.FormPrice}
+                        className={cls.formPrice}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -161,7 +161,7 @@ const AuctionToken = () => {
 
                   <h2 className={cls.subtitle}>SET finish date and time</h2>
                   <div className={cls.date}>
-                    <form noValidate className={cls.FormTime}>
+                    <form noValidate className={cls.formTime}>
                       <TextField
                         id="time"
                         type="time"
@@ -175,7 +175,7 @@ const AuctionToken = () => {
                         }}
                       />
                     </form>
-                    <form noValidate className={cls.FormDate}>
+                    <form noValidate className={cls.formDate}>
                       <TextField
                         id="date"
                         type="date"
