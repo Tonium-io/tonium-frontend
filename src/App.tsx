@@ -14,11 +14,13 @@ import CreateCol from './pages/Createcol';
 import MintNft from './pages/MintNft';
 import Auction from './pages/Auction';
 import Own from './pages/Own';
+import Transaction from './pages/Transaction';
 import Wp from './pages/Wp';
 import Collection from './pages/Collection';
 import AuctionToken from './pages/AuctionToken';
 import Login from './Components/Login';
 import SendMoneyDialog from './Components/SendMoneyDialog';
+import SellToken from './pages/SellToken';
 
 declare const window: any;
 
@@ -34,6 +36,12 @@ function App() {
           <Switch>
             <Route exact path="/own">
               <Own />
+            </Route>
+            <Route exact path="/own/transaction">
+              <Transaction />
+            </Route>
+            <Route exact path="/own/sell">
+              <SellToken />
             </Route>
             <Route exact path="/auction">
               <Auction />

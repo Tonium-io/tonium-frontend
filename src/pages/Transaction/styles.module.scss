@@ -1,0 +1,117 @@
+.transaction {
+  .container {
+    max-width: 792px;
+    margin-left: 41px;
+    padding: 0;
+    .userName {
+      font-weight: bold;
+      font-size: 28px;
+      line-height: 33px;
+      text-transform: lowercase;
+      color: #7A7A7A;
+      .tokenSpan {
+        font-weight: bold;
+        font-size: 28px;
+        line-height: 33px;
+        text-transform: uppercase;
+        color: #000000;
+        margin-left: 5px;
+      }
+    }
+    .navWrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .back {
+        display: flex;
+        align-items: center;
+        .backLink {
+          font-size: 12px;
+          line-height: 14px;
+          text-transform: uppercase;
+          color: #FF00E0;
+          padding-left: 10px;
+          text-decoration-line: underline;
+          -webkit-text-decoration-line: underline;
+        }
+      }
+    }
+    .wrapTokens {
+      .wrapHistory {
+        width: 100%;
+        .wrapSpan {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+          span {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 16px;
+            img {
+              margin-right: 10px;
+            }
+            .action {
+              color: #000;
+              margin-right: 5px;
+            }
+            .tokenName {
+              color: #FF00E0;
+              margin-right: 5px;
+            }
+            .where {
+              color: #000;
+              text-transform: none;
+              margin-right: 5px;
+            }
+            .userAdres {
+              margin-right: 5px;
+            }
+          }
+          .date {
+            text-align: right;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+    .tab {
+      margin: 19px 0 0 0;
+      text-transform: uppercase;
+      color: #A9A9A9;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 19px;
+      text-decoration: none;
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      opacity: 1;
+    }
+  }
+}
+@media screen and (max-width: 1024px) {
+  .transaction {
+    .container {
+      margin-left: 0;
+    }
+  }
+} 
+@media screen and (max-width: 768px) {
+  .transaction {
+    .container {
+      .wrapTokens {
+        .wrapHistory {
+          .wrapSpan {
+            span, img {
+              padding-bottom: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -44,11 +44,11 @@
           .wrapPrice {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
+            flex-direction: column;
             width: 260px;
-            margin-top: 19px;
             .formPrice {
               margin: 0;
+              width: 80px;
               input {
                 font-weight: bold;
                 font-size: 18px;
@@ -59,7 +59,7 @@
             .price {
               margin: 0 28px 22px 0;
               form {
-                width: 125px;
+                width: 120px;
                 display: flex;
                 align-items: center;
                 img {
@@ -67,73 +67,27 @@
                 }
               }
             }
-            .step {
-              margin-bottom: 22px;
-              .wrapFormPrice {
-                width: 70px;
-              }
-              form {
-                width: 80px;
-                display: flex;
-                align-items: center;
-                font-weight: bold;
-                font-size: 18px;
-                line-height: 21px;
-                color: #000000;
-                img {
-                  margin-left: 8px;
-                }
-              }
-            }
-            .date {
-              display: flex;
-              align-items: center;
-              .formTime {
-                margin-right: 23px;
-                input {
-                  border-bottom: 1px solid #ff00e0;
-                  width: 70px;
-                }
-                img {
-                  margin-right: 3px;
-                }
-              }
-              .formDate {
-                width: 124px;
-                img {
-                  margin-right: 3px;
-                }
-                input {
-                  width: 123px;
-                }
-              }
-              input {
-                border-bottom: 1px solid #ff00e0;
-                font-weight: bold;
-                font-size: 14px;
-                line-height: 16px;
-                color: #000000;
-              }
-            }
-            .btn {
-              padding: 29px;
-              background: linear-gradient(180deg, #ff00e0 0%, #ba1fc8 100%);
-              box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-              font-weight: bold;
-              font-size: 14px;
-              line-height: 16px;
-              text-align: center;
-              text-transform: uppercase;
-              color: #000000;
-              text-shadow: 1px 1px 10px #ffffff;
-              display: block;
-              text-decoration: none;
-              margin-top: 18px;
-              border: none;
-              cursor: pointer;
-            }
+            
           }
         }
+      }
+      .btn {
+        padding: 29px 61px;
+        background: linear-gradient(180deg, #ff00e0 0%, #ba1fc8 100%);
+        box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #000000;
+        text-shadow: 1px 1px 10px #ffffff;
+        display: block;
+        text-decoration: none;
+        margin-top: 102px;
+        width: 154px;
+        border: none;
+        cursor: pointer;
       }
     }
     .subtitle {
@@ -154,8 +108,10 @@
     }
   }
 }
-.wrapFormPrice {
-  width: 112px;
+.setPrice {
+  padding-top: 19px;
+}
+.wrapRoot {
   display: flex;
   align-items: center;
 }
@@ -170,17 +126,17 @@
   .auction {
     .container {
       margin-left: 0;
-      .wrapToken {
-        .wrapItem {
+      .WrapToken {
+        .WrapItem {
           display: block;
           .item {
             margin: 35px 0 0 0;
-            .wrapDescription {
+            .WrapDescription {
               .wrapdesc {
                 max-width: 189px;
               }
             }
-            .wrapPrice {
+            .WrapPrice {
               .price {
                 margin-right: 10px;
               }
