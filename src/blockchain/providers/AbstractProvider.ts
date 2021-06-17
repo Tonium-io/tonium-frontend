@@ -1,6 +1,5 @@
-import ContractNamesType from '../../types/Contract';
-/* eslint-disable no-unused-vars */
 import contracts from '../contracts.json';
+import { ContractNames } from '../../constants';
 
 abstract class AbstractProvider {
   inited: Boolean = false;
@@ -13,7 +12,7 @@ abstract class AbstractProvider {
 
   private readyPromiseResolve!: any;
 
-  static getContractRaw(name: keyof typeof ContractNamesType) {
+  static getContractRaw(name: keyof typeof ContractNames) {
     return contracts[name];
     // if (contracts[name]) {
     //   return contracts[name];
@@ -95,7 +94,7 @@ abstract class AbstractProvider {
   }
 
   abstract deployContract(
-    contractName: keyof typeof ContractNamesType,
+    contractName: keyof typeof ContractNames,
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},

@@ -33,7 +33,7 @@ const Collection = () => {
       });
 
       const nameCol = state.userCollections?.find(
-        (c: any) => c.address === collection,
+        (c: any) => c.address === `0:${collection}`,
       )?.name;
 
       setCollName(nameCol);

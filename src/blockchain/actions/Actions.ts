@@ -1,6 +1,7 @@
 import web3Utils from 'web3-utils';
 
 import AbstractProvider from '../providers/AbstractProvider';
+import { zeroAddress } from '../../constants';
 
 class Actions {
   private getCurrentProvider: () => AbstractProvider;
@@ -78,22 +79,48 @@ class Actions {
     }
 
     results = await Promise.all(results);
-    results = results.map((i: any) => {
-      const newResult = {
+
+    let ipfsResults = results.filter((res: any) => res.data === zeroAddress);
+    let bcResults = results.filter((res: any) => res.data !== zeroAddress);
+
+    ipfsResults = ipfsResults.map((i: any) => ({
+      ...i,
+      name: web3Utils.hexToUtf8(`0x${i.name}`),
+      tokenData: i.jsonMeta
+        ? JSON.parse(web3Utils.hexToUtf8(`0x${i.jsonMeta}`))
+        : '',
+    }));
+
+    let bcChanks: any = [];
+    bcResults.forEach((bsResult: any) =>
+      bcChanks.push(provider.run('files', 'getDetails', {}, bsResult.data)),
+    );
+    bcChanks = await Promise.all(bcChanks);
+    bcResults = bcResults.map((i: any, index: number) => {
+      const image = web3Utils.hexToUtf8(`0x${bcChanks[index].chunks.join('')}`);
+      return {
         ...i,
         name: web3Utils.hexToUtf8(`0x${i.name}`),
-        tokenUri: web3Utils.hexToUtf8(`0x${i.tokenUri}`),
+        tokenData: i.jsonMeta
+          ? JSON.parse(web3Utils.hexToUtf8(`0x${i.jsonMeta}`))
+          : '',
+        image,
       };
-      return newResult;
     });
-    return results;
+
+    return [...ipfsResults, ...bcResults];
+  }
+
+  async getTokenBlockchainData(address: string) {
+    const provider = await this.resolveProviderOrThrow();
+    const res = provider.run('files', 'getDetails', {}, address);
+    return res;
   }
 
   async createUserCollections(
     name: string,
     symbol: string,
     noMoneyFallback: (addr: string, value: number) => void,
-    tokenURI = '',
   ) {
     const provider = await this.resolveProviderOrThrow();
 
@@ -110,7 +137,6 @@ class Actions {
       {
         name: web3Utils.utf8ToHex(name).replace('0x', ''),
         symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
-        tokenURI: web3Utils.utf8ToHex(tokenURI).replace('0x', ''),
         decimals: 0,
         root_public_key: provider.getPublicKey(true),
         wallet_code: walletContract.tvc,
@@ -140,44 +166,64 @@ class Actions {
   async createUserCollectionToken(
     address: string,
     name: string,
-    type: number = 255,
-    data = '',
+    jsonMeta = '',
+    data: string,
   ) {
     const provider = await this.resolveProviderOrThrow();
-
-    const addressWallet = await provider.getAddress();
+    // const addressWallet = await provider.getAddress();
 
     const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
-    const ourData = await provider.call(
+    return provider.call(
       'rootToken',
       'mint',
       {
+        tokenId: currentMintedToken,
         name: web3Utils.utf8ToHex(name).replace('0x', ''),
-        type,
-        data: web3Utils.utf8ToHex(data).replace('0x', ''),
-        tokenId: currentMintedToken,
+        jsonMeta: web3Utils
+          .utf8ToHex(JSON.stringify(jsonMeta))
+          .replace('0x', ''),
+        data,
       },
       address,
     );
+    // const wallets = await provider.run(
+    //   'controller',
+    //   'm_wallets',
+    //   {},
+    //   addressWallet,
+    // );
+    //
+    // await provider.call(
+    //   'rootToken',
+    //   'grant',
+    //   {
+    //     dest: wallets.m_wallets[address],
+    //     tokenId: currentMintedToken,
+    //     grams: 0,
+    //   },
+    //   address,
+    // );
+  }
 
-    const wallets = await provider.run(
-      'controller',
-      'm_wallets',
-      {},
-      addressWallet,
+  async createUserCollectionTokenFile(
+    chunks: any[],
+    noMoneyFallback: (addr: string, value: number) => void,
+  ) {
+    const provider = await this.resolveProviderOrThrow();
+
+    const contractAddress = await provider.deployContract(
+      'files',
+      noMoneyFallback,
+      { nonce: Math.floor(Math.random() * 100000) },
+      { chunks_count: chunks.length },
     );
 
-    await provider.call(
-      'rootToken',
-      'grant',
-      {
-        dest: wallets.m_wallets[address],
-        tokenId: currentMintedToken,
-        grams: 0,
-      },
-      address,
-    );
-    return ourData;
+    await Promise.all([
+      ...chunks.map((chunk: string, index: number) =>
+        provider.call('files', 'writeData', { index, chunk }, contractAddress),
+      ),
+    ]);
+    return contractAddress;
   }
 
   async getCollectionData(address: string) {
@@ -186,7 +232,6 @@ class Actions {
     const data = await Promise.all([
       provider.run('rootToken', 'getName', {}, address),
       provider.run('rootToken', 'getSymbol', {}, address),
-      provider.run('rootToken', 'getTokenURI', {}, address),
       provider.run('rootToken', 'getTotalSupply', {}, address),
     ]);
 
@@ -194,8 +239,7 @@ class Actions {
       address,
       name: web3Utils.hexToUtf8(`0x${data[0].value0}`),
       symbol: web3Utils.hexToUtf8(`0x${data[1].value0}`),
-      tokenUri: web3Utils.hexToUtf8(`0x${data[2].value0}`),
-      totalSupply: data[3].value0,
+      totalSupply: data[2].value0,
     };
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button, Grid, TextField } from '@material-ui/core';
@@ -64,11 +64,30 @@ const CostLegend = withStyles(() => ({
 }))(Typography);
 
 const CreatorFieldV2 = ({ onSubmit }: any) => {
+  const [image, setImage] = useState<string>('');
+  const [file, setFile] = useState<string>('');
   const {
     formState: { errors },
+    register,
     control,
     handleSubmit,
   }: any = useForm();
+
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e?.target?.files;
+    if (files) {
+      const img = files[0];
+      setImage(img ? URL.createObjectURL(img) : '');
+    }
+  };
+
+  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e?.target?.files;
+    if (files) {
+      const fileName = files[0]?.name;
+      setFile(fileName || '');
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,62 +102,53 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
           direction="column"
         >
           <Grid item>
-            <Controller
-              control={control}
-              name="image"
-              rules={{
-                required: 'This field is required',
-              }}
-              render={({ field }) => (
-                <AddImageButton
-                  style={errors?.image ? { border: '2px solid #f44336' } : {}}
-                  component="label"
-                  {...field}
-                >
-                  <AddBoxIcon fontSize="large" />
-                  <Typography style={{ fontWeight: 'bold', marginTop: '10px' }}>
-                    ADD IMAGE
-                  </Typography>
-                  <Typography style={{ fontSize: '0.8rem' }}>
-                    JPG or GIF
-                  </Typography>
-                  <input type="file" hidden />
-                </AddImageButton>
+            <AddImageButton
+              style={errors?.image ? { border: '2px solid #f44336' } : {}}
+              component="label"
+            >
+              <AddBoxIcon fontSize="large" />
+              <Typography style={{ fontWeight: 'bold', marginTop: '10px' }}>
+                ADD IMAGE
+              </Typography>
+              <Typography style={{ fontSize: '0.8rem' }}>JPG or GIF</Typography>
+              <input
+                {...register('image', { required: true })}
+                type="file"
+                hidden
+                onInput={handleChangeImage}
+              />
+              {image && (
+                <img
+                  src={image}
+                  alt="Preview"
+                  className={styles.previewImage}
+                />
               )}
-            />
+            </AddImageButton>
           </Grid>
           <Grid item>
             <Typography style={{ fontWeight: 'bold', marginTop: '15px' }}>
               UPLOAD FULL FILE
             </Typography>
-            <Controller
-              control={control}
-              name="fullFile"
-              rules={{
-                required: 'This field is required',
-              }}
-              render={({ field }) => (
-                <UploadFileButton
-                  style={
-                    errors?.fullFile ? { border: '2px solid #f44336' } : {}
-                  }
-                  component="label"
-                  {...field}
-                >
-                  <GetAppIcon fontSize="large" />
-                  <input type="file" hidden />
-                </UploadFileButton>
-              )}
-            />
+            <UploadFileButton
+              style={errors?.fullFile ? { border: '2px solid #f44336' } : {}}
+              component="label"
+            >
+              <GetAppIcon fontSize="large" />
+              <input
+                {...register('fullFile', { required: true })}
+                type="file"
+                hidden
+                onInput={handleChangeFile}
+              />
+              {file && <div className={styles.previewFile}>{file}</div>}
+            </UploadFileButton>
           </Grid>
           <Grid item>
             <Controller
               control={control}
               name="checkbox"
               defaultValue="blockchain"
-              rules={{
-                required: 'This field is required',
-              }}
               render={({ field }) => (
                 <RadioGroup className={styles.radioGroup} {...field}>
                   <FormControlLabel
@@ -204,11 +214,11 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                 <TextField
                   className={styles.descInputHeader}
                   inputRef={field.ref}
-                  error={Boolean(errors?.symbol)}
-                  multiline
                   fullWidth
-                  rows={4}
+                  error={Boolean(errors?.symbol)}
                   label="Description"
+                  multiline
+                  rows={4}
                   helperText={errors?.symbol ? errors?.symbol?.message : ''}
                   {...field}
                 />
