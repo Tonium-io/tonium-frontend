@@ -524,13 +524,13 @@
       "functions": [
         {
           "name": "constructor",
-          "inputs": [{ "name": "chunks_count", "type": "uint8" }],
+          "inputs": [{ "name": "chunks_count", "type": "uint32" }],
           "outputs": []
         },
         {
           "name": "writeData",
           "inputs": [
-            { "name": "index", "type": "uint128" },
+            { "name": "index", "type": "uint32" },
             { "name": "chunk", "type": "bytes" }
           ],
           "outputs": []
@@ -556,10 +556,10 @@
           "outputs": [{ "name": "m_raw_data_chunks", "type": "bytes[]" }]
         }
       ],
-      "data": [{ "key": 1, "name": "nonce", "type": "uint128" }],
+      "data": [{ "key": 1, "name": "nonce", "type": "uint64" }],
       "events": []
     },
-    "tvc": "te6ccgECGAEAA/0AAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsVBQQXArQh2zzTAAGOEoECANcYIPkBWPhCIPhl+RDyqN5TMNM/MzAh0x8zIPgjvvLgZSH5ACD4SoEBAPQOIJEx3vLQZiD4SiPIyx9ZgQEA9EP4aiNsQdMfAds8+Edu8nwJBgE6ItDXCwOpOADcIccA3CHXDR/yvCHdAds8+Edu8nwGAiggghBJ4+n/u+MCIIIQbluPbLrjAgsHA2gw+Ehu4wD4RvJzcfhm0wfR+ELy4GUgwgDy4Gj4ACD4bW34TV8gjoDkMAFvAvhwMNs8f/hnCQgQARKliFMTgCD0FzMXAXbtRNAg10nCAY4x0//TAPQE0//Tf9N/03/U0dD6QNMf9ARZbwIB0fhw+G/4bvht+Gz4a/hqf/ho+Gb4YgoAxI5f9AVt+Gpw+GtxIYBA9A6T1wt/kXDi+Gxw+G1w+G6NCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4b3BtbwL4cHABgED0DvK91wv/+GJw+GNw+GZ/+GjiBFAgghAmrq0NuuMCIIIQL4I9C7rjAiCCEC/V/kG64wIgghBJ4+n/uuMCEw8ODAOIMPhIbuMA0ds8JI4vJtDTAfpAMDHIz4cgznHPC2FeIVUwyM+TJ4+n/st/y3/L/wFvIgLLH/QAzclw+wCSXwTi4wB/+GcUDRAAIHBfMG1vAvhN+E74QvhQbEQBXjDR2zz4UCGOIo0EcAAAAAAAAAAAAAAAACv1f5BgyM4BbyICyx/0AMlw+wDef/hnFAMiMPhIbuMA03/U0ds82zx/+GcUERAAYPhQ+E/4TvhN+Ez4S/hK+Eb4QsjL/8sA9ADL/8t/y3/Lf1nIzgFvIgLLH/QAzcntVAHQ+EUgbpIwcN74Qrry4Gb4APhFIG6SMHDe+EK68uBmIfhQbxGAIPQP8rKCEP/////5QTAxqwLy0Gsh+E278uBq+E74Tbvy4Gz4APhQbyIjAVMSufKyI1mAIPQXbwL4cPhOpLV/+G7bPFsSAKT4SoEBAPSGb6GWAdcLH28C3nCaIW6zIJQwIMEe3o4xUxFu8n9vIiD4I7mbIfhKgQEA9Fsw+GreIqS1BzMh+EqBAQD0fG+hlgHXCx9vAt40W+hbAVIw0ds8+EshjhyNBHAAAAAAAAAAAAAAAAApq6tDYMjOy//JcPsA3n/4ZxQAaO1E0NP/0wD0BNP/03/Tf9N/1NHQ+kDTH/QEWW8CAdH4cPhv+G74bfhs+Gv4an/4aPhm+GICCvSkIPShFxYAFHNvbCAwLjQ1LjAAAA==",
+    "tvc": "te6ccgECGAEAA/0AAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsVBQQXArQh2zzTAAGOEoECANcYIPkBWPhCIPhl+RDyqN5TMNM/MzAh0x8zIPgjvvLgZSH5ACD4SoEBAPQOIJEx3vLQZiD4SiPIyx9ZgQEA9EP4aiNsQdMfAds8+Edu8nwTBgE6ItDXCwOpOADcIccA3CHXDR/yvCHdAds8+Edu8nwGAiggghA8uGWbu+MCIIIQSePp/7rjAgkHA4gw+Ehu4wDR2zwkji8m0NMB+kAwMcjPhyDOcc8LYV4hVTDIz5Mnj6f+y3/Lf8v/AW8iAssf9ADNyXD7AJJfBOLjAH/4Zw8IEQAgcF8wbW8C+E34TvhC+FBsRARQIIIQIk2szLrjAiCCECaurQ264wIgghAv1f5BuuMCIIIQPLhlm7rjAhAODQoDIjD4SG7jANMf1NHbPNs8f/hnDwsRAdD4RSBukjBw3vhCuvLgZvgA+EUgbpIwcN74Qrry4GYh+FBvEYAg9A/ysoIQ//////lBMDGrAvLQayH4Tbvy4Gr4TvhNu/LgbPgA+FBvIiMBUxK58rIjWYAg9BdvAvhw+E6ktR/4bts8WwwApPhKgQEA9IZvoZYB1wsfbwLecJohbrMglDAgwR7ejjFTEW7yf28iIPgjuZsh+EqBAQD0WzD4at4ipLUHMyH4SoEBAPR8b6GWAdcLH28C3jRb6FsBXjDR2zz4UCGOIo0EcAAAAAAAAAAAAAAAACv1f5BgyM4BbyICyx/0AMlw+wDef/hnDwFSMNHbPPhLIY4cjQRwAAAAAAAAAAAAAAAAKaurQ2DIzsv/yXD7AN5/+GcPAGjtRNDT/9MA9ATT/9M/0x/TH9TR0PpA0x/0BFlvAgHR+HD4b/hu+G34bPhr+Gp/+Gj4ZvhiA2gw+Ehu4wD4RvJzcfhm0x/R+ELy4GUgwgDy4Gj4ACD4bW34TV8gjoDkMAFvAvhwMNs8f/hnExIRAGD4UPhP+E74TfhM+Ev4SvhG+ELIy//LAPQAy//LP8sfyx9ZyM4BbyICyx/0AM3J7VQBEqWIUxOAIPQXMxcBdu1E0CDXScIBjjHT/9MA9ATT/9M/0x/TH9TR0PpA0x/0BFlvAgHR+HD4b/hu+G34bPhr+Gp/+Gj4ZvhiFADEjl/0BW34anD4a3EhgED0DpPXCz+RcOL4bHD4bXD4bo0IYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPhvcG1vAvhwcAGAQPQO8r3XC//4YnD4Y3D4Zn/4aOICCvSkIPShFxYAFHNvbCAwLjQ1LjAAAA==",
     "zip": "https://github.com/Tonium-io/TON_Files/archive/refs/heads/master.zip#TON_Files-master/file"
   }
 }

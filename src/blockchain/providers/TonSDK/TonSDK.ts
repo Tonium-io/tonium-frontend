@@ -511,14 +511,7 @@ class TonSDK extends AbstractProvider {
     const addressBalance = Number(addressInfo.balance);
     const executorFees = Number(executorResult.fees.total_account_fees);
 
-    if (addressInfo.isInited) {
-      // if (addressBalance <= executorFees) {
-      //   const difference = executorFees - addressBalance;
-      //   const fees = difference / 1000000000;
-      //   noMoneyFallback(result.address, fees);
-      // }
-      return result.address;
-    }
+    if (addressInfo.isInited) return result.address;
 
     // eslint-disable-next-line no-console
     console.log(
@@ -552,7 +545,7 @@ class TonSDK extends AbstractProvider {
         try {
           await this.sendMoney(result.address, fees);
         } catch (e) {
-          throw new Error(e);
+          throw new Error(e.message);
         }
       }
     }

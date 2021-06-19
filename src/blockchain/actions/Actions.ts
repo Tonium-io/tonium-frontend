@@ -1,7 +1,8 @@
 import web3Utils from 'web3-utils';
 
+import { hexToUtf8 } from 'src/helpers';
+import { zeroAddress } from 'src/constants';
 import AbstractProvider from '../providers/AbstractProvider';
-import { zeroAddress } from '../../constants';
 
 class Actions {
   private getCurrentProvider: () => AbstractProvider;
@@ -21,27 +22,36 @@ class Actions {
   // eslint-disable-next-line class-methods-use-this
   async getUserCollections() {
     let userNFTs = [];
-    if (localStorage.getItem('tonuim_userNFT')) {
-      const newdata = JSON.parse(
-        localStorage.getItem('tonuim_userNFT') as string,
-      );
-      if (newdata) {
-        userNFTs = newdata;
+
+    const localStorageCollections = localStorage.getItem('tonuim_userNFT');
+    if (localStorageCollections) {
+      try {
+        userNFTs = JSON.parse(localStorageCollections);
+      } catch (e) {
+        throw new Error('Json parse error');
       }
     }
 
-    if (!userNFTs.length) {
-      return [];
-    }
-    const promises = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const collection of userNFTs) {
-      promises.push(this.getCollectionData(collection));
-    }
+    if (!userNFTs.length) return [];
 
-    const result = await Promise.all(promises);
+    const collectionsData: any = [];
+    const tokensData: any = [];
+    userNFTs.forEach((collection: string) => {
+      collectionsData.push(this.getCollectionData(collection));
+      tokensData.push(this.getLastInfoTokenFiles(collection));
+    });
 
-    return result;
+    const [collections, tokens]: any = [
+      await Promise.all(collectionsData),
+      await Promise.all(tokensData),
+    ];
+
+    return collections.map((collection: any, index: number) => ({
+      ...collection,
+      ...tokens[index],
+      name: collection.name,
+      description: collection.symbol,
+    }));
   }
 
   async deployNFTWallet(address: string) {
@@ -56,6 +66,53 @@ class Actions {
       controllerAddress,
     );
     return deployNFT;
+  }
+
+  async getLastInfoTokenFiles(address: string) {
+    const provider = await this.getCurrentProvider();
+    const lastMintedToken = await this.getLastMintedToken(address);
+
+    if (lastMintedToken === '0') return null;
+
+    const infoToken = await provider.run(
+      'rootToken',
+      'getInfoToken',
+      {
+        tokenId: lastMintedToken,
+      },
+      address,
+    );
+
+    if (infoToken.data === zeroAddress) {
+      let ipfsFile = '';
+      let ipfsImage = '';
+      if (infoToken.jsonMeta) {
+        try {
+          const meta = JSON.parse(hexToUtf8(infoToken.jsonMeta));
+          ipfsFile = meta.ipfsFile;
+          ipfsImage = meta.ipfsImage;
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log('Parse error');
+        }
+      }
+      return {
+        ipfsFile,
+        ipfsImage,
+      };
+    }
+
+    const chunks = await provider.run(
+      'files',
+      'getDetails',
+      {},
+      infoToken.data,
+    );
+    const file = hexToUtf8(chunks.chunks.join(''));
+
+    return {
+      file,
+    };
   }
 
   async getInfoTokens(address: string) {
@@ -77,34 +134,64 @@ class Actions {
       results.push(getInfoToken);
       lastMintedToken -= 1;
     }
-
     results = await Promise.all(results);
 
-    let ipfsResults = results.filter((res: any) => res.data === zeroAddress);
-    let bcResults = results.filter((res: any) => res.data !== zeroAddress);
-
-    ipfsResults = ipfsResults.map((i: any) => ({
-      ...i,
-      name: web3Utils.hexToUtf8(`0x${i.name}`),
-      tokenData: i.jsonMeta
-        ? JSON.parse(web3Utils.hexToUtf8(`0x${i.jsonMeta}`))
-        : '',
-    }));
-
-    let bcChanks: any = [];
-    bcResults.forEach((bsResult: any) =>
-      bcChanks.push(provider.run('files', 'getDetails', {}, bsResult.data)),
+    let ipfsResults: any[] = [];
+    let bcResults: any[] = [];
+    results.forEach((token: any) =>
+      token.data === zeroAddress
+        ? ipfsResults.push(token)
+        : bcResults.push(token),
     );
-    bcChanks = await Promise.all(bcChanks);
-    bcResults = bcResults.map((i: any, index: number) => {
-      const image = web3Utils.hexToUtf8(`0x${bcChanks[index].chunks.join('')}`);
+
+    ipfsResults = ipfsResults.map((token: any) => {
+      let description = '';
+      let ipfsFile = '';
+      let ipfsImage = '';
+      if (token.jsonMeta) {
+        try {
+          const meta = JSON.parse(hexToUtf8(token.jsonMeta));
+          description = meta.description;
+          ipfsFile = meta.ipfsFile;
+          ipfsImage = meta.ipfsImage;
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log('Parse error');
+        }
+      }
       return {
-        ...i,
-        name: web3Utils.hexToUtf8(`0x${i.name}`),
-        tokenData: i.jsonMeta
-          ? JSON.parse(web3Utils.hexToUtf8(`0x${i.jsonMeta}`))
-          : '',
-        image,
+        data: token.data,
+        time: token.time,
+        name: hexToUtf8(token.name),
+        description,
+        ipfsFile,
+        ipfsImage,
+      };
+    });
+
+    let bcChunks: any = [];
+    bcResults.forEach((bsResult: any) =>
+      bcChunks.push(provider.run('files', 'getDetails', {}, bsResult.data)),
+    );
+    bcChunks = await Promise.all(bcChunks);
+    bcResults = bcResults.map((token: any, index: number) => {
+      let description = '';
+      if (token.jsonMeta) {
+        try {
+          const meta = JSON.parse(hexToUtf8(token.jsonMeta));
+          description = meta.description;
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log('Parse error');
+        }
+      }
+      const file = hexToUtf8(bcChunks[index].chunks.join(''));
+      return {
+        data: token.data,
+        time: token.time,
+        name: hexToUtf8(token.name),
+        description,
+        file,
       };
     });
 

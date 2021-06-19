@@ -1,10 +1,11 @@
-import { Typography } from '@material-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
-
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { ContextApp, setUserCollectionTokens } from '../../store/reducer';
 
+import { Typography } from '@material-ui/core';
+
+import { ContextApp, setUserCollectionTokens } from '../../store/reducer';
+import tonLogo from '../../img/ton-logo.png';
 import Loader from '../../Components/Loader';
 import TableFields from '../../Components/TableFields';
 import Breadcrumbs from '../../Components/Breadcrumbs';
@@ -12,9 +13,6 @@ import cls from '../../app.module.scss';
 
 const Collection = () => {
   const { collection } = useParams<any>();
-  // eslint-disable-next-line no-console
-
-  // todo radar page
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
@@ -24,9 +22,11 @@ const Collection = () => {
     if (state.auth) {
       setLoad(true);
       toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
         const newData = data.map((i: any) => ({
           ...i,
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          defaultImage: tonLogo,
         }));
         setUserCollectionTokens(dispatch, newData);
         setLoad(false);

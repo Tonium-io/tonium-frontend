@@ -1,0 +1,63 @@
+.previewImage {
+  position: absolute;
+  width: 165px;
+  height: 165px;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.previewFile {
+  width: 90%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+.radioGroup {
+  & > label {
+    margin-left: -8px;
+    margin-right: auto;
+  }
+}
+
+p.differentPopover {
+  width: 55px;
+  font-size: 9px;
+  line-height: 11px;
+  text-decoration-line: underline;
+  text-transform: uppercase;
+  color: #ff00e0;
+}
+
+.nameInputHeader,
+.descInputHeader {
+  & > label {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+}
+
+.nameInputHeader {
+  & > div > input {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    text-transform: uppercase;
+    color: #a4a4a4;
+  }
+}
+
+.descInputHeader {
+  & > div > textarea {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    color: #a4a4a4;
+  }
+}

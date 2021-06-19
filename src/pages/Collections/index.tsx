@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import Typography from '@material-ui/core/Typography';
 
-// import Skeleton from '@material-ui/lab/Skeleton';
-
-import { NavLink } from 'react-router-dom';
-
-import { toast } from 'react-toastify';
+import tonLogo from '../../img/ton-logo.png';
 import { ContextApp, setUserCollections } from '../../store/reducer';
 import TableFields from '../../Components/TableFields';
 import Loader from '../../Components/Loader';
@@ -23,9 +21,11 @@ const Collections = () => {
     if (state.auth) {
       setLoad(true);
       toniumNFT.actions.getUserCollections().then((data: any) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
         const newData = data.map((i: any) => ({
           ...i,
-          img: 'https://i.pinimg.com/originals/fb/16/f9/fb16f9c0afed2c195f4732c3f279b77a.jpg',
+          defaultImage: tonLogo,
         }));
         setUserCollections(dispatch, newData);
         setLoad(false);
