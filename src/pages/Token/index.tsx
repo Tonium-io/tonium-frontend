@@ -13,6 +13,7 @@ import TimeIcon from '../../img/time.svg';
 import CristalIcon from '../../img/cristall.svg';
 import { ContextApp, setNftAuctions } from '../../store/reducer';
 import Breadcrumbs from '../../Components/Breadcrumbs';
+import getShortToken from '../../utils/getShortToken';
 
 import cls from './styles.module.scss';
 
@@ -141,11 +142,9 @@ const Token = () => {
                           {item.name}
                         </span>
                         <span className={cls.where}>by</span>
-                        <span
-                          className={cls.userAdres}
-                        >{`${item.addressWallet.substring(0, 8)}
-                        ...
-                        ${item.addressWallet.substring(61, 66)}`}</span>
+                        <span className={cls.userAdres}>
+                          {getShortToken(item.addressWallet)}
+                        </span>
                       </span>
                       <span className={cls.date}>17:01 14.05.2021</span>
                     </span>
@@ -158,12 +157,9 @@ const Token = () => {
                           {item.name}
                         </span>
                         <span className={cls.where}>by</span>
-                        <span
-                          className={cls.userAdres}
-                        >{`${item.addressWallet.substring(
-                          0,
-                          8,
-                        )}...${item.addressWallet.substring(61, 66)}`}</span>
+                        <span className={cls.userAdres}>
+                          {getShortToken(item.addressWallet)}
+                        </span>
                       </span>
                       <span className={cls.date}>17:01 14.05.2021</span>
                     </span>
@@ -176,19 +172,13 @@ const Token = () => {
                           {item.name}
                         </span>
                         <span className={cls.where}>from</span>
-                        <span
-                          className={cls.userAdres}
-                        >{`${item.addressWallet.substring(
-                          0,
-                          8,
-                        )}...${item.addressWallet.substring(61, 66)}`}</span>
+                        <span className={cls.userAdres}>
+                          {getShortToken(item.addressWallet)}
+                        </span>
                         <span className={cls.where}>to</span>
-                        <span
-                          className={cls.userAdres}
-                        >{`${item.addressWallet.substring(
-                          0,
-                          8,
-                        )}...${item.addressWallet.substring(61, 66)}`}</span>
+                        <span className={cls.userAdres}>
+                          {getShortToken(item.addressWallet)}
+                        </span>
                       </span>
                       <span className={cls.date}>17:01 14.05.2021</span>
                     </span>
