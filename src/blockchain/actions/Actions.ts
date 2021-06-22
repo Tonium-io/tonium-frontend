@@ -258,7 +258,8 @@ class Actions {
   ) {
     const provider = await this.resolveProviderOrThrow();
     // const addressWallet = await provider.getAddress();
-
+    // eslint-disable-next-line no-console
+    console.log('Mint token');
     const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
     return provider.call(
       'rootToken',
@@ -297,19 +298,25 @@ class Actions {
     noMoneyFallback: (addr: string, value: number) => void,
   ) {
     const provider = await this.resolveProviderOrThrow();
-
+    // eslint-disable-next-line no-console
+    console.log('Chunks length: ', chunks.length);
     const contractAddress = await provider.deployContract(
       'files',
       noMoneyFallback,
       { nonce: Math.floor(Math.random() * 100000) },
       { chunks_count: chunks.length },
     );
-
+    // eslint-disable-next-line no-console
+    console.log('Files contract deploy success.');
+    // eslint-disable-next-line no-console
+    console.log('Writing to file.');
     await Promise.all([
       ...chunks.map((chunk: string, index: number) =>
         provider.call('files', 'writeData', { index, chunk }, contractAddress),
       ),
     ]);
+    // eslint-disable-next-line no-console
+    console.log('Written to file, file address: ', contractAddress);
     return contractAddress;
   }
 

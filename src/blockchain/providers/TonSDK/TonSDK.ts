@@ -439,7 +439,7 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-    const amount = Math.floor((value + 0.2) * 1_000_000_000);
+    const amount = Math.floor((value + 2) * 1_000_000_000);
     return acc.run('sendValue', {
       dest: address,
       amount,
@@ -507,7 +507,9 @@ class TonSDK extends AbstractProvider {
       abi: { type: 'Contract', value: rawContract.abi },
       message: result.message,
     });
-
+    // const executorResult = {
+    //   fees: { total_account_fees: BigInt(15000000000) },
+    // };
     const addressBalance = Number(addressInfo.balance);
     const executorFees = Number(executorResult.fees.total_account_fees);
 
@@ -548,6 +550,8 @@ class TonSDK extends AbstractProvider {
           throw new Error(e.message);
         }
       }
+      // eslint-disable-next-line no-console
+      console.log(fees + 2, 'rubys sent to ', result.address);
     }
 
     const deployResult = await this.client.processing

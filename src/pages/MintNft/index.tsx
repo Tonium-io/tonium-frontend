@@ -40,7 +40,7 @@ const MintNft = () => {
 
     if (checkbox === 'ipfs') {
       const node = await IPFS.create();
-      const isImage = isImageFile(file);
+      const isImage = isImageFile(file.type);
       const ipfsFile = await node.add(file);
       tokenData = isImage
         ? { ...tokenData, ipfsImage: ipfsFile.path }
@@ -58,6 +58,12 @@ const MintNft = () => {
 
       const fileAsString = await readerPromise;
       const fileStringAsHex = utf8ToHex(fileAsString);
+      // eslint-disable-next-line no-console
+      console.log('File: ', file);
+      // eslint-disable-next-line no-console
+      console.log('File length as string: ', fileAsString.length);
+      // eslint-disable-next-line no-console
+      console.log('File length as bytes(hex): ', fileStringAsHex.length);
       const chunks: string[] = [];
       for (let start = 0; start < fileStringAsHex.length; start += 15000) {
         const chunk = fileStringAsHex.slice(start, start + 15000);
@@ -81,6 +87,7 @@ const MintNft = () => {
           position: 'bottom-right',
           autoClose: 4000,
         });
+        return;
       }
     }
 

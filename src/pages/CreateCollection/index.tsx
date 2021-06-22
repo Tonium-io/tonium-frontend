@@ -34,15 +34,13 @@ const CreateCollection = () => {
           history.push('/collections/');
         })
         .catch((e: any) => {
+          setLoad(false);
           // eslint-disable-next-line no-console
           console.error(e.message);
           toast.error('Error', {
             position: 'bottom-right',
             autoClose: 4000,
           });
-        })
-        .finally(() => {
-          setLoad(false);
         });
     }
   };

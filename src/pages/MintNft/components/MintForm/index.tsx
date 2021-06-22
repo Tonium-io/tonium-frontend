@@ -159,9 +159,9 @@ const MintForm = ({ onSubmit }: any) => {
           item
           container
           spacing={4}
-          lg={4}
+          lg={3}
           md={5}
-          xs={6}
+          xs={12}
           direction="column"
         >
           <Grid item>

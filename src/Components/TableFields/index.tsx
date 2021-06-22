@@ -23,19 +23,33 @@ const TableFields = ({
       wrap="wrap"
     >
       {arrayItems.map((c: any) => (
-        <ListItem button key={c.time}>
+        <ListItem button key={c.time || c.address}>
           {clickCollectionsUrl ? (
             <NavLink
-              to={`${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
+              to={`/${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
             >
               <Paper className={cls.element}>
-                <div>
+                {c.file && isImageFile(c.file) && (
                   <img
-                    style={{ width: 210, height: 118 }}
-                    alt="alt"
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={c.file}
+                  />
+                )}
+                {c.ipfsImage && (
+                  <img
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
+                  />
+                )}
+                {!c.file && !c.ipfsImage && (
+                  <img
+                    className={styles.paperImage}
+                    alt={c.name}
                     src={c.defaultImage}
                   />
-                </div>
+                )}
               </Paper>
             </NavLink>
           ) : (
