@@ -21,6 +21,7 @@ import AuctionToken from './pages/AuctionToken';
 import Login from './Components/Login';
 import SendMoneyDialog from './Components/SendMoneyDialog';
 import SellToken from './pages/SellToken';
+import Token from './pages/Token';
 
 declare const window: any;
 
@@ -66,6 +67,9 @@ function App() {
             </Route>
             <Route exact path="/collections/:collection/mint-add">
               <MintNft />
+            </Route>
+            <Route exact path="/token">
+              <Token />
             </Route>
           </Switch>
         </MainLayout>

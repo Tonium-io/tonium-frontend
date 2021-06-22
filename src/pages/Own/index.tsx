@@ -197,7 +197,7 @@ const Own = () => {
                   <NavLink to="/own/sell" className={cls.btnToken}>
                     Sell
                   </NavLink>
-                  <NavLink to="#" className={cls.btnToken}>
+                  <NavLink to="/token" className={cls.btnToken}>
                     Send
                   </NavLink>
                   <NavLink to="#" className={cls.btnToken}>

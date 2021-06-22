@@ -12,6 +12,7 @@ import ArrowIcon from '../../img/arrow.svg';
 import HammerIcon from '../../img/hammer.svg';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
 import Breadcrumbs from '../../Components/Breadcrumbs';
+import getShortToken from '../../utils/getShortToken';
 
 import cls from './styles.module.scss';
 
@@ -176,10 +177,9 @@ const Transaction = () => {
                     <span className={cls.action}>{item.minted}</span>
                     <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>by</span>
-                    <span className={cls.userAdres}>{`${item.address.substring(
-                      0,
-                      8,
-                    )}...${item.address.substring(61, 66)}`}</span>
+                    <span className={cls.userAdres}>
+                      {getShortToken(item.address)}
+                    </span>
                   </span>
                   <span className={cls.date}>17:01 14.05.2021</span>
                 </span>
@@ -190,10 +190,9 @@ const Transaction = () => {
                     <span className={cls.action}>{item.action}</span>
                     <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>by</span>
-                    <span className={cls.userAdres}>{`${item.address.substring(
-                      0,
-                      8,
-                    )}...${item.address.substring(61, 66)}`}</span>
+                    <span className={cls.userAdres}>
+                      {getShortToken(item.address)}
+                    </span>
                   </span>
                   <span className={cls.date}>17:01 14.05.2021</span>
                 </span>
@@ -204,15 +203,13 @@ const Transaction = () => {
                     <span className={cls.action}>{item.transfer}</span>
                     <span className={cls.tokenName}>{item.name}</span>
                     <span className={cls.where}>from</span>
-                    <span className={cls.userAdres}>{`${item.address.substring(
-                      0,
-                      8,
-                    )}...${item.address.substring(61, 66)}`}</span>
+                    <span className={cls.userAdres}>
+                      {getShortToken(item.address)}
+                    </span>
                     <span className={cls.where}>to</span>
-                    <span className={cls.userAdres}>{`${item.address.substring(
-                      0,
-                      8,
-                    )}...${item.address.substring(61, 66)}`}</span>
+                    <span className={cls.userAdres}>
+                      {getShortToken(item.address)}
+                    </span>
                   </span>
                   <span className={cls.date}>17:01 14.05.2021</span>
                 </span>
