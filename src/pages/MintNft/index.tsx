@@ -14,6 +14,8 @@ import cls from '../../app.module.scss';
 
 import MintForm from './components/MintForm';
 
+declare const window: any;
+
 const MintNft = () => {
   const history = useHistory();
   const { collection } = useParams<any>();
@@ -39,7 +41,11 @@ const MintNft = () => {
     let tokenFileAddress = zeroAddress;
 
     if (checkbox === 'ipfs') {
-      const node = await IPFS.create();
+      let node = window.IPFSNode;
+      if (!node) {
+        node = await IPFS.create();
+        window.IPFSNode = node;
+      }
       const isImage = isImageFile(file.type);
       const ipfsFile = await node.add(file);
       tokenData = isImage
@@ -91,8 +97,6 @@ const MintNft = () => {
       }
     }
 
-    // if (state.auth) return;
-
     toniumNFT.actions
       .createUserCollectionToken(
         `0:${collection}`,
@@ -107,7 +111,6 @@ const MintNft = () => {
           position: 'bottom-right',
           autoClose: 4000,
         });
-        setLoad(false);
         history.push(history.location.pathname.replace('/mint-add', ''));
       })
       .catch((e: any) => {

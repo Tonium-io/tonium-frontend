@@ -307,7 +307,7 @@ class Actions {
       { chunks_count: chunks.length },
     );
     // eslint-disable-next-line no-console
-    console.log('Files contract deploy success.');
+    console.log('Files contract deploy success.', contractAddress);
     // eslint-disable-next-line no-console
     console.log('Writing to file.');
     await Promise.all([

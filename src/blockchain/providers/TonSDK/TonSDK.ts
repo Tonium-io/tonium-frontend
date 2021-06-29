@@ -439,7 +439,9 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-    const amount = Math.floor((value + 2) * 1_000_000_000);
+    const amount = Math.floor((value + 10) * 1_000_000_000);
+    // eslint-disable-next-line no-console
+    console.log('send', value + 10, 'rubys to', address);
     return acc.run('sendValue', {
       dest: address,
       amount,
@@ -455,10 +457,7 @@ class TonSDK extends AbstractProvider {
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
-    const randomPublicKey = (
-      await this.client.crypto.generate_random_sign_keys()
-    ).public;
-
+    const randomKey = await this.client.crypto.generate_random_sign_keys();
     const deployOptions = {
       abi: {
         type: 'Contract',
@@ -469,7 +468,7 @@ class TonSDK extends AbstractProvider {
         initial_data: initialParams,
         initial_pubkey:
           contractName === 'rootToken'
-            ? randomPublicKey
+            ? randomKey.public
             : this.keys.keys.public,
       },
       call_set: {
@@ -550,8 +549,6 @@ class TonSDK extends AbstractProvider {
           throw new Error(e.message);
         }
       }
-      // eslint-disable-next-line no-console
-      console.log(fees + 2, 'rubys sent to ', result.address);
     }
 
     const deployResult = await this.client.processing

@@ -20,6 +20,15 @@ const Collection = () => {
 
   useEffect(() => {
     if (state.auth) {
+      const collectionData = state.userCollections?.find(
+        (c: any) => c.address === `0:${collection}`,
+      );
+      setCollName(collectionData ? collectionData.name : collection);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (state.auth) {
       setLoad(true);
       toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
         // eslint-disable-next-line no-console
@@ -31,12 +40,6 @@ const Collection = () => {
         setUserCollectionTokens(dispatch, newData);
         setLoad(false);
       });
-
-      const nameCol = state.userCollections?.find(
-        (c: any) => c.address === `0:${collection}`,
-      )?.name;
-
-      setCollName(nameCol);
     }
   }, []);
 

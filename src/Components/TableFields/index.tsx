@@ -29,11 +29,11 @@ const TableFields = ({
               to={`/${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
             >
               <Paper className={cls.element}>
-                {c.file && isImageFile(c.file) && (
+                {c.file && (
                   <img
                     className={styles.paperImage}
                     alt={c.name}
-                    src={c.file}
+                    src={isImageFile(c.file) ? c.file : c.defaultImage}
                   />
                 )}
                 {c.ipfsImage && (
@@ -55,11 +55,11 @@ const TableFields = ({
           ) : (
             <Paper className={cls.element}>
               <div>
-                {c.file && isImageFile(c.file) && (
+                {c.file && (
                   <img
                     className={styles.paperImage}
                     alt={c.name}
-                    src={c.file}
+                    src={isImageFile(c.file) ? c.file : c.defaultImage}
                   />
                 )}
                 {c.ipfsImage && (
