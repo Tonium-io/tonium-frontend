@@ -122,13 +122,10 @@ const Auction = () => {
       });
     }
   }, []);
-  // eslint-disable-next-line no-console
-  console.log(state.nftAuctions, 'AUCTIONS');
   if (load) {
     return <Loader />;
   }
-  // eslint-disable-next-line no-console
-  console.log('Auction');
+
   return (
     <div className={cls.auction}>
       <Container className={cls.container}>

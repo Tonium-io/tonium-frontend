@@ -1,4 +1,4 @@
-$panel: #000;
+ $panel: #000;
 $panel2: #ededed;
 $text: #000;
 $link: #37abff;
@@ -247,4 +247,9 @@ header {
   height: 100%;
   top: 50%;
   left: 50%;
+}
+@media screen and (max-width: 768px) {
+  .content {
+    padding: 0;
+  }
 }

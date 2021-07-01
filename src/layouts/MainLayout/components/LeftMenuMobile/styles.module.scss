@@ -1,0 +1,38 @@
+.top {
+  position: absolute;
+  z-index: 99;
+  top: 54px;
+  background: #FFFFFF;
+  border: 1px solid #C6C6C6;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  align-items: center;
+  padding-top: 17px;
+}
+.panelButton {
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  &:hover {
+    background: linear-gradient(90deg, #D500F9 0%, #FF1744 100%);
+  }
+}
+.footer {
+  padding-top: 26px;
+  text-align: center;
+}
+.socialIcon {
+  color: #000;
+  &:hover {
+    color: #00acee;
+  }
+}
+.info {
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  color: #000000;
+}
+.inputIcon {
+  margin-top: 10px;
+  color: #D0D0D0;
+}
