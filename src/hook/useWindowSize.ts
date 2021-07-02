@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
-console.log(React);
+import { useEffect, useState } from 'react';
 
 const useWindowSize = function useWindowSize() {
   const [size, setSize] = useState([window.innerHeight, window.innerWidth]);
