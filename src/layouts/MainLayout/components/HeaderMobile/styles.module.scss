@@ -189,18 +189,18 @@ input::placeholder, .balance {
   text-align: justify;
   }
 }
-.menuItems {
-
-}
 .menuItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #CECECE;
-  margin-bottom: 17px;
-  width: 127px;
+  width: 130px;
   margin: auto;
   padding: 17px 0 13px;
+  border-bottom: 1px solid #CECECE;
+}
+.menuItem:nth-child(4) {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 .menuItemIcon {
   color: #aeaeae;

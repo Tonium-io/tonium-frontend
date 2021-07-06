@@ -41,35 +41,33 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '78px',
         paddingTop: '3px',
       },
-      '& :before': {
-        content: 'none',
-      },
-      '& :after': {
-        content: 'none',
-      },
       '& .MuiFilledInput-root': {
         backgroundColor: 'transparent',
       },
     },
     menu: {
-      '& .MuiNativeSelect-root': {
+      '& .MuiInputBase-input': {
         fontSize: '12px',
         lineHeight: '14px',
         textTransform: 'uppercase',
         color: '#000000',
         paddingLeft: '10px',
       },
-      '& :before': {
-        content: 'none',
+      '& .MuiNativeSelect-icon': {
+        right: 'calc(100% - 110px)',
+        color: '#33A9FB',
       },
-      '& :after': {
-        content: 'none',
+      '& .MuiNativeSelect-select:focus': {
+        backgroundColor: 'rgba(0, 0, 0, 0)',
       },
     },
     switch: {
       '& .MuiFormControlLabel-root': {
         marginRight: '0',
       },
+    },
+    rootBtn: {
+      minWidth: '0',
     },
   }),
 );
@@ -167,8 +165,8 @@ const Header: React.FC = () => {
             </div>
 
             <div className={styles.settingsWrap}>
-              <Button onClick={settingsClick}>
-                <SettingsIcon color="inherit" className={styles.settings} />
+              <Button className={classes.rootBtn} onClick={settingsClick}>
+                <SettingsIcon fontSize="small" className={styles.settings} />
               </Button>
             </div>
           </div>
@@ -183,6 +181,7 @@ const Header: React.FC = () => {
                     value={getShortToken(address || '')}
                     InputProps={{
                       readOnly: true,
+                      disableUnderline: true,
                     }}
                   />
                 </Grid>
@@ -207,13 +206,19 @@ const Header: React.FC = () => {
 
               <div className={styles.menuItems}>
                 <div className={styles.menuItem}>
-                  <PersonIcon className={styles.menuItemIcon} color="inherit" />
+                  <PersonIcon
+                    className={styles.menuItemIcon}
+                    fontSize="small"
+                  />
                   <span className={styles.userName}>@lordofnft</span>
-                  <PensilIcon className={styles.iconAfter} color="inherit" />
+                  <PensilIcon className={styles.iconAfter} fontSize="small" />
                 </div>
 
                 <div className={styles.menuItem}>
-                  <WalletIcon className={styles.menuItemIcon} color="inherit" />
+                  <WalletIcon
+                    className={styles.menuItemIcon}
+                    fontSize="small"
+                  />
                   <span className={styles.menuItemText}>Wallet</span>
                   <DownIcon className={styles.iconAfter} />
                 </div>
@@ -221,7 +226,7 @@ const Header: React.FC = () => {
                 <div className={styles.menuItem}>
                   <PanToolIcon
                     className={styles.menuItemIcon}
-                    color="inherit"
+                    fontSize="small"
                   />
 
                   <Grid item>
@@ -229,27 +234,33 @@ const Header: React.FC = () => {
                       className={`${classes.menu} ${styles.menuItemText}`}
                       IconComponent={DownIcon}
                       name="whitelist"
-                      inputProps={{ 'aria-label': 'whitelist' }}
+                      inputProps={{
+                        'aria-label': 'whitelist',
+                      }}
+                      disableUnderline
                     >
-                      <option value={10}>Main Whitelist</option>
-                      <option value={20}>Show all</option>
+                      <option value={10}>No filter</option>
+                      <option value={20}>Main Whitelist</option>
+                      <option value={30}>Show all</option>
                     </NativeSelect>
                   </Grid>
                 </div>
+
                 <div className={styles.menuItem}>
                   <LanguageIcon
                     className={styles.menuItemIcon}
-                    color="inherit"
+                    fontSize="small"
                   />
 
-                  <Grid container item justify="center">
+                  <Grid container item>
                     <NativeSelect
                       className={`${classes.menu} ${styles.menuItemText}`}
                       name="lang"
                       IconComponent={DownIcon}
                       inputProps={{ 'aria-label': 'lang' }}
+                      disableUnderline
                     >
-                      <option value={10}>EN</option>
+                      <option value={10}>English</option>
                     </NativeSelect>
                   </Grid>
                 </div>
