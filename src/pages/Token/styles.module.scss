@@ -228,9 +228,18 @@ img {
   }
   .itemAuction {
     top: 312px;
-    left: 0;
+    left: calc(50% - 102px);
   }
   .item {
     padding-top: 185px;
+  }
+  .token {
+    margin: auto;
+  }
+  .downloadText {
+    text-align: center;
+  }
+  .wrapToken {
+    text-align: center;
   }
 }

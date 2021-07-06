@@ -171,6 +171,9 @@
     .container {
       margin-left: 0;
       .wrapToken {
+        .tokenName {
+          white-space: normal;
+        }
         .wrapItem {
           display: block;
           .item {
