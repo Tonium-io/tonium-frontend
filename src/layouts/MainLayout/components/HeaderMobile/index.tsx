@@ -7,7 +7,6 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
-import MenuIcon from '@material-ui/icons/Menu';
 import LinkIcon from '@material-ui/icons/Link';
 import PersonIcon from '@material-ui/icons/Person';
 import Switch from '@material-ui/core/Switch';
@@ -90,6 +89,36 @@ const Header: React.FC = () => {
     setState({ ...states, [event.target.name]: event.target.checked });
   };
 
+  const handleClick = () => {
+    const menu = document.querySelector(`.${styles.menuIcon}`);
+    const menuActive = document.querySelector(
+      `.${styles.menuIcon}.${styles.menuActive}`,
+    );
+
+    setOpenLeftMenu(dispatch, !state.openLeftMenu);
+
+    if (menu !== menuActive) {
+      menu?.classList.add(`${styles.menuActive}`);
+    } else {
+      menu?.classList.remove(`${styles.menuActive}`);
+    }
+  };
+
+  const settingsClick = () => {
+    const settings = document.querySelector(`.${styles.settings}`);
+    const settingsActive = document.querySelector(
+      `.${styles.settings}.${styles.settingsActive}`,
+    );
+
+    setShowModal(!isShowModal);
+
+    if (settings !== settingsActive) {
+      settings?.classList.add(`${styles.settingsActive}`);
+    } else {
+      settings?.classList.remove(`${styles.settingsActive}`);
+    }
+  };
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
@@ -113,11 +142,8 @@ const Header: React.FC = () => {
         <Toolbar className={styles.header}>
           <div className={styles.leftMenu}>
             <div className={styles.burgerWrap}>
-              <Button
-                className={styles.burgerBtn}
-                onClick={() => setOpenLeftMenu(dispatch, !state.openLeftMenu)}
-              >
-                <MenuIcon className={styles.menuIcon} />
+              <Button className={styles.burgerBtn} onClick={handleClick}>
+                <span className={styles.menuIcon} />
               </Button>
             </div>
             <img src={Logo} alt="Logo" />
@@ -139,8 +165,9 @@ const Header: React.FC = () => {
               <LinkIcon />
               <span className={styles.unlink}>unlink</span>
             </div>
+
             <div className={styles.settingsWrap}>
-              <Button onClick={() => setShowModal(!isShowModal)}>
+              <Button onClick={settingsClick}>
                 <SettingsIcon color="inherit" className={styles.settings} />
               </Button>
             </div>

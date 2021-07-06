@@ -25,7 +25,7 @@ const MainLayout: React.FC<MainProps> = ({ children }) => {
         container
         spacing={0}
         direction="row"
-        justify="flex-start"
+        justify="center"
         alignItems="stretch"
         className={styles.wrap}
       >

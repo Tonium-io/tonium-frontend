@@ -35,7 +35,52 @@ header .header {
   cursor: pointer;
 }
 .menuIcon {
-  color: #fff;
+  background: #fff;
+  position: relative;
+  width: 20px;
+  height: 2px;
+  &::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    position: absolute;
+    top: 4px;
+    left: 0;
+  }
+  &::after {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+  }
+}
+.menuActive {
+  background: #FF00E0;
+  width: 20px;
+  height: 2px;
+  position: relative;
+  transition: 0.2s;
+  transform: rotate(-45deg);
+  &::before {
+    content: '';
+    background: #FF00E0;
+    width: 20px;
+    height: 2px;
+    position: absolute;
+    top: 0;
+    transform: rotate(90deg);
+  }
+  &::after {
+    content: none;
+  }
+}
+.settingsActive {
+    transition: 1s;
+    transform: rotate(155deg);
 }
 .rightMenu {
   display: flex;
