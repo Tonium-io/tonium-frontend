@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import PanToolIcon from '@material-ui/icons/PanTool';
@@ -51,7 +52,6 @@ const useStyles = makeStyles((theme: Theme) =>
         lineHeight: '14px',
         textTransform: 'uppercase',
         color: '#000000',
-        paddingLeft: '10px',
       },
       '& .MuiNativeSelect-icon': {
         right: 'calc(100% - 110px)',
@@ -68,6 +68,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     rootBtn: {
       minWidth: '0',
+      width: '37px',
+      height: '40px',
     },
   }),
 );
@@ -75,6 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header: React.FC = () => {
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const [isShowModal, setShowModal] = useState(false);
+  const [isUnlink, setUnlink] = useState(false);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState<Number>();
   const [load, setLoad] = useState(false);
@@ -82,6 +85,8 @@ const Header: React.FC = () => {
     checkedB: true,
   });
   const classes = useStyles(0);
+
+  const unlink = isUnlink ? 'unlink' : 'link';
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -144,7 +149,9 @@ const Header: React.FC = () => {
                 <span className={styles.menuIcon} />
               </Button>
             </div>
-            <img src={Logo} alt="Logo" />
+            <NavLink to="/">
+              <img src={Logo} alt="Logo" />
+            </NavLink>
           </div>
 
           <div className={styles.rightMenu}>
@@ -158,11 +165,21 @@ const Header: React.FC = () => {
                 // }}
               />
             </Grid>
-            <img src={CristallIcon} alt="Cristall" />
-            <div className={styles.unlinkWrap}>
-              <LinkIcon />
-              <span className={styles.unlink}>unlink</span>
-            </div>
+
+            <img
+              src={CristallIcon}
+              className={styles.cristallIcon}
+              alt="Cristall"
+            />
+            <Button
+              className={styles.unlinkWrap}
+              onClick={() => setUnlink(!isUnlink)}
+            >
+              <span className={styles.unlink}>
+                <LinkIcon />
+                {unlink}
+              </span>
+            </Button>
 
             <div className={styles.settingsWrap}>
               <Button className={classes.rootBtn} onClick={settingsClick}>
@@ -206,20 +223,24 @@ const Header: React.FC = () => {
 
               <div className={styles.menuItems}>
                 <div className={styles.menuItem}>
-                  <PersonIcon
-                    className={styles.menuItemIcon}
-                    fontSize="small"
-                  />
-                  <span className={styles.userName}>@lordofnft</span>
+                  <div className={styles.menuItemWrap}>
+                    <PersonIcon
+                      className={styles.menuItemIcon}
+                      fontSize="small"
+                    />
+                    <span className={styles.userName}>@lordofnft</span>
+                  </div>
                   <PensilIcon className={styles.iconAfter} fontSize="small" />
                 </div>
 
                 <div className={styles.menuItem}>
-                  <WalletIcon
-                    className={styles.menuItemIcon}
-                    fontSize="small"
-                  />
-                  <span className={styles.menuItemText}>Wallet</span>
+                  <div className={styles.menuItemWrap}>
+                    <WalletIcon
+                      className={styles.menuItemIcon}
+                      fontSize="small"
+                    />
+                    <span className={styles.menuItemText}>Wallet</span>
+                  </div>
                   <DownIcon className={styles.iconAfter} />
                 </div>
 

@@ -29,8 +29,8 @@ header .header {
   margin-right: 10px;
 }
 .burgerBtn {
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 40px;
   position: relative;
   cursor: pointer;
 }
@@ -109,7 +109,7 @@ input::-webkit-inner-spin-button {
   margin-right: 5px;
 }
 .balance input {
-  color: red;
+  color: #000;
 }
 input::-webkit-input-placeholder {
   font-weight: bold;
@@ -147,17 +147,33 @@ input::placeholder, .balance {
   color: #000000;
 }
 .unlinkWrap {
-  text-align: center;
-  border-left: 1px solid #CECECE;
-  padding: 0 10px;
+  height: 40px;
+  padding: 0;
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 17px;
+    border-left: 1px solid #CECECE;
+  }
 }
 .unlink {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 8px;
-  line-height: 9px;
+  line-height: 1px;
   text-transform: uppercase;
   color: #0F0F0F;
   margin-top: -8px;
+  width: 31px;
+}
+.cristallIcon {
+  margin-right: 0;
+  padding-right: 10px;
+  display: flex;
 }
 .settingsMenu {
   position: absolute;
@@ -202,6 +218,11 @@ input::placeholder, .balance {
   border-bottom: none;
   padding-bottom: 0;
 }
+.menuItemWrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 .menuItemIcon {
   color: #aeaeae;
 }
@@ -214,13 +235,14 @@ input::placeholder, .balance {
   line-height: 14px;
   text-transform: lowercase;
   color: #000000;
-  padding: 0 10px;
+  padding-left: 10px;
 }
 .menuItemText {
   font-size: 12px;
   line-height: 14px;
   text-transform: uppercase;
   color: #000000;
+  padding-left: 10px;
 }
 .pointInputWrap {
   text-align: center;
