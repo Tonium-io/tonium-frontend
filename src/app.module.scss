@@ -1,4 +1,4 @@
- $panel: #000;
+$panel: #000;
 $panel2: #ededed;
 $text: #000;
 $link: #37abff;
@@ -7,8 +7,8 @@ $hovertxt: #00ffeb;
 $red: #ff00e0;
 
 .panel_button {
-  background-color: $link !important;
-  height: 50%;
+  background-color: #313131 !important;
+  height: 76px;
   margin-bottom: 1px !important;
   justify-content: center !important;
   width: 100%;
@@ -16,33 +16,27 @@ $red: #ff00e0;
     fill: $text;
   }
   &:hover {
-    background-color: $hover !important;
-    color: $hovertxt;
-    svg {
-      fill: $red;
-    }
+    background: #757474 !important;
   }
   div {
     flex: 0 0 auto;
   }
   span {
+    color: #fff;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 12px;
   }
 }
 .small_button {
-  height: 60px;
-}
-.icon {
-  min-width: 30px !important;
+  height: 76px;
 }
 
 .panel_logo {
   padding: 40px !important;
   text-align: center;
   justify-content: center !important;
-  width: 100%;
+  width: 100%; 
   img {
   }
 }
@@ -56,6 +50,8 @@ header {
 }
 
 .footer {
+  position: absolute;
+  bottom: 0;
   width: 100%;
   padding: 40px;
   color: #fff;
@@ -248,9 +244,10 @@ header {
   top: 50%;
   left: 50%;
 }
-@media screen and (max-width: 768px) {
-  .content {
-    padding: 50px 15px 15px;
-    margin: auto;
+
+.activeLink {
+  background: linear-gradient(90deg, #D500F9 0%, #FF1744 100%);
+  &:hover {
+    background: linear-gradient(90deg, #D500F9 0%, #FF1744 100%) !important;
   }
 }

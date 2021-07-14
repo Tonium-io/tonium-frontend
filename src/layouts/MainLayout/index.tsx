@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 import LeftMenuMobile from './components/LeftMenuMobile';
 import LeftMenu from './components/LeftMenu';
-import HeaderMobile from './components/HeaderMobile';
+import HeaderMobile from './components/Header/HeaderMobile';
 import Header from './components/Header';
 import { ContextApp } from '../../store/reducer';
 import UseWindowSize from '../../hook/useWindowSize';
@@ -54,8 +54,8 @@ const MainLayout: React.FC<MainProps> = ({ children }) => {
                 item
                 xs={12}
                 direction="column"
-                justify="flex-start"
-                alignItems="flex-start"
+                justify="flex-end"
+                alignItems="flex-end"
               >
                 <HeaderMobile />
               </Grid>

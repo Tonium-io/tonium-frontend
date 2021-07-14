@@ -2,12 +2,7 @@ import React from 'react';
 
 import ListItem from '@material-ui/core/ListItem';
 import { Link, NavLink } from 'react-router-dom';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import StarIcon from '@material-ui/icons/Star';
 import ListItemText from '@material-ui/core/ListItemText';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
-import GavelIcon from '@material-ui/icons/Gavel';
-import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import Typography from '@material-ui/core/Typography';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import TelegramIcon from '@material-ui/icons/Telegram';
@@ -30,11 +25,8 @@ const LeftMenu: React.FC = () => (
       className={[cls.panel_button, cls.small_button].join(' ')}
       component={NavLink}
       to="/own"
-      // activeClassName={cls.activeLink}
+      activeClassName={cls.activeLink}
     >
-      <ListItemIcon className={cls.icon}>
-        <StarIcon />
-      </ListItemIcon>
       <ListItemText primary="My own" />
     </ListItem>
     <ListItem
@@ -42,11 +34,8 @@ const LeftMenu: React.FC = () => (
       className={[cls.panel_button, cls.small_button].join(' ')}
       component={NavLink}
       to="/collections"
-      // activeClassName={cls.activeLink}
+      activeClassName={cls.activeLink}
     >
-      <ListItemIcon className={cls.icon}>
-        <GpsFixedIcon />
-      </ListItemIcon>
       <ListItemText primary="Mint NFT" />
     </ListItem>
     <ListItem
@@ -54,11 +43,8 @@ const LeftMenu: React.FC = () => (
       className={cls.panel_button}
       component={NavLink}
       to="/auction"
-      // activeClassName={cls.activeLink}
+      activeClassName={cls.activeLink}
     >
-      <ListItemIcon className={cls.icon}>
-        <GavelIcon />
-      </ListItemIcon>
       <ListItemText primary="Auction" />
     </ListItem>
     <ListItem
@@ -66,11 +52,8 @@ const LeftMenu: React.FC = () => (
       className={cls.panel_button}
       component={NavLink}
       to="/radar"
-      // activeClassName={cls.activeLink}
+      activeClassName={cls.activeLink}
     >
-      <ListItemIcon className={cls.icon}>
-        <TrackChangesIcon />
-      </ListItemIcon>
       <ListItemText primary="NFT radar" />
     </ListItem>
 

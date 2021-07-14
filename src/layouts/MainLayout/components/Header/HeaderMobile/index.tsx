@@ -19,17 +19,19 @@ import LanguageIcon from '@material-ui/icons/Language';
 import WalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import DownIcon from '@material-ui/icons/ExpandMore';
 import PowerInputIcon from '@material-ui/icons/PowerInput';
-import CristallIcon from '../../../../img/cristall.svg';
-import Logo from '../../../../img/tonium-logo-mobile.svg';
-import getShortToken from '../../../../utils/getShortToken';
+import CristallIcon from '../../../../../img/cristall.svg';
+import Logo from '../../../../../img/tonium-logo-mobile.svg';
+import getShortToken from '../../../../../utils/getShortToken';
 
 import {
   ContextApp,
-  setOpenLeftMenu /* setLogin, setOpen */,
-} from '../../../../store/reducer';
-import Loader from '../../../../Components/Loader';
+  setOpenLeftMenu,
+  setLogin,
+  setOpen,
+} from '../../../../../store/reducer';
+import Loader from '../../../../../Components/Loader';
 
-import styles from './styles.module.scss';
+import styles from '../styles.module.scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,7 +79,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header: React.FC = () => {
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const [isShowModal, setShowModal] = useState(false);
-  const [isUnlink, setUnlink] = useState(false);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState<Number>();
   const [load, setLoad] = useState(false);
@@ -85,8 +86,6 @@ const Header: React.FC = () => {
     checkedB: true,
   });
   const classes = useStyles(0);
-
-  const unlink = isUnlink ? 'unlink' : 'link';
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -171,15 +170,44 @@ const Header: React.FC = () => {
               className={styles.cristallIcon}
               alt="Cristall"
             />
-            <Button
-              className={styles.unlinkWrap}
-              onClick={() => setUnlink(!isUnlink)}
-            >
-              <span className={styles.unlink}>
-                <LinkIcon />
-                {unlink}
-              </span>
-            </Button>
+
+            {state.auth ? (
+              <Grid
+                container
+                item
+                spacing={1}
+                direction="row"
+                alignItems="center"
+                wrap="nowrap"
+              >
+                <Grid item>
+                  <Button
+                    className={styles.unlinkWrap}
+                    onClick={() => {
+                      toniumNFT.providerLogout();
+                      setLogin(dispatch, false);
+                    }}
+                  >
+                    <span className={styles.unlink}>
+                      <LinkIcon />
+                      Unlink
+                    </span>
+                  </Button>
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid item>
+                <Button
+                  className={styles.unlinkWrap}
+                  onClick={() => setOpen(dispatch, true)}
+                >
+                  <span className={styles.unlink}>
+                    <LinkIcon />
+                    Link
+                  </span>
+                </Button>
+              </Grid>
+            )}
 
             <div className={styles.settingsWrap}>
               <Button className={classes.rootBtn} onClick={settingsClick}>
