@@ -88,7 +88,10 @@ const MintNft = () => {
       } catch (e) {
         setLoad(false);
         // eslint-disable-next-line no-console
-        console.log(e);
+        console.log(
+          e,
+          `ERROR end: ${new Date().getMinutes()}:${new Date().getSeconds()}`,
+        );
         toast.error('Error', {
           position: 'bottom-right',
           autoClose: 4000,

@@ -82,7 +82,11 @@ class TonSDK extends AbstractProvider {
 
     this.client = new TonClient({
       network: {
-        server_address: 'https://net.ton.dev', // dev
+        endpoints: ['net.ton.dev'], // dev
+        // message_processing_timeout: 200000,
+      },
+      abi: {
+        // message_expiration_timeout: 200000,
       },
     });
 
@@ -439,9 +443,9 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-    const amount = Math.floor((value + 10) * 1_000_000_000);
+    const amount = Math.floor((value + 20) * 1_000_000_000);
     // eslint-disable-next-line no-console
-    console.log('send', value + 10, 'rubys to', address);
+    console.log('send', value + 20, 'rubys to', address);
     return acc.run('sendValue', {
       dest: address,
       amount,

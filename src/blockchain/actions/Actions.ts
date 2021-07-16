@@ -309,7 +309,10 @@ class Actions {
     // eslint-disable-next-line no-console
     console.log('Files contract deploy success.', contractAddress);
     // eslint-disable-next-line no-console
-    console.log('Writing to file.');
+    console.log(
+      'Writing to file.',
+      `Start: ${new Date().getMinutes()}:${new Date().getSeconds()}`,
+    );
     await Promise.all([
       ...chunks.map((chunk: string, index: number) =>
         provider.call('files', 'writeData', { index, chunk }, contractAddress),
