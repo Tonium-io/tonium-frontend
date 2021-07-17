@@ -79,7 +79,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       width: '500px',
       background: 'rgba(189, 189, 189, 0.1)',
-      marginLeft: '106px',
       borderRadius: '5px 5px 0px 0px',
       marginTop: '4px',
       marginBottom: '6px',

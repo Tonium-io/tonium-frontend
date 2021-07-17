@@ -1,5 +1,5 @@
 header.headerWrap {
-  background: #FFFFFF;
+  background: #ffffff;
   color: #000;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -59,7 +59,7 @@ header .header {
   }
 }
 .menuActive {
-  background: #FF00E0;
+  background: #ff00e0;
   width: 20px;
   height: 2px;
   position: relative;
@@ -67,7 +67,7 @@ header .header {
   transform: rotate(-45deg);
   &::before {
     content: '';
-    background: #FF00E0;
+    background: #ff00e0;
     width: 20px;
     height: 2px;
     position: absolute;
@@ -79,8 +79,8 @@ header .header {
   }
 }
 .settingsActive {
-    transition: 1s;
-    transform: rotate(155deg);
+  transition: 1s;
+  transform: rotate(155deg);
 }
 .rightMenu {
   display: flex;
@@ -101,8 +101,8 @@ header .header {
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0; 
+  -webkit-appearance: none;
+  margin: 0;
 }
 .balance {
   width: 17px;
@@ -139,7 +139,8 @@ input::-ms-input-placeholder {
   text-transform: uppercase;
   color: #000000;
 }
-input::placeholder, .balance {
+input::placeholder,
+.balance {
   font-weight: bold;
   font-size: 14px;
   line-height: 16px;
@@ -156,7 +157,7 @@ input::placeholder, .balance {
     left: 0;
     width: 1px;
     height: 17px;
-    border-left: 1px solid #CECECE;
+    border-left: 1px solid #cecece;
   }
 }
 .unlink {
@@ -166,7 +167,7 @@ input::placeholder, .balance {
   font-size: 8px;
   line-height: 1px;
   text-transform: uppercase;
-  color: #0F0F0F;
+  color: #0f0f0f;
   margin-top: -8px;
   width: 31px;
 }
@@ -180,8 +181,8 @@ input::placeholder, .balance {
   top: 56px;
   right: 8px;
   z-index: 99;
-  background: #FFFFFF;
-  border: 1px solid #C6C6C6;
+  background: #ffffff;
+  border: 1px solid #c6c6c6;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   width: 206px;
 }
@@ -198,11 +199,11 @@ input::placeholder, .balance {
 .switchWrap {
   flex-direction: row-reverse;
   span {
-  font-size: 10px;
-  line-height: 12px;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  text-align: justify;
+    font-size: 10px;
+    line-height: 12px;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: justify;
   }
 }
 .menuItem {
@@ -212,7 +213,7 @@ input::placeholder, .balance {
   width: 130px;
   margin: auto;
   padding: 17px 0 13px;
-  border-bottom: 1px solid #CECECE;
+  border-bottom: 1px solid #cecece;
 }
 .menuItem:nth-child(4) {
   border-bottom: none;
@@ -227,7 +228,7 @@ input::placeholder, .balance {
   color: #aeaeae;
 }
 .iconAfter {
-  color: #33A9FB;
+  color: #33a9fb;
 }
 .userName {
   font-weight: bold;
@@ -249,5 +250,7 @@ input::placeholder, .balance {
   padding-top: 21px;
 }
 .powerInput {
-  color: #D0D0D0;
+  color: #d0d0d0;
+}
+.input {
 }
