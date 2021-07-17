@@ -1,17 +1,21 @@
 .own {
   .container {
-    width: 792px;
-    margin-left: 82px;
+    max-width: 792px;
+    margin: 0;
     padding: 0;
     .userName {
       font-weight: bold;
       font-size: 28px;
       line-height: 33px;
       text-transform: lowercase;
-      color: #7A7A7A;
+      color: #7a7a7a;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
     }
     .navWrap {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
     }
@@ -24,9 +28,8 @@
       margin-left: 5px;
     }
     .tab {
-      margin: 19px 20px 0 0;
       text-transform: uppercase;
-      color: #A9A9A9;
+      color: #a9a9a9;
       font-weight: bold;
       font-size: 16px;
       line-height: 19px;
@@ -39,11 +42,10 @@
     .wrapTokens {
       display: flex;
       flex-wrap: wrap;
-      width: 792px;
+      max-width: 792px;
       .tokens {
         margin: 37px 44px 33px 0;
         width: 165px;
-        height: 165px;
         text-decoration: none;
         .text {
           font-weight: bold;
@@ -55,7 +57,8 @@
           display: block;
           padding-top: 8px;
         }
-        &:nth-child(4),&:nth-child(8) {
+        &:nth-child(4),
+        &:nth-child(8) {
           margin: 37px 0 33px 0;
         }
         .three {
@@ -78,7 +81,7 @@
               text-transform: uppercase;
               text-decoration: none;
               color: #000;
-              background: #EAEAEA;
+              background: #eaeaea;
               padding: 7px 67px 6px 67px;
               margin-bottom: 3px;
             }
@@ -94,9 +97,56 @@
       font-size: 12px;
       line-height: 14px;
       text-transform: uppercase;
-      color: #FF00E0;
+      color: #ff00e0;
       padding-left: 10px;
       text-decoration-line: underline;
     }
+  }
+}
+@media screen and (max-width: 1024px) {
+  .own {
+    .container {
+      .tab {
+        margin: 0;
+      }
+      .wrapTokens {
+        .tokens {
+          margin: 37px 44px 33px 0;
+          &:nth-child(4),
+          &:nth-child(8) {
+            margin: 37px 44px 33px 0;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .own {
+    padding-top: 20px;
+    .container {
+      margin-left: 0;
+      padding-left: 20px;
+      .navWrap {
+        justify-content: start;
+      }
+      .wrapTokens {
+        justify-content: space-evenly;
+        padding-top: 20px;
+        .tokens {
+          margin: 20px 5px 0 0;
+          &:nth-child(4),
+          &:nth-child(8) {
+            margin: 20px 5px 0 0;
+          }
+        }
+      }
+    }
+  }
+  .history {
+    padding-top: 8px;
+  }
+  .historyIcon {
+    margin-right: 0;
   }
 }

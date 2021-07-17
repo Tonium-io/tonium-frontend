@@ -179,7 +179,7 @@ const Own = () => {
           </Tabs>
 
           <div className={cls.history}>
-            <img src={HistoryIcon} alt="History" />
+            <img src={HistoryIcon} className={cls.historyIcon} alt="History" />
             <NavLink to="/own/transaction" className={cls.historyLink}>
               Transaction history
             </NavLink>

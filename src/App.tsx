@@ -22,6 +22,7 @@ import Login from './Components/Login';
 import SendMoneyDialog from './Components/SendMoneyDialog';
 import SellToken from './pages/SellToken';
 import Token from './pages/Token';
+import Radar from './pages/NftRadar';
 
 declare const window: any;
 
@@ -70,6 +71,9 @@ function App() {
             </Route>
             <Route exact path="/token">
               <Token />
+            </Route>
+            <Route exact path="/radar">
+              <Radar />
             </Route>
           </Switch>
         </MainLayout>

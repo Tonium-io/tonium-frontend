@@ -7,8 +7,8 @@ $hovertxt: #00ffeb;
 $red: #ff00e0;
 
 .panel_button {
-  background-color: $link !important;
-  height: 50%;
+  background-color: #313131 !important;
+  height: 76px;
   margin-bottom: 1px !important;
   justify-content: center !important;
   width: 100%;
@@ -16,34 +16,32 @@ $red: #ff00e0;
     fill: $text;
   }
   &:hover {
-    background-color: $hover !important;
-    color: $hovertxt;
-    svg {
-      fill: $red;
-    }
+    background: #757474 !important;
   }
   div {
     flex: 0 0 auto;
   }
   span {
+    color: #fff;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 12px;
   }
 }
 .small_button {
-  height: 60px;
-}
-.icon {
-  min-width: 30px !important;
+  height: 76px;
 }
 
 .panel_logo {
-  padding: 40px !important;
+  padding: 30px 0 !important;
   text-align: center;
   justify-content: center !important;
   width: 100%;
+  height: 161px;
   img {
+    margin: 0;
+    width: 107px;
+    height: 98px;
   }
 }
 
@@ -56,6 +54,8 @@ header {
 }
 
 .footer {
+  position: absolute;
+  bottom: 0;
   width: 100%;
   padding: 40px;
   color: #fff;
@@ -91,7 +91,7 @@ header {
   position: relative;
   height: calc(100% - 64px);
   overflow-y: auto;
-  padding: 40px;
+  padding: 83px 40px 40px 82px;
 
   .content_wrap {
     padding-bottom: 40px;
@@ -154,6 +154,7 @@ header {
             div {
               text-align: center;
               margin: 0 auto;
+              text-decoration: none;
               p {
                 margin-top: 0;
               }
@@ -165,6 +166,7 @@ header {
           text-align: center;
           width: 100%;
           text-transform: uppercase;
+          text-decoration: none;
           margin-top: 10px;
         }
       }
@@ -247,4 +249,14 @@ header {
   height: 100%;
   top: 50%;
   left: 50%;
+}
+
+.activeLink {
+  background: linear-gradient(90deg, #d500f9 0%, #ff1744 100%);
+  &:hover {
+    background: linear-gradient(90deg, #d500f9 0%, #ff1744 100%) !important;
+  }
+}
+.new {
+  text-decoration: none;
 }

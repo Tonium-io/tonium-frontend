@@ -1,14 +1,14 @@
 .transaction {
   .container {
     max-width: 792px;
-    margin-left: 41px;
+    margin: 0;
     padding: 0;
     .userName {
       font-weight: bold;
       font-size: 28px;
       line-height: 33px;
       text-transform: lowercase;
-      color: #7A7A7A;
+      color: #7a7a7a;
       .tokenSpan {
         font-weight: bold;
         font-size: 28px;
@@ -29,7 +29,7 @@
           font-size: 12px;
           line-height: 14px;
           text-transform: uppercase;
-          color: #FF00E0;
+          color: #ff00e0;
           padding-left: 10px;
           text-decoration-line: underline;
           -webkit-text-decoration-line: underline;
@@ -59,7 +59,7 @@
               margin-right: 5px;
             }
             .tokenName {
-              color: #FF00E0;
+              color: #ff00e0;
               margin-right: 5px;
             }
             .where {
@@ -81,7 +81,7 @@
     .tab {
       margin: 19px 0 0 0;
       text-transform: uppercase;
-      color: #A9A9A9;
+      color: #a9a9a9;
       font-weight: bold;
       font-size: 16px;
       line-height: 19px;
@@ -99,14 +99,15 @@
       margin-left: 0;
     }
   }
-} 
+}
 @media screen and (max-width: 768px) {
   .transaction {
     .container {
       .wrapTokens {
         .wrapHistory {
           .wrapSpan {
-            span, img {
+            span,
+            img {
               padding-bottom: 5px;
             }
           }
