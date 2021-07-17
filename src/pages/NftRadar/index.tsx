@@ -72,7 +72,7 @@ const AntTab = withStyles((theme: Theme) =>
   }),
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
-const Own = () => {
+const Radar = () => {
   const { state, dispatch } = useContext(ContextApp);
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
@@ -89,49 +89,49 @@ const Own = () => {
         {
           name: 'Test1',
           address: '0:x12312312432534453',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           marked: true,
         },
         {
           name: 'Test2',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           marked: true,
         },
         {
           name: 'Test3',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           bided: true,
         },
         {
           name: 'Test4',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
         },
         {
           name: 'Test5',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
         },
         {
           name: 'Test6',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
         },
         {
           name: 'Test7',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
         },
         {
           name: 'Test8',
           address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
         },
       ];
@@ -149,7 +149,7 @@ const Own = () => {
   }
   // eslint-disable-next-line no-console
   return (
-    <div className={cls.own}>
+    <div className={cls.radar}>
       <Container className={cls.container}>
         <Breadcrumbs>
           <NavLink to="/">Home</NavLink>
@@ -184,7 +184,7 @@ const Own = () => {
               <NavLink to="/token" className={cls.tokens}>
                 <div
                   className={cls.three}
-                  style={{ backgroundImage: `url(${item.img})` }}
+                  // style={{ backgroundImage: `url(${item.img})` }}
                 />
                 <span className={cls.text}>{item.name}</span>
               </NavLink>
@@ -204,4 +204,4 @@ const Own = () => {
   );
 };
 
-export default Own;
+export default Radar;
