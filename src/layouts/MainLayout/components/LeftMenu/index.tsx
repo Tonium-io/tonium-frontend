@@ -18,7 +18,7 @@ const LeftMenu: React.FC = () => (
       to="/home"
       // activeClassName={cls.activeLink}
     >
-      <img src={Logo} alt="logo" width="140" />
+      <img src={Logo} alt="logo" />
     </ListItem>
     <ListItem
       button

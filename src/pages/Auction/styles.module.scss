@@ -1,7 +1,7 @@
 .auction {
   .container {
     max-width: 792px;
-    margin-left: 82px;
+    margin: 0;
     padding: 0;
     .title {
       width: 200px;
@@ -21,7 +21,7 @@
       flex-wrap: wrap;
       max-width: 792px;
       .tokens {
-        margin: 37px 44px 50px 0;  
+        margin: 37px 44px 50px 0;
         width: 165px;
         height: 165px;
         text-decoration: none;
@@ -69,8 +69,9 @@
           display: block;
           padding-top: 8px;
         }
-        &:nth-child(4),&:nth-child(8) {
-          margin: 37px 0 33px 0;  
+        &:nth-child(4),
+        &:nth-child(8) {
+          margin: 37px 0 33px 0;
         }
         .three {
           width: 165px;
@@ -92,14 +93,14 @@
               text-transform: uppercase;
               text-decoration: none;
               color: #000;
-              background: #EAEAEA;
+              background: #eaeaea;
               padding: 7px 67px 6px 67px;
               margin-bottom: 3px;
             }
           }
-        }      
-      }    
-    } 
+        }
+      }
+    }
   }
 }
 @media screen and (max-width: 768px) {
@@ -110,7 +111,8 @@
         justify-content: space-evenly;
         .tokens {
           margin-right: 20px;
-          &:nth-child(4),&:nth-child(8) {
+          &:nth-child(4),
+          &:nth-child(8) {
             margin-right: 20px;
           }
         }
