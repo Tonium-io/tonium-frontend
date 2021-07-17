@@ -65,7 +65,7 @@ const TableFields = ({
       ))}
       {linkCreator && (
         <ListItem button>
-          <NavLink to={linkCreator}>
+          <NavLink to={linkCreator} className={cls.new}>
             <Paper className={cls.element}>
               <div>
                 <div>
