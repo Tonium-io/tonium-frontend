@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '40px',
     },
     rootPaper: {
-      padding: '2px 4px',
+      padding: '2px 4px 2px 8px',
       display: 'flex',
       alignItems: 'center',
       width: '500px',
@@ -239,17 +239,15 @@ const Header: React.FC = () => {
           {isShowModal && (
             <div className={styles.settingsMenu}>
               <div className={styles.settingsMenuHeader}>
-                <Grid item>
-                  <TextField
-                    className={`${classes.root} ${styles.wallet}`}
-                    variant="filled"
-                    value={getShortToken(address || '')}
-                    InputProps={{
-                      readOnly: true,
-                      disableUnderline: true,
-                    }}
-                  />
-                </Grid>
+                <TextField
+                  className={`${classes.root} ${styles.wallet}`}
+                  variant="filled"
+                  value={getShortToken(address || '')}
+                  InputProps={{
+                    readOnly: true,
+                    disableUnderline: true,
+                  }}
+                />
 
                 <Grid className={classes.switch} item>
                   <FormControlLabel
