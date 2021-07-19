@@ -92,11 +92,10 @@
   }
 }
 @media screen and (max-width: 768px) {
-  .own {
+  .radar {
     padding-top: 20px;
     .container {
       margin-left: 0;
-      padding-left: 20px;
       .navWrap {
         justify-content: start;
       }
@@ -112,11 +111,5 @@
         }
       }
     }
-  }
-  .history {
-    padding-top: 8px;
-  }
-  .historyIcon {
-    margin-right: 0;
   }
 }

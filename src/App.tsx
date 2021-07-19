@@ -72,6 +72,9 @@ function App() {
             <Route exact path="/token">
               <Token />
             </Route>
+            <Route exact path="/radar/token">
+              <Token />
+            </Route>
             <Route exact path="/radar">
               <Radar />
             </Route>

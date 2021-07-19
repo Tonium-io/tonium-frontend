@@ -178,7 +178,7 @@ const Radar = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.userAllTokens.map((item: TokenItemType) => (
-              <NavLink to="/token" className={cls.tokens}>
+              <NavLink to="/radar/token" className={cls.tokens}>
                 <div
                   className={cls.three}
                   // style={{ backgroundImage: `url(${item.img})` }}

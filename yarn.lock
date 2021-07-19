@@ -4543,7 +4543,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.9.0:
+color-convert@^1.9.0, color-convert@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -4576,11 +4576,11 @@ color-string@^1.6.0:
     simple-swizzle "^0.2.2"
 
 color@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/color/-/color-3.2.0.tgz#108509078b8b93746515cbdffb03e20097ec586b"
-  integrity sha512-4ximSqKXLTQmYLJuvrRHtpOqniR+ASoaVK+Rxdy6ZpfsLvUqtIM7oGGgopRG+O4p9NRv/AfuVD3jsvdxyXqozQ==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/color/-/color-3.2.1.tgz#3544dc198caf4490c3ecc9a790b54fe9ff45e164"
+  integrity sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==
   dependencies:
-    color-convert "^2.0.1"
+    color-convert "^1.9.3"
     color-string "^1.6.0"
 
 colorette@^1.2.1, colorette@^1.2.2:
@@ -15356,9 +15356,9 @@ strip-json-comments@~2.0.1:
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
 strtok3@^6.0.3:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/strtok3/-/strtok3-6.2.0.tgz#7c24e74a9a24c7f2b976e4469654d459e6795d91"
-  integrity sha512-hBbPN4+f9fypbfTs0NImALgzYcb6k/blFr2mJVX6bUOmJCbXe/trDHdIC+Ir5XUXRMGFvq487ecwLitDoHVoew==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/strtok3/-/strtok3-6.2.2.tgz#aad1da5fc28bf10d603c367c2a7f9f47a6c1d2d9"
+  integrity sha512-iUzLl3UhF2RfqQah80JngnfltQFLEidGyTX8+hHFMQFjzUj3UpIpOx824FtFmRI9bwyywReENpdHGDkFJwJlGQ==
   dependencies:
     peek-readable "^4.0.0"
 

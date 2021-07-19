@@ -66,7 +66,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     switch: {
       '& .MuiFormControlLabel-root': {
-        marginRight: '0',
+        marginRight: 0,
+        marginLeft: 0,
+        width: 90,
       },
     },
     rootBtn: {
