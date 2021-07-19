@@ -155,10 +155,7 @@ const Radar = () => {
           <NavLink to="/">Home</NavLink>
         </Breadcrumbs>
 
-        <span className={cls.userName}>
-          @lordofnft
-          <span className={cls.tokenSpan}>tokens</span>
-        </span>
+        <h1 className={cls.title}>Nft Radar</h1>
 
         <div className={cls.navWrap}>
           <Tabs

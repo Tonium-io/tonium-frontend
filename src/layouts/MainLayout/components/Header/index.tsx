@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
         lineHeight: '14px',
         color: '#ABABAB',
         width: '78px',
-        paddingTop: '3px',
+        paddingTop: '0',
+        marginRight: '20px',
       },
       '& .MuiFilledInput-root': {
         backgroundColor: 'transparent',

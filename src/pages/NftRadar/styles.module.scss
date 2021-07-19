@@ -19,14 +19,6 @@
       align-items: center;
       justify-content: space-between;
     }
-    .tokenSpan {
-      font-weight: bold;
-      font-size: 28px;
-      line-height: 33px;
-      text-transform: uppercase;
-      color: #000000;
-      margin-left: 5px;
-    }
     .tab {
       text-transform: uppercase;
       color: #a9a9a9;
@@ -72,6 +64,13 @@
         }
       }
     }
+  }
+  .title {
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 33px;
+    text-transform: uppercase;
+    color: #000000;
   }
 }
 @media screen and (max-width: 1024px) {
