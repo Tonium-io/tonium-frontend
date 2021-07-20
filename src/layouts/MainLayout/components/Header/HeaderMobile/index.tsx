@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import PanToolIcon from '@material-ui/icons/PanTool';
@@ -86,6 +86,7 @@ const Header: React.FC = () => {
     checkedB: true,
   });
   const classes = useStyles(0);
+  const history = useHistory();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -133,7 +134,11 @@ const Header: React.FC = () => {
       };
       setInitialData();
     }
-  }, [state.auth]);
+
+    history.listen(() => {
+      setOpenLeftMenu(dispatch, false);
+    });
+  }, [state.auth, history]);
 
   return (
     <>
