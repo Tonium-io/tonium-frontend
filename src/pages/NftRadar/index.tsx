@@ -155,10 +155,7 @@ const Radar = () => {
           <NavLink to="/">Home</NavLink>
         </Breadcrumbs>
 
-        <span className={cls.userName}>
-          @lordofnft
-          <span className={cls.tokenSpan}>tokens</span>
-        </span>
+        <h1 className={cls.title}>Nft Radar</h1>
 
         <div className={cls.navWrap}>
           <Tabs
@@ -181,7 +178,7 @@ const Radar = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.userAllTokens.map((item: TokenItemType) => (
-              <NavLink to="/token" className={cls.tokens}>
+              <NavLink to="/radar/token" className={cls.tokens}>
                 <div
                   className={cls.three}
                   // style={{ backgroundImage: `url(${item.img})` }}

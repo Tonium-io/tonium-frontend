@@ -100,9 +100,7 @@ const Header: React.FC = () => {
     setOpenLeftMenu(dispatch, !state.openLeftMenu);
 
     if (menu !== menuActive) {
-      menu?.classList.add(`${styles.menuActive}`);
-    } else {
-      menu?.classList.remove(`${styles.menuActive}`);
+      setShowModal(false);
     }
   };
 
@@ -116,6 +114,7 @@ const Header: React.FC = () => {
 
     if (settings !== settingsActive) {
       settings?.classList.add(`${styles.settingsActive}`);
+      setOpenLeftMenu(dispatch, false);
     } else {
       settings?.classList.remove(`${styles.settingsActive}`);
     }
@@ -145,7 +144,11 @@ const Header: React.FC = () => {
           <div className={styles.leftMenu}>
             <div className={styles.burgerWrap}>
               <Button className={styles.burgerBtn} onClick={handleClick}>
-                <span className={styles.menuIcon} />
+                <span
+                  className={`${styles.menuIcon} ${
+                    state.openLeftMenu ? styles.menuActive : ''
+                  }`}
+                />
               </Button>
             </div>
             <NavLink to="/">

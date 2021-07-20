@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
         lineHeight: '14px',
         color: '#ABABAB',
         width: '78px',
-        paddingTop: '3px',
+        paddingTop: '0',
+        marginRight: '20px',
       },
       '& .MuiFilledInput-root': {
         backgroundColor: 'transparent',
@@ -65,7 +66,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     switch: {
       '& .MuiFormControlLabel-root': {
-        marginRight: '0',
+        marginRight: 0,
+        marginLeft: 0,
+        width: 90,
       },
     },
     rootBtn: {
