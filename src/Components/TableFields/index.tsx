@@ -1,9 +1,12 @@
-import { Grid, ListItem, Paper, Typography } from '@material-ui/core';
-import { AddBox } from '@material-ui/icons';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import { Grid, ListItem, Paper, Typography } from '@material-ui/core';
+import { AddBox } from '@material-ui/icons';
+
+import { isImageFile } from '../../helpers';
 import cls from '../../app.module.scss';
+import styles from './styles.module.scss';
 
 const TableFields = ({
   arrayItems,
@@ -20,47 +23,64 @@ const TableFields = ({
       wrap="wrap"
     >
       {arrayItems.map((c: any) => (
-        <ListItem button key={c.name}>
+        <ListItem button key={c.time || c.address}>
           {clickCollectionsUrl ? (
             <NavLink
-              to={`${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
+              to={`/${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
             >
               <Paper className={cls.element}>
-                <div>
+                {c.file && (
                   <img
-                    style={{ width: 210, height: 118 }}
-                    alt="alt"
-                    src={c.img}
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={isImageFile(c.file) ? c.file : c.defaultImage}
                   />
-                </div>
+                )}
+                {c.ipfsImage && (
+                  <img
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
+                  />
+                )}
+                {!c.file && !c.ipfsImage && (
+                  <img
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={c.defaultImage}
+                  />
+                )}
               </Paper>
             </NavLink>
           ) : (
             <Paper className={cls.element}>
               <div>
-                {c.image && (
+                {c.file && (
                   <img
-                    style={{ width: 210, height: 150 }}
+                    className={styles.paperImage}
                     alt={c.name}
-                    src={c.image}
+                    src={isImageFile(c.file) ? c.file : c.defaultImage}
                   />
                 )}
-                {!c.image && (
+                {c.ipfsImage && (
                   <img
-                    style={{ width: 210, height: 150 }}
+                    className={styles.paperImage}
                     alt={c.name}
-                    src={
-                      c.tokenData
-                        ? `https://ipfs.io/ipfs/${c.tokenData.image}`
-                        : c.img
-                    }
+                    src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
+                  />
+                )}
+                {!c.file && !c.ipfsImage && (
+                  <img
+                    className={styles.paperImage}
+                    alt={c.name}
+                    src={c.defaultImage}
                   />
                 )}
               </div>
             </Paper>
           )}
           <Typography>{c.name}</Typography>
-          <Typography>{c.tokenData?.description}</Typography>
+          <Typography>{c.description}</Typography>
         </ListItem>
       ))}
       {linkCreator && (

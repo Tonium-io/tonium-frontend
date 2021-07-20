@@ -142,15 +142,12 @@ header {
         flex-wrap: wrap;
         .element {
           width: 200px;
+          height: 200px;
           & > div {
             height: 200px;
             width: 100%;
             display: flex;
             align-items: center;
-            img {
-              max-width: 200px;
-              max-height: 200px;
-            }
             div {
               text-align: center;
               margin: 0 auto;
@@ -189,7 +186,6 @@ header {
         }
       }
       .create_right {
-        padding: 0 20px 0 40px;
         form {
           max-width: 600px;
           input,

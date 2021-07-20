@@ -82,7 +82,11 @@ class TonSDK extends AbstractProvider {
 
     this.client = new TonClient({
       network: {
-        server_address: 'https://net.ton.dev', // dev
+        endpoints: ['net.ton.dev'], // dev
+        // message_processing_timeout: 200000,
+      },
+      abi: {
+        // message_expiration_timeout: 200000,
       },
     });
 
@@ -439,7 +443,9 @@ class TonSDK extends AbstractProvider {
       },
       { signer: this.keys, client: this.client },
     );
-    const amount = Math.floor((value + 0.2) * 1_000_000_000);
+    const amount = Math.floor((value + 20) * 1_000_000_000);
+    // eslint-disable-next-line no-console
+    console.log('send', value + 20, 'rubys to', address);
     return acc.run('sendValue', {
       dest: address,
       amount,
@@ -455,10 +461,7 @@ class TonSDK extends AbstractProvider {
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
-    const randomPublicKey = (
-      await this.client.crypto.generate_random_sign_keys()
-    ).public;
-
+    const randomKey = await this.client.crypto.generate_random_sign_keys();
     const deployOptions = {
       abi: {
         type: 'Contract',
@@ -469,7 +472,7 @@ class TonSDK extends AbstractProvider {
         initial_data: initialParams,
         initial_pubkey:
           contractName === 'rootToken'
-            ? randomPublicKey
+            ? randomKey.public
             : this.keys.keys.public,
       },
       call_set: {
@@ -507,18 +510,13 @@ class TonSDK extends AbstractProvider {
       abi: { type: 'Contract', value: rawContract.abi },
       message: result.message,
     });
-
+    // const executorResult = {
+    //   fees: { total_account_fees: BigInt(15000000000) },
+    // };
     const addressBalance = Number(addressInfo.balance);
     const executorFees = Number(executorResult.fees.total_account_fees);
 
-    if (addressInfo.isInited) {
-      // if (addressBalance <= executorFees) {
-      //   const difference = executorFees - addressBalance;
-      //   const fees = difference / 1000000000;
-      //   noMoneyFallback(result.address, fees);
-      // }
-      return result.address;
-    }
+    if (addressInfo.isInited) return result.address;
 
     // eslint-disable-next-line no-console
     console.log(
@@ -552,7 +550,7 @@ class TonSDK extends AbstractProvider {
         try {
           await this.sendMoney(result.address, fees);
         } catch (e) {
-          throw new Error(e);
+          throw new Error(e.message);
         }
       }
     }

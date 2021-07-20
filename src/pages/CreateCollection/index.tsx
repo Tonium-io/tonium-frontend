@@ -1,21 +1,16 @@
 import React, { useContext, useState } from 'react';
-
 import { NavLink, useHistory } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-// import ListItem from '@material-ui/core/ListItem';
-// import Skeleton from '@material-ui/lab/Skeleton';
-
 import { toast } from 'react-toastify';
+
+import Typography from '@material-ui/core/Typography';
 
 import Loader from '../../Components/Loader';
 import { ContextApp, setSendMoneyDialog } from '../../store/reducer';
-
-import CreatorField from '../../Components/CreatorField';
-
 import Breadcrumbs from '../../Components/Breadcrumbs';
 import cls from '../../app.module.scss';
+import CreateForm from './components/CreateForm';
 
-const CreateCol = () => {
+const CreateCollection = () => {
   const history = useHistory();
   const [load, setLoad] = useState(false);
   const { toniumNFT, state, dispatch } = useContext(ContextApp);
@@ -24,11 +19,11 @@ const CreateCol = () => {
     setSendMoneyDialog(dispatch, { visible: true, addr, value });
   };
 
-  const onSubmit = (values: any) => {
+  const onSubmit = ({ name, symbol }: any) => {
     if (state.auth) {
       setLoad(true);
       toniumNFT.actions
-        .createUserCollections(values.name, values.symbol, noMoneyFallback)
+        .createUserCollections(name, symbol, noMoneyFallback)
         .then((data: any) => {
           // eslint-disable-next-line no-console
           console.log(data, 'Success');
@@ -39,15 +34,13 @@ const CreateCol = () => {
           history.push('/collections/');
         })
         .catch((e: any) => {
+          setLoad(false);
           // eslint-disable-next-line no-console
           console.error(e.message);
           toast.error('Error', {
             position: 'bottom-right',
             autoClose: 4000,
           });
-        })
-        .finally(() => {
-          setLoad(false);
         });
     }
   };
@@ -64,11 +57,10 @@ const CreateCol = () => {
         <Typography variant="h1" component="h1" gutterBottom>
           Create Collection
         </Typography>
-
-        <CreatorField onSubmit={onSubmit} />
+        <CreateForm onSubmit={onSubmit} />
       </div>
     </>
   );
 };
 
-export default CreateCol;
+export default CreateCollection;

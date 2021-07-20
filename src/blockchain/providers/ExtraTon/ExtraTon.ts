@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import freeton from 'freeton';
 
+import { TonClient } from '@tonclient/core';
 import AbstractProvider from '../AbstractProvider';
 import { ContractNames } from '../../../constants';
 
@@ -9,6 +10,8 @@ declare const window: any;
 
 class ExtraTon extends AbstractProvider {
   provider: any;
+
+  tonClient!: TonClient;
 
   static description = 'ExtraTon extension';
 
@@ -22,7 +25,11 @@ class ExtraTon extends AbstractProvider {
 
   constructor() {
     super();
-    // this.contracts = {};
+    this.tonClient = new TonClient({
+      network: {
+        server_address: 'https://net.ton.dev', // dev
+      },
+    });
     this.init();
   }
 
@@ -147,19 +154,32 @@ class ExtraTon extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
+    if (contractName === 'controller') return null;
+
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
       rawContract.abi,
       rawContract.tvc,
     );
-    contract.setInitialPublicKey(await this.getPublicKey());
+
+    let publicKey: string;
+    if (contractName === 'rootToken') {
+      const randomKey = await this.tonClient.crypto.generate_random_sign_keys();
+      publicKey = randomKey.public;
+    } else {
+      publicKey = this.getPublicKey(false);
+    }
+
+    contract.setInitialPublicKey(publicKey);
     contract.setInitialParams(initialParams);
-    contract.setInitialAmount('500000000');
-
+    contract.setInitialAmount('7000000000');
     const realContract = await contract.deploy(constructorParams);
-    await realContract.getDeployProcessing().wait();
-
+    try {
+      await realContract.getDeployProcessing().wait();
+    } catch (e) {
+      return null;
+    }
     return realContract.address;
   }
 

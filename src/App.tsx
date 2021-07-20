@@ -10,7 +10,7 @@ import { ContextApp, reducer, initialState } from './store/reducer';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
-import CreateCol from './pages/Createcol';
+import CreateCollection from './pages/CreateCollection';
 import MintNft from './pages/MintNft';
 import Auction from './pages/Auction';
 import Own from './pages/Own';
@@ -61,7 +61,7 @@ function App() {
               <Collections />
             </Route>
             <Route exact path="/collections/new">
-              <CreateCol />
+              <CreateCollection />
             </Route>
             <Route exact path="/collections/:collection">
               <Collection />

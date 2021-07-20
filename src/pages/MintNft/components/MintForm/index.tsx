@@ -3,14 +3,14 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { Button, Grid, TextField } from '@material-ui/core';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import Typography from '@material-ui/core/Typography';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withStyles } from '@material-ui/core/styles';
 
-import StyledRadio from '../StyledRadio';
-import StyledPopover from '../StyledPopover';
+import { isImageFile } from 'src/helpers';
+import StyledPopover from 'src/Components/StyledPopover';
+import StyledRadio from 'src/Components/StyledRadio';
 
 import styles from './styles.module.scss';
 
@@ -24,15 +24,6 @@ const AddImageButton: any = withStyles(() => ({
     '& > span': {
       flexDirection: 'column',
     },
-  },
-}))(Button);
-
-const UploadFileButton: any = withStyles(() => ({
-  root: {
-    backgroundColor: '#e9e9e9',
-    width: 165,
-    height: 47,
-    borderRadius: 0,
   },
 }))(Button);
 
@@ -63,9 +54,9 @@ const CostLegend = withStyles(() => ({
   },
 }))(Typography);
 
-const CreatorFieldV2 = ({ onSubmit }: any) => {
+const MintForm = ({ onSubmit }: any) => {
   const [image, setImage] = useState<string>('');
-  const [file, setFile] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
   const {
     formState: { errors },
     register,
@@ -76,22 +67,26 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e?.target?.files;
     if (files) {
-      const img = files[0];
-      setImage(img ? URL.createObjectURL(img) : '');
-    }
-  };
-
-  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e?.target?.files;
-    if (files) {
-      const fileName = files[0]?.name;
-      setFile(fileName || '');
+      const loadedFile = files[0];
+      if (loadedFile) {
+        const { name, type } = loadedFile;
+        if (isImageFile(type)) {
+          if (fileName) setFileName('');
+          setImage(URL.createObjectURL(loadedFile));
+        } else {
+          if (image) setImage('');
+          setFileName(name);
+        }
+      } else {
+        if (fileName) setFileName('');
+        if (image) setImage('');
+      }
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={2} direction="row">
+      <Grid container direction="row">
         <Grid
           item
           container
@@ -103,20 +98,17 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
         >
           <Grid item>
             <AddImageButton
-              style={errors?.image ? { border: '2px solid #f44336' } : {}}
+              style={errors?.files ? { border: '2px solid #f44336' } : {}}
               component="label"
             >
-              <AddBoxIcon fontSize="large" />
-              <Typography style={{ fontWeight: 'bold', marginTop: '10px' }}>
-                ADD IMAGE
-              </Typography>
-              <Typography style={{ fontSize: '0.8rem' }}>JPG or GIF</Typography>
-              <input
-                {...register('image', { required: true })}
-                type="file"
-                hidden
-                onInput={handleChangeImage}
-              />
+              {!image && !fileName && (
+                <>
+                  <AddBoxIcon fontSize="large" />
+                  <Typography style={{ fontWeight: 'bold', marginTop: '10px' }}>
+                    ADD FILE
+                  </Typography>
+                </>
+              )}
               {image && (
                 <img
                   src={image}
@@ -124,25 +116,14 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
                   className={styles.previewImage}
                 />
               )}
-            </AddImageButton>
-          </Grid>
-          <Grid item>
-            <Typography style={{ fontWeight: 'bold', marginTop: '15px' }}>
-              UPLOAD FULL FILE
-            </Typography>
-            <UploadFileButton
-              style={errors?.fullFile ? { border: '2px solid #f44336' } : {}}
-              component="label"
-            >
-              <GetAppIcon fontSize="large" />
+              {fileName && <div className={styles.previewFile}>{fileName}</div>}
               <input
-                {...register('fullFile', { required: true })}
+                {...register('files', { required: true })}
                 type="file"
                 hidden
-                onInput={handleChangeFile}
+                onInput={handleChangeImage}
               />
-              {file && <div className={styles.previewFile}>{file}</div>}
-            </UploadFileButton>
+            </AddImageButton>
           </Grid>
           <Grid item>
             <Controller
@@ -178,51 +159,31 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
           item
           container
           spacing={4}
-          lg={4}
+          lg={3}
           md={5}
-          xs={6}
+          xs={12}
           direction="column"
         >
           <Grid item>
-            <Controller
-              control={control}
-              name="name"
-              rules={{
-                required: 'This field is required',
-              }}
-              render={({ field }) => (
-                <TextField
-                  className={styles.nameInputHeader}
-                  inputRef={field.ref}
-                  fullWidth
-                  error={Boolean(errors?.name)}
-                  label="Set the name/title"
-                  helperText={errors?.name ? errors?.name?.message : ''}
-                  {...field}
-                />
-              )}
+            <TextField
+              {...register('name', { required: 'This field is required' })}
+              className={styles.nameInputHeader}
+              fullWidth
+              error={Boolean(errors?.name)}
+              label="Set the name/title"
+              helperText={errors?.name ? errors?.name?.message : ''}
             />
           </Grid>
           <Grid item>
-            <Controller
-              control={control}
-              name="symbol"
-              rules={{
-                required: 'This field is required',
-              }}
-              render={({ field }) => (
-                <TextField
-                  className={styles.descInputHeader}
-                  inputRef={field.ref}
-                  fullWidth
-                  error={Boolean(errors?.symbol)}
-                  label="Description"
-                  multiline
-                  rows={4}
-                  helperText={errors?.symbol ? errors?.symbol?.message : ''}
-                  {...field}
-                />
-              )}
+            <TextField
+              {...register('symbol', { required: 'This field is required' })}
+              className={styles.descInputHeader}
+              fullWidth
+              error={Boolean(errors?.symbol)}
+              label="Description"
+              multiline
+              rows={4}
+              helperText={errors?.symbol ? errors?.symbol?.message : ''}
             />
           </Grid>
           <Grid item>
@@ -260,4 +221,4 @@ const CreatorFieldV2 = ({ onSubmit }: any) => {
   );
 };
 
-export default CreatorFieldV2;
+export default MintForm;
