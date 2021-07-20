@@ -82,13 +82,11 @@ const AuctionToken = () => {
       });
     }
   }, []);
-  // eslint-disable-next-line no-console
-  console.log(state.nftAuctions, 'AUCTIONSTOKEN');
+
   if (load) {
     return <Loader />;
   }
-  // eslint-disable-next-line no-console
-  console.log('AuctionToken');
+
   return (
     <div className={cls.auction}>
       <Container className={cls.container}>

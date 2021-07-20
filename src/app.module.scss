@@ -256,3 +256,9 @@ header {
 .new {
   text-decoration: none;
 }
+@media screen and (max-width: 768px) {
+  .content {
+    padding: 50px 20px 20px;
+    width: 100%;
+  }
+}
