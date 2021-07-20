@@ -137,6 +137,7 @@ const Header: React.FC = () => {
 
     history.listen(() => {
       setOpenLeftMenu(dispatch, false);
+      setShowModal(false);
     });
   }, [state.auth, history]);
 
