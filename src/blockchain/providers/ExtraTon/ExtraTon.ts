@@ -8,6 +8,18 @@ import { ContractNames } from '../../../constants';
 
 declare const window: any;
 
+// const _ = {
+
+//   checkExtensionAvailability() {
+//     if (window.freeton === undefined) {
+//       throw 'Extension not available.';
+//     }
+//   },
+//   getProvider() {
+//     return new freeton.providers.ExtensionProvider(window.freeton);
+//   }
+// };
+
 class ExtraTon extends AbstractProvider {
   provider: any;
 
@@ -182,6 +194,24 @@ class ExtraTon extends AbstractProvider {
     }
     return realContract.address;
   }
+
+  // async sign(form) {
+  // const button = document.querySelector('.buttonSign');
+  //   button.disabled = true;
+  //   try {
+  //     _.checkExtensionAvailability();
+  //     const provider = _.getProvider();
+  //     const signer = await provider.getSigner();
+  //     const result = await signer.sign(form.unsigned.value);
+  //     document.getElementById('result').innerHTML += '</br>' + JSON.stringify(result);
+  //     console.log(result);
+  //   } catch (e) {
+  //     document.getElementById('result').innerHTML += '</br>' + JSON.stringify(e);
+  //     console.error(e);
+  //   } finally {
+  //     button.disabled = false;
+  //   }
+  // }
 
   // eslint-disable-next-line class-methods-use-this
   async signMessage(message: {}) {

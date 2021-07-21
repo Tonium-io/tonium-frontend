@@ -63,7 +63,6 @@ const Login = () => {
       handleClose();
     }
   };
-
   return (
     <>
       <Dialog
@@ -79,6 +78,7 @@ const Login = () => {
           >
             Please select provider
           </DialogTitle>
+          {/* <form className={styles.signForm} onSubmit={app.sign(this);return false;}> */}
           <DialogContent className={styles.content}>
             {Object.entries(toniumNFT.getProviders()).map(
               ([providerName, provider]: any) => (
@@ -105,6 +105,7 @@ const Login = () => {
               ),
             )}
           </DialogContent>
+          {/* </form> */}
 
           {isAdditionalProviderFieldsRequired && (
             <form autoComplete="off">

@@ -138,6 +138,8 @@ const Header: React.FC = () => {
     }
   };
 
+  console.log(address);
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
