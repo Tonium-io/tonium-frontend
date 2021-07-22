@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import { Link, NavLink } from 'react-router-dom';
@@ -52,10 +52,24 @@ const useStyles = makeStyles((theme: Theme) =>
 const LeftMenu: React.FC = () => {
   const classes = useStyles();
   const { state, dispatch } = useContext(ContextApp);
+  const node = useRef<any>(null);
 
   const handleClick = () => {
     setOpenLeftMenu(dispatch, !state.openLeftMenu);
   };
+  const handleClickOutside = (e: any) => {
+    if (node.current && node.current?.contains(e.target)) {
+      return;
+    }
+    setOpenLeftMenu(dispatch, false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <Grid
@@ -65,6 +79,7 @@ const LeftMenu: React.FC = () => {
       direction="column"
       wrap="nowrap"
       className={cls.top}
+      ref={node}
     >
       <Paper component="form" className={classes.root}>
         <InputBase

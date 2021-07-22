@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import Toolbar from '@material-ui/core/Toolbar';
@@ -118,6 +118,7 @@ const Header: React.FC = () => {
     checkedB: true,
   });
   const classes = useStyles(0);
+  const node = useRef<any>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -137,6 +138,20 @@ const Header: React.FC = () => {
       settings?.classList.remove(`${styles.settingsActive}`);
     }
   };
+
+  const handleClickOutside = (e: any) => {
+    if (node.current && node.current?.contains(e.target)) {
+      return;
+    }
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (state.auth) {
@@ -240,7 +255,7 @@ const Header: React.FC = () => {
           </div>
 
           {isShowModal && (
-            <div className={styles.settingsMenu}>
+            <div className={styles.settingsMenu} ref={node}>
               <div className={styles.settingsMenuHeader}>
                 <TextField
                   className={`${classes.root} ${styles.wallet}`}
