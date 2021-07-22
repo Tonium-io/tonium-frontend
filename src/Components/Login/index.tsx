@@ -78,34 +78,34 @@ const Login = () => {
           >
             Please select provider
           </DialogTitle>
-          {/* <form className={styles.signForm} onSubmit={app.sign(this);return false;}> */}
-          <DialogContent className={styles.content}>
-            {Object.entries(toniumNFT.getProviders()).map(
-              ([providerName, provider]: any) => (
-                <div key={providerName}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    disabled={!provider.isAvailable()}
-                    onClick={() => selectProvider(providerName)}
-                  >
-                    {providerName}
-                  </Button>
-                  <div
-                    style={{
-                      marginTop: 20,
-                      display: 'flex',
-                      flex: 1,
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <small>{provider.description}</small>
+          <form className={styles.signForm}>
+            <DialogContent className={styles.content}>
+              {Object.entries(toniumNFT.getProviders()).map(
+                ([providerName, provider]: any) => (
+                  <div key={providerName}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      disabled={!provider.isAvailable()}
+                      onClick={() => selectProvider(providerName)}
+                    >
+                      {providerName}
+                    </Button>
+                    <div
+                      style={{
+                        marginTop: 20,
+                        display: 'flex',
+                        flex: 1,
+                        flexDirection: 'column',
+                      }}
+                    >
+                      <small>{provider.description}</small>
+                    </div>
                   </div>
-                </div>
-              ),
-            )}
-          </DialogContent>
-          {/* </form> */}
+                ),
+              )}
+            </DialogContent>
+          </form>
 
           {isAdditionalProviderFieldsRequired && (
             <form autoComplete="off">
