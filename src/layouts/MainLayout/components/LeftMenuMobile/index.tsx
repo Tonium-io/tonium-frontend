@@ -58,7 +58,7 @@ const LeftMenu: React.FC = () => {
     setOpenLeftMenu(dispatch, !state.openLeftMenu);
   };
   const handleClickOutside = (e: any) => {
-    if (node.current && node.current?.contains(e.target)) {
+    if (node.current?.contains(e.target)) {
       return;
     }
     setOpenLeftMenu(dispatch, false);

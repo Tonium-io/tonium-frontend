@@ -119,6 +119,8 @@ const Header: React.FC = () => {
   });
   const classes = useStyles(0);
   const node = useRef<any>(null);
+  const trigger = useRef<any>(null);
+  const [show, setShow] = useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -140,10 +142,17 @@ const Header: React.FC = () => {
   };
 
   const handleClickOutside = (e: any) => {
-    if (node.current && node.current?.contains(e.target)) {
-      return;
+    if (trigger.current?.contains(e.target)) {
+      return setShow(!show);
     }
-    setShowModal(false);
+
+    if (!node.current?.contains(e.target)) {
+      return setShowModal(false);
+    }
+    return {
+      trigger,
+      node,
+    };
   };
 
   useEffect(() => {
@@ -248,7 +257,11 @@ const Header: React.FC = () => {
             )}
 
             <div className={styles.settingsWrap}>
-              <Button className={classes.rootBtn} onClick={settingsClick}>
+              <Button
+                className={classes.rootBtn}
+                onClick={settingsClick}
+                ref={trigger}
+              >
                 <SettingsIcon fontSize="small" className={styles.settings} />
               </Button>
             </div>
