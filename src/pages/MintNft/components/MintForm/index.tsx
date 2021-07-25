@@ -150,7 +150,8 @@ const MintForm = ({ onSubmit }: any) => {
             <StyledPopover
               className={styles.differentPopover}
               text="DIFFERENT?"
-              popoverContent="Popover content"
+              popoverContent="When a file is placed in the blockchain, it is stored distributed and remains immutable and non-removable. In this case, the file is stored completely in the NFT. However, the fee for uploading a file may be higher. 
+              In IPFS, data is stored locally in the p2p system and transmitted to other users via the protocol. When uploading to IPFS, only the link to the file and the hash are placed into the NFT."
             />
           </Grid>
         </Grid>
