@@ -22,6 +22,7 @@ import PowerInputIcon from '@material-ui/icons/PowerInput';
 import CristallIcon from '../../../../../img/cristall.svg';
 import Logo from '../../../../../img/tonium-logo-mobile.svg';
 import getShortToken from '../../../../../utils/getShortToken';
+import UseDetectClickOut from '../../../../../hook/useDetectClickOut';
 
 import {
   ContextApp,
@@ -90,6 +91,7 @@ const Header: React.FC = () => {
   const node = useRef<any>(null);
   const trigger = useRef<any>(null);
   const [show, setShow] = useState(true);
+  const { triggerRef } = UseDetectClickOut();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -125,6 +127,7 @@ const Header: React.FC = () => {
 
   const handleClickOutside = (e: any) => {
     if (trigger.current?.contains(e.target)) {
+      setOpenLeftMenu(dispatch, !state.openLeftMenu);
       return setShow(!show);
     }
 
@@ -132,10 +135,7 @@ const Header: React.FC = () => {
       return setShowModal(false);
     }
 
-    return {
-      trigger,
-      node,
-    };
+    return setShow(false);
   };
 
   useEffect(() => {
@@ -176,7 +176,7 @@ const Header: React.FC = () => {
               <Button
                 className={styles.burgerBtn}
                 onClick={handleClick}
-                ref={trigger}
+                ref={triggerRef}
               >
                 <span
                   className={`${styles.menuIcon} ${
