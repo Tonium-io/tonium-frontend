@@ -105,7 +105,8 @@ const MintForm = ({ onSubmit }: any) => {
                 <>
                   <AddBoxIcon fontSize="large" />
                   <Typography style={{ fontWeight: 'bold', marginTop: '10px' }}>
-                    ADD FILE
+                    Add image <br />
+                    <span className={styles.fileText}>jpg or gif</span>
                   </Typography>
                 </>
               )}
@@ -124,6 +125,10 @@ const MintForm = ({ onSubmit }: any) => {
                 onInput={handleChangeImage}
               />
             </AddImageButton>
+          </Grid>
+          <Grid item>
+            <span className={styles.downloadText}>Upload full file</span>
+            <input className={styles.download} type="file" />
           </Grid>
           <Grid item>
             <Controller
@@ -156,67 +161,69 @@ const MintForm = ({ onSubmit }: any) => {
           </Grid>
         </Grid>
 
-        <Grid
-          item
-          container
-          spacing={4}
-          lg={3}
-          md={5}
-          xs={12}
-          direction="column"
-        >
-          <Grid item>
-            <TextField
-              {...register('name', { required: 'This field is required' })}
-              className={styles.nameInputHeader}
-              fullWidth
-              error={Boolean(errors?.name)}
-              label="Set the name/title"
-              helperText={errors?.name ? errors?.name?.message : ''}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              {...register('symbol', { required: 'This field is required' })}
-              className={styles.descInputHeader}
-              fullWidth
-              error={Boolean(errors?.symbol)}
-              label="Description"
-              multiline
-              rows={4}
-              helperText={errors?.symbol ? errors?.symbol?.message : ''}
-            />
-          </Grid>
-          <Grid item>
-            <ColorButton
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large"
-            >
-              MINT NFT
-            </ColorButton>
-
-            <CostLegend>
-              2
-              <svg
-                width="20"
-                height="16"
-                viewBox="0 0 20 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+        <div className={styles.gridWrap}>
+          <Grid
+            item
+            container
+            spacing={4}
+            lg={3}
+            md={5}
+            xs={12}
+            direction="column"
+          >
+            <Grid item>
+              <TextField
+                {...register('name', { required: 'This field is required' })}
+                className={styles.nameInputHeader}
+                fullWidth
+                error={Boolean(errors?.name)}
+                label="Set the name/title"
+                helperText={errors?.name ? errors?.name?.message : ''}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                {...register('symbol', { required: 'This field is required' })}
+                className={styles.descInputHeader}
+                fullWidth
+                error={Boolean(errors?.symbol)}
+                label="Description"
+                multiline
+                rows={4}
+                helperText={errors?.symbol ? errors?.symbol?.message : ''}
+              />
+            </Grid>
+            <Grid item>
+              <ColorButton
+                type="submit"
+                variant="contained"
+                color="primary"
+                size="large"
               >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M9.23096 15.6893C9.61087 16.0725 10.2257 16.0725 10.6055 15.6893L19.551 6.666C19.9052 6.30875 19.9339 5.73813 19.6174 5.34625L15.5916 0.361625C15.4068 0.13275 15.1301 0 14.838 0H4.99859C4.70637 0 4.42965 0.13275 4.24483 0.361625L0.219026 5.34625C-0.0974197 5.73813 -0.0686856 6.30875 0.285517 6.666L9.23096 15.6893Z"
-                  fill="#33A9FB"
-                />
-              </svg>
-              COST
-            </CostLegend>
+                MINT NFT
+              </ColorButton>
+
+              <CostLegend>
+                2
+                <svg
+                  width="20"
+                  height="16"
+                  viewBox="0 0 20 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M9.23096 15.6893C9.61087 16.0725 10.2257 16.0725 10.6055 15.6893L19.551 6.666C19.9052 6.30875 19.9339 5.73813 19.6174 5.34625L15.5916 0.361625C15.4068 0.13275 15.1301 0 14.838 0H4.99859C4.70637 0 4.42965 0.13275 4.24483 0.361625L0.219026 5.34625C-0.0974197 5.73813 -0.0686856 6.30875 0.285517 6.666L9.23096 15.6893Z"
+                    fill="#33A9FB"
+                  />
+                </svg>
+                COST
+              </CostLegend>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </Grid>
     </form>
   );
