@@ -62,10 +62,9 @@ header {
   p {
     text-align: center;
     a {
-      text-transform: uppercase;
       color: $hovertxt;
       text-decoration: underline;
-      font-size: 9px;
+      font-size: 12px;
       &:hover {
         color: #fff;
       }
