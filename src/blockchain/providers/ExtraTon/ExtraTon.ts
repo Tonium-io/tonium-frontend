@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import freeton from 'freeton';
 
-import { TonClient } from '@tonclient/core';
+import { TonClient, signerSigningBox, signerNone } from '@tonclient/core';
 import AbstractProvider from '../AbstractProvider';
 import { ContractNames } from '../../../constants';
 
@@ -15,7 +15,11 @@ class ExtraTon extends AbstractProvider {
 
   static description = 'ExtraTon extension';
 
+  signerHandle: number = 0;
+
   signer: any;
+
+  keys: any;
 
   // contracts: {
   //   rootToken?: any;
@@ -109,6 +113,13 @@ class ExtraTon extends AbstractProvider {
     return result;
   }
 
+  getSigner() {
+    if (this.signerHandle) {
+      return signerSigningBox(this.signerHandle);
+    }
+    return signerNone();
+  }
+
   static isAvailable() {
     return window.freeton !== undefined;
   }
@@ -125,6 +136,23 @@ class ExtraTon extends AbstractProvider {
 
   // eslint-disable-next-line class-methods-use-this
   async getBalance() {
+    const address = await this.getAddress();
+    if (address) {
+      const balance = await this.tonClient.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: address,
+          },
+        },
+        result: 'balance',
+      });
+
+      if (balance.result?.length) {
+        const bln = balance.result[0].balance;
+        return bln / 1000000000;
+      }
+    }
     return Number.NaN;
   }
 
@@ -183,12 +211,43 @@ class ExtraTon extends AbstractProvider {
     return realContract.address;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  async getAddresInfo(address: string) {
+    const answer = {
+      isExist: false,
+      isInited: false,
+      balance: 0,
+    };
+    const { result } = await this.tonClient.net.query_collection({
+      collection: 'accounts',
+      filter: {
+        id: {
+          eq: address,
+        },
+      },
+      result: 'acc_type balance code',
+    });
+    if (result.length === 0) {
+      return answer;
+    }
+
+    return {
+      balance: BigInt(result[0].balance),
+      isExist: true,
+      isInited: !!result[0].acc_type,
+    };
+  }
+
   async signMessage(message: {}) {
-    throw new Error(
-      `Extra ton not supported signMessage Please use another provider ${message}`,
-    );
-    return 'false';
+    await this.whenReady();
+    // throw new Error(
+    //   `Extra ton not supported signMessage Please use another provider ${message}`,
+    // );
+    const result = await this.tonClient.crypto.sign({
+      unsigned: btoa(JSON.stringify(message)),
+      keys: this.keys.keys,
+    });
+    // return 'false';
+    return result.signed;
   }
 }
 
