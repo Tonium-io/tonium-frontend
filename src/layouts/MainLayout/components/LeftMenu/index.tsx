@@ -59,7 +59,10 @@ const LeftMenu: React.FC = () => (
 
     <div className={cls.footer}>
       <Typography className={cls.socials}>
-        <Link to={{ pathname: 'https://twitter.com' }} target="_blank">
+        <Link
+          to={{ pathname: 'https://twitter.com/TONiumNFT' }}
+          target="_blank"
+        >
           <TwitterIcon />
         </Link>
         <Link to={{ pathname: 'https://t.me/tonium_io' }} target="_blank">
@@ -67,7 +70,7 @@ const LeftMenu: React.FC = () => (
         </Link>
       </Typography>
       <Typography>
-        TONIUM <span>ver 0.1 MVP</span>
+        TONIUM <span>ver 0.5 MVP</span>
       </Typography>
       <Typography>
         <Link
@@ -77,7 +80,7 @@ const LeftMenu: React.FC = () => (
           }}
           target="_blank"
         >
-          Whitepapper
+          WhitePaper
         </Link>
       </Typography>
     </div>
