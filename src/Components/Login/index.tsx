@@ -20,10 +20,6 @@ const Login = () => {
     isAdditionalProviderFieldsRequired,
     setIsAdditionalProviderFieldsRequired,
   ] = useState(false);
-  // const [
-  //   isExtratonSigner,
-  //   setIsExtratonSigner,
-  // ] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
   const isMountedRef = useRef<any>(null);
@@ -66,14 +62,6 @@ const Login = () => {
       toniumNFT.setProvider(name);
       handleClose();
     }
-
-    // if (toniumNFT.getProviders()[name].getRequiredInitFieldsExtraton().length) {
-    //   setSelectedProvider(name as any);
-    //   setIsExtratonSigner(true);
-    // } else {
-    //   toniumNFT.setProvider(name);
-    //   handleClose();
-    // }
   };
 
   return (
@@ -117,43 +105,6 @@ const Login = () => {
               ),
             )}
           </DialogContent>
-
-          {/* {isExtratonSigner && ( 
-           <form className={styles.signForm}>
-             <Grid 
-              container
-              xs={12}
-              direction="row"
-              justify="center"
-              style={{ margin: '50px 0' }}
-             >
-            <Grid item xs={7}>
-               {toniumNFT
-                  .getProviders()
-                  [selectedProvider as any].getRequiredInitFieldsExtraton()
-                  .map((field: any) => (
-                    <TextField
-                      error={!formValues?.[field.name]}
-                      key={field.name}
-                      onChange={async (e) => {
-                        const newValues = { ...formValues } || {};
-                        newValues[field.name] = e.target.value;
-                        setFormValues(newValues);
-                      }}
-                      value={formValues?.[field.name] || ''}
-                      name={field.name}
-                      label={field.description}
-                      fullWidth
-                      helperText={
-                        !formValues?.[`${field.name}`]
-                          ? 'This field is required'
-                          : ''
-                      }
-                    />
-                  ))}
-               </Grid>
-             </Grid>
-            </form>)} */}
 
           {isAdditionalProviderFieldsRequired && (
             <form autoComplete="off">

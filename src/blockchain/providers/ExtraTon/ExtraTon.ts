@@ -8,19 +8,6 @@ import { ContractNames } from '../../../constants';
 
 declare const window: any;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _ = {
-  checkExtensionAvailability() {
-    if (window.freeton === undefined) {
-      // eslint-disable-next-line no-throw-literal
-      throw 'Extension not available.';
-    }
-  },
-  getProvider() {
-    return new freeton.providers.ExtensionProvider(window.freeton);
-  },
-};
-
 class ExtraTon extends AbstractProvider {
   provider: any;
 
@@ -147,7 +134,6 @@ class ExtraTon extends AbstractProvider {
     return this.signer?.wallet.address;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getBalance() {
     const address = await this.getAddress();
     if (address) {
@@ -252,14 +238,10 @@ class ExtraTon extends AbstractProvider {
 
   async signMessage(message: {}) {
     await this.whenReady();
-    // throw new Error(
-    //   `Extra ton not supported signMessage Please use another provider ${message}`,
-    // );
     const result = await this.tonClient.crypto.sign({
       unsigned: btoa(JSON.stringify(message)),
       keys: this.keys.keys,
     });
-    // return 'false';
     return result.signed;
   }
 }
