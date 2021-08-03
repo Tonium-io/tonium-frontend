@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { NavLink, useHistory } from 'react-router-dom';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,6 +22,7 @@ import PowerInputIcon from '@material-ui/icons/PowerInput';
 import CristallIcon from '../../../../../img/cristall.svg';
 import Logo from '../../../../../img/tonium-logo-mobile.svg';
 import getShortToken from '../../../../../utils/getShortToken';
+import UseDetectClickOut from '../../../../../hook/useDetectClickOut';
 
 import {
   ContextApp,
@@ -87,6 +88,10 @@ const Header: React.FC = () => {
   });
   const classes = useStyles(0);
   const history = useHistory();
+  const node = useRef<any>(null);
+  const trigger = useRef<any>(null);
+  const [show, setShow] = useState(true);
+  const { triggerRef } = UseDetectClickOut();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
@@ -115,11 +120,30 @@ const Header: React.FC = () => {
 
     if (settings !== settingsActive) {
       settings?.classList.add(`${styles.settingsActive}`);
-      setOpenLeftMenu(dispatch, false);
     } else {
       settings?.classList.remove(`${styles.settingsActive}`);
     }
   };
+
+  const handleClickOutside = (e: any) => {
+    if (trigger.current?.contains(e.target)) {
+      setOpenLeftMenu(dispatch, !state.openLeftMenu);
+      return setShow(!show);
+    }
+
+    if (!node.current?.contains(e.target)) {
+      return setShowModal(false);
+    }
+
+    return setShow(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (state.auth) {
@@ -149,7 +173,11 @@ const Header: React.FC = () => {
         <Toolbar className={styles.header}>
           <div className={styles.leftMenu}>
             <div className={styles.burgerWrap}>
-              <Button className={styles.burgerBtn} onClick={handleClick}>
+              <Button
+                className={styles.burgerBtn}
+                onClick={handleClick}
+                ref={triggerRef}
+              >
                 <span
                   className={`${styles.menuIcon} ${
                     state.openLeftMenu ? styles.menuActive : ''
@@ -219,14 +247,18 @@ const Header: React.FC = () => {
             )}
 
             <div className={styles.settingsWrap}>
-              <Button className={classes.rootBtn} onClick={settingsClick}>
+              <Button
+                className={classes.rootBtn}
+                onClick={settingsClick}
+                ref={trigger}
+              >
                 <SettingsIcon fontSize="small" className={styles.settings} />
               </Button>
             </div>
           </div>
 
           {isShowModal && (
-            <div className={styles.settingsMenu}>
+            <div className={styles.settingsMenu} ref={node}>
               <div className={styles.settingsMenuHeader}>
                 <Grid item>
                   <TextField

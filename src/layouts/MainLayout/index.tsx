@@ -1,4 +1,4 @@
-import React, { ReactNode, /* useEffect, useState, */ useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
