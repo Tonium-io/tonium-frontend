@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React /* useContext, useRef, useEffect */ from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import { Link, NavLink } from 'react-router-dom';
@@ -13,9 +13,11 @@ import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
+import UseDetectClickOut from '../../../../hook/useDetectClickOut';
+
 // import cls from '../../../../app.module.scss';
 import cls from './styles.module.scss';
-import { ContextApp, setOpenLeftMenu } from '../../../../store/reducer';
+// import { ContextApp, setOpenLeftMenu } from '../../../../store/reducer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,11 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LeftMenu: React.FC = () => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(ContextApp);
-
-  const handleClick = () => {
-    setOpenLeftMenu(dispatch, !state.openLeftMenu);
-  };
+  const { nodeRef } = UseDetectClickOut();
 
   return (
     <Grid
@@ -65,6 +63,7 @@ const LeftMenu: React.FC = () => {
       direction="column"
       wrap="nowrap"
       className={cls.top}
+      ref={nodeRef}
     >
       <Paper component="form" className={classes.root}>
         <InputBase
@@ -87,7 +86,6 @@ const LeftMenu: React.FC = () => {
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
         to="/own"
-        onClick={() => handleClick()}
         // activeClassName={cls.activeLink}
       >
         <ListItemText primary="My NFT" />
@@ -97,7 +95,6 @@ const LeftMenu: React.FC = () => {
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
         to="/collections"
-        onClick={() => handleClick()}
         // activeClassName={cls.activeLink}
       >
         <ListItemText primary="Mint NFT" />
@@ -107,7 +104,6 @@ const LeftMenu: React.FC = () => {
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
         to="/auction"
-        onClick={() => handleClick()}
         // activeClassName={cls.activeLink}
       >
         <ListItemText primary="Auction" />
@@ -117,7 +113,6 @@ const LeftMenu: React.FC = () => {
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
         to="/radar"
-        onClick={() => handleClick()}
         // activeClassName={cls.activeLink}
       >
         <ListItemText primary="NFT radar" />
