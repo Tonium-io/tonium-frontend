@@ -8,6 +8,19 @@ import { ContractNames } from '../../../constants';
 
 declare const window: any;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _ = {
+  checkExtensionAvailability() {
+    if (window.freeton === undefined) {
+      // eslint-disable-next-line no-throw-literal
+      throw 'Extension not available.';
+    }
+  },
+  getProvider() {
+    return new freeton.providers.ExtensionProvider(window.freeton);
+  },
+};
+
 class ExtraTon extends AbstractProvider {
   provider: any;
 
