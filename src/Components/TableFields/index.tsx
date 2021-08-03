@@ -90,7 +90,9 @@ const TableFields = ({
               <div>
                 <div>
                   <AddBox />
-                  <Typography>Create new</Typography>
+                  <Typography>
+                    Create new <br /> NFT
+                  </Typography>
                 </div>
               </div>
             </Paper>
