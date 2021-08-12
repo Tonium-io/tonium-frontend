@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import freeton from 'freeton';
 
-import { TonClient, signerSigningBox, signerNone } from '@tonclient/core';
+import { TonClient } from '@tonclient/core';
 import AbstractProvider from '../AbstractProvider';
 import { ContractNames } from '../../../constants';
 
@@ -20,6 +20,14 @@ class ExtraTon extends AbstractProvider {
   signer: any;
 
   keys: any;
+
+  // signed: string;
+
+  // public: string;
+
+  // public: string;
+
+  // unsigned: string;
 
   // contracts: {
   //   rootToken?: any;
@@ -46,6 +54,21 @@ class ExtraTon extends AbstractProvider {
       window.freeton,
     );
     this.signer = await this.provider.getSigner();
+
+    const result = await this.signer.sign(this.signer.publicKey);
+    console.log('result: ', result);
+
+    // const signer = await this.provider.getSigner();
+
+    // const result = await signer.sign(form.unsigned.value);
+    // const wallet = this.provider.getPublicKey();
+
+    // const signer = this.provider.sign(this.signer.publicKey)
+    // const signer = this.provider.sign()
+    // console.log('signer: ', signer);
+
+    // console.log('wallet: ', wallet);
+
     // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 
     // // eslint-disable-next-line no-restricted-syntax
@@ -111,13 +134,6 @@ class ExtraTon extends AbstractProvider {
       await this.getContractAtAddress(contractName, address)
     ).methods[functionName].call(input);
     return result;
-  }
-
-  getSigner() {
-    if (this.signerHandle) {
-      return signerSigningBox(this.signerHandle);
-    }
-    return signerNone();
   }
 
   static isAvailable() {
@@ -240,7 +256,7 @@ class ExtraTon extends AbstractProvider {
     await this.whenReady();
     const result = await this.tonClient.crypto.sign({
       unsigned: btoa(JSON.stringify(message)),
-      keys: this.keys.keys,
+      keys: this.signer.publicKey,
     });
     return result.signed;
   }
