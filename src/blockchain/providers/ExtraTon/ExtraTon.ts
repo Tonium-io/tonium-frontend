@@ -55,8 +55,9 @@ class ExtraTon extends AbstractProvider {
     );
     this.signer = await this.provider.getSigner();
 
+    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
     const result = await this.signer.sign(this.signer.publicKey);
-    console.log('result: ', result);
+    // console.log('result: ', result);
 
     // const signer = await this.provider.getSigner();
 
