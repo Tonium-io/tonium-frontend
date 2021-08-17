@@ -124,7 +124,7 @@ const Login = () => {
               xs={12}
               direction="row"
               justify="center"
-              style={{ margin: '40px 0' }}
+              style={{ margin: '40px 0 0' }}
             >
               <p className={styles.textSignature}>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
