@@ -21,14 +21,6 @@ class ExtraTon extends AbstractProvider {
 
   keys: any;
 
-  // signed: string;
-
-  // public: string;
-
-  // public: string;
-
-  // unsigned: string;
-
   // contracts: {
   //   rootToken?: any;
   //   exchanger?: any;
@@ -55,20 +47,7 @@ class ExtraTon extends AbstractProvider {
     );
     this.signer = await this.provider.getSigner();
 
-    // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-    const result = await this.signer.sign(this.signer.publicKey);
-    // console.log('result: ', result);
-
-    // const signer = await this.provider.getSigner();
-
-    // const result = await signer.sign(form.unsigned.value);
-    // const wallet = this.provider.getPublicKey();
-
-    // const signer = this.provider.sign(this.signer.publicKey)
-    // const signer = this.provider.sign()
-    // console.log('signer: ', signer);
-
-    // console.log('wallet: ', wallet);
+    await this.signer.sign(this.signer.publicKey);
 
     // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 

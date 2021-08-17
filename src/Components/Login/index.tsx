@@ -20,6 +20,7 @@ const Login = () => {
     isAdditionalProviderFieldsRequired,
     setIsAdditionalProviderFieldsRequired,
   ] = useState(false);
+  const [selectedProviderName, setSelectedProviderName] = useState<any>('');
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
   const isMountedRef = useRef<any>(null);
@@ -52,6 +53,7 @@ const Login = () => {
   const handleClose = () => {
     setIsAdditionalProviderFieldsRequired(false);
     setOpen(dispatch, false);
+    setSelectedProviderName('');
   };
 
   const selectProvider = (name: string) => {
@@ -61,6 +63,16 @@ const Login = () => {
     } else {
       toniumNFT.setProvider(name);
       handleClose();
+    }
+  };
+
+  const handleClickButton = (providerName: string) => {
+    if (providerName === 'ExtraTon') {
+      setSelectedProviderName(providerName);
+      setIsAdditionalProviderFieldsRequired(false);
+    } else {
+      selectProvider(providerName);
+      setSelectedProviderName('');
     }
   };
 
@@ -87,7 +99,7 @@ const Login = () => {
                     variant="outlined"
                     color="primary"
                     disabled={!provider.isAvailable()}
-                    onClick={() => selectProvider(providerName)}
+                    onClick={() => handleClickButton(providerName)}
                   >
                     {providerName}
                   </Button>
@@ -105,6 +117,41 @@ const Login = () => {
               ),
             )}
           </DialogContent>
+
+          {selectedProviderName && (
+            <Grid
+              container
+              xs={12}
+              direction="row"
+              justify="center"
+              style={{ margin: '40px 0' }}
+            >
+              <p className={styles.textSignature}>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Maiores quas vero fugit saepe nobis ex perferendis excepturi
+                illo, modi aspernatur animi, qui delectus labore commodi
+                laudantium earum ipsam incidunt perspiciatis. Repudiandae
+                accusantium exercitationem nesciunt obcaecati ut. Tenetur
+                adipisci doloremque illum ut hic minus quaerat nemo deleniti
+                vero ducimus, nihil quisquam magnam rerum, dolore odio
+                accusantium amet est fuga quam? Explicabo. Deleniti molestiae
+                distinctio nesciunt earum hic doloremque quidem consectetur
+                omnis illum illo cum iusto iure, nobis sed inventore placeat ut
+                quasi exercitationem cupiditate sapiente. Perferendis officia
+                laborum quidem cupiditate fugit.
+              </p>
+
+              <Button
+                variant="contained"
+                color="primary"
+                value="submit"
+                type="submit"
+                onClick={() => selectProvider(selectedProviderName)}
+              >
+                Login
+              </Button>
+            </Grid>
+          )}
 
           {isAdditionalProviderFieldsRequired && (
             <form autoComplete="off">
