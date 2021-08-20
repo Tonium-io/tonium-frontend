@@ -27,9 +27,8 @@ class ExtraTon extends AbstractProvider {
   //   controller?: any;
   // };
 
-  constructor(initParams: any) {
+  constructor() {
     super();
-    console.log('fdsfsa', initParams);
 
     this.tonClient = new TonClient({
       network: {
