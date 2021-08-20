@@ -27,8 +27,10 @@ class ExtraTon extends AbstractProvider {
   //   controller?: any;
   // };
 
-  constructor() {
+  constructor(initParams: any) {
     super();
+    console.log('fdsfsa', initParams);
+
     this.tonClient = new TonClient({
       network: {
         server_address: 'https://net.ton.dev', // dev
@@ -47,7 +49,15 @@ class ExtraTon extends AbstractProvider {
     );
     this.signer = await this.provider.getSigner();
 
-    await this.signer.sign(this.signer.publicKey);
+    if (!localStorage.getItem('tonium_signature')) {
+      await this.signer.sign(this.signer.publicKey);
+    }
+
+    if (localStorage.getItem('tonium_signature')) {
+      localStorage.getItem('tonium_signature') as string;
+    } else {
+      localStorage.setItem('tonium_signature', this.signer.publicKey);
+    }
 
     // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 
@@ -64,6 +74,7 @@ class ExtraTon extends AbstractProvider {
 
   // eslint-disable-next-line class-methods-use-this
   logout() {
+    localStorage.removeItem('tonium_signature');
     return true;
   }
 

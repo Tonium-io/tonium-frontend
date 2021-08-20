@@ -134,11 +134,7 @@ const Login = () => {
                 accusantium exercitationem nesciunt obcaecati ut. Tenetur
                 adipisci doloremque illum ut hic minus quaerat nemo deleniti
                 vero ducimus, nihil quisquam magnam rerum, dolore odio
-                accusantium amet est fuga quam? Explicabo. Deleniti molestiae
-                distinctio nesciunt earum hic doloremque quidem consectetur
-                omnis illum illo cum iusto iure, nobis sed inventore placeat ut
-                quasi exercitationem cupiditate sapiente. Perferendis officia
-                laborum quidem cupiditate fugit.
+                accusantium amet est fuga quam?
               </p>
 
               <Button
