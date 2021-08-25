@@ -8,19 +8,6 @@ import { ContractNames } from '../../../constants';
 
 declare const window: any;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _ = {
-  checkExtensionAvailability() {
-    if (window.freeton === undefined) {
-      // eslint-disable-next-line no-throw-literal
-      throw 'Extension not available.';
-    }
-  },
-  getProvider() {
-    return new freeton.providers.ExtensionProvider(window.freeton);
-  },
-};
-
 class ExtraTon extends AbstractProvider {
   provider: any;
 
@@ -28,7 +15,11 @@ class ExtraTon extends AbstractProvider {
 
   static description = 'ExtraTon extension';
 
+  signerHandle: number = 0;
+
   signer: any;
+
+  keys: any;
 
   // contracts: {
   //   rootToken?: any;
@@ -38,6 +29,7 @@ class ExtraTon extends AbstractProvider {
 
   constructor() {
     super();
+
     this.tonClient = new TonClient({
       network: {
         server_address: 'https://net.ton.dev', // dev
@@ -55,6 +47,17 @@ class ExtraTon extends AbstractProvider {
       window.freeton,
     );
     this.signer = await this.provider.getSigner();
+
+    if (!localStorage.getItem('tonium_signature')) {
+      await this.signer.sign(this.signer.publicKey);
+    }
+
+    if (localStorage.getItem('tonium_signature')) {
+      localStorage.getItem('tonium_signature') as string;
+    } else {
+      localStorage.setItem('tonium_signature', this.signer.publicKey);
+    }
+
     // const contracts = ['rootToken', 'exchanger', 'controller'] as const;
 
     // // eslint-disable-next-line no-restricted-syntax
@@ -70,6 +73,7 @@ class ExtraTon extends AbstractProvider {
 
   // eslint-disable-next-line class-methods-use-this
   logout() {
+    localStorage.removeItem('tonium_signature');
     return true;
   }
 
@@ -136,8 +140,24 @@ class ExtraTon extends AbstractProvider {
     return this.signer?.wallet.address;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getBalance() {
+    const address = await this.getAddress();
+    if (address) {
+      const balance = await this.tonClient.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: address,
+          },
+        },
+        result: 'balance',
+      });
+
+      if (balance.result?.length) {
+        const bln = balance.result[0].balance;
+        return bln / 1000000000;
+      }
+    }
     return Number.NaN;
   }
 
@@ -196,30 +216,39 @@ class ExtraTon extends AbstractProvider {
     return realContract.address;
   }
 
-  // async sign(form: ) {
-  // const button = document.querySelector('.buttonSign');
-  //   button.disabled = true;
-  //   try {
-  //     _.checkExtensionAvailability();
-  //     const provider = _.getProvider();
-  //     const signer = await provider.getSigner();
-  //     const result = await signer.sign(form.unsigned.value);
-  //     document.getElementById('result').innerHTML += '</br>' + JSON.stringify(result);
-  //     console.log(result);
-  //   } catch (e) {
-  //     document.getElementById('result').innerHTML += '</br>' + JSON.stringify(e);
-  //     console.error(e);
-  //   } finally {
-  //     button.disabled = false;
-  //   }
-  // }
+  async getAddresInfo(address: string) {
+    const answer = {
+      isExist: false,
+      isInited: false,
+      balance: 0,
+    };
+    const { result } = await this.tonClient.net.query_collection({
+      collection: 'accounts',
+      filter: {
+        id: {
+          eq: address,
+        },
+      },
+      result: 'acc_type balance code',
+    });
+    if (result.length === 0) {
+      return answer;
+    }
 
-  // eslint-disable-next-line class-methods-use-this
+    return {
+      balance: BigInt(result[0].balance),
+      isExist: true,
+      isInited: !!result[0].acc_type,
+    };
+  }
+
   async signMessage(message: {}) {
-    throw new Error(
-      `Extra ton not supported signMessage Please use another provider ${message}`,
-    );
-    return 'false';
+    await this.whenReady();
+    const result = await this.tonClient.crypto.sign({
+      unsigned: btoa(JSON.stringify(message)),
+      keys: this.signer.publicKey,
+    });
+    return result.signed;
   }
 }
 

@@ -20,10 +20,7 @@ const Login = () => {
     isAdditionalProviderFieldsRequired,
     setIsAdditionalProviderFieldsRequired,
   ] = useState(false);
-  // const [
-  //   isExtratonSigner,
-  //   setIsExtratonSigner,
-  // ] = useState(false);
+  const [selectedProviderName, setSelectedProviderName] = useState<any>('');
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
   const isMountedRef = useRef<any>(null);
@@ -56,6 +53,7 @@ const Login = () => {
   const handleClose = () => {
     setIsAdditionalProviderFieldsRequired(false);
     setOpen(dispatch, false);
+    setSelectedProviderName('');
   };
 
   const selectProvider = (name: string) => {
@@ -66,14 +64,16 @@ const Login = () => {
       toniumNFT.setProvider(name);
       handleClose();
     }
+  };
 
-    // if (toniumNFT.getProviders()[name].getRequiredInitFieldsExtraton().length) {
-    //   setSelectedProvider(name as any);
-    //   setIsExtratonSigner(true);
-    // } else {
-    //   toniumNFT.setProvider(name);
-    //   handleClose();
-    // }
+  const handleClickButton = (providerName: string) => {
+    if (providerName === 'ExtraTon') {
+      setSelectedProviderName(providerName);
+      setIsAdditionalProviderFieldsRequired(false);
+    } else {
+      selectProvider(providerName);
+      setSelectedProviderName('');
+    }
   };
 
   return (
@@ -99,7 +99,7 @@ const Login = () => {
                     variant="outlined"
                     color="primary"
                     disabled={!provider.isAvailable()}
-                    onClick={() => selectProvider(providerName)}
+                    onClick={() => handleClickButton(providerName)}
                   >
                     {providerName}
                   </Button>
@@ -118,42 +118,36 @@ const Login = () => {
             )}
           </DialogContent>
 
-          {/* {isExtratonSigner && ( 
-           <form className={styles.signForm}>
-             <Grid 
+          {selectedProviderName && (
+            <Grid
               container
               xs={12}
               direction="row"
               justify="center"
-              style={{ margin: '50px 0' }}
-             >
-            <Grid item xs={7}>
-               {toniumNFT
-                  .getProviders()
-                  [selectedProvider as any].getRequiredInitFieldsExtraton()
-                  .map((field: any) => (
-                    <TextField
-                      error={!formValues?.[field.name]}
-                      key={field.name}
-                      onChange={async (e) => {
-                        const newValues = { ...formValues } || {};
-                        newValues[field.name] = e.target.value;
-                        setFormValues(newValues);
-                      }}
-                      value={formValues?.[field.name] || ''}
-                      name={field.name}
-                      label={field.description}
-                      fullWidth
-                      helperText={
-                        !formValues?.[`${field.name}`]
-                          ? 'This field is required'
-                          : ''
-                      }
-                    />
-                  ))}
-               </Grid>
-             </Grid>
-            </form>)} */}
+              style={{ margin: '40px 0 0' }}
+            >
+              <p className={styles.textSignature}>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Maiores quas vero fugit saepe nobis ex perferendis excepturi
+                illo, modi aspernatur animi, qui delectus labore commodi
+                laudantium earum ipsam incidunt perspiciatis. Repudiandae
+                accusantium exercitationem nesciunt obcaecati ut. Tenetur
+                adipisci doloremque illum ut hic minus quaerat nemo deleniti
+                vero ducimus, nihil quisquam magnam rerum, dolore odio
+                accusantium amet est fuga quam?
+              </p>
+
+              <Button
+                variant="contained"
+                color="primary"
+                value="submit"
+                type="submit"
+                onClick={() => selectProvider(selectedProviderName)}
+              >
+                Login
+              </Button>
+            </Grid>
+          )}
 
           {isAdditionalProviderFieldsRequired && (
             <form autoComplete="off">
