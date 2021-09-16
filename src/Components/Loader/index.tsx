@@ -4,6 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import styles from './styles.module.scss';
 
 interface LoaderProps {
+  // eslint-disable-next-line react/require-default-props
   global?: boolean | undefined;
 }
 

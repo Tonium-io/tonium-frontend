@@ -549,7 +549,7 @@ class TonSDK extends AbstractProvider {
       } else {
         try {
           await this.sendMoney(result.address, fees);
-        } catch (e) {
+        } catch (e: any) {
           throw new Error(e.message);
         }
       }

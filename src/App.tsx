@@ -91,6 +91,7 @@ function App() {
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
+          theme="colored"
           rtl={false}
           pauseOnFocusLoss
           draggable
