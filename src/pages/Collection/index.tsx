@@ -32,7 +32,7 @@ const Collection = () => {
       setLoad(true);
       toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
         // eslint-disable-next-line no-console
-        console.log(data);
+        // console.log(data);
         const newData = data.map((i: any) => ({
           ...i,
           defaultImage: tonLogo,

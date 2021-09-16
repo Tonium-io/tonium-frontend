@@ -53,31 +53,33 @@ const TableFields = ({
               </Paper>
             </NavLink>
           ) : (
-            <Paper className={cls.element}>
-              <div>
-                {c.file && (
-                  <img
-                    className={styles.paperImage}
-                    alt={c.name}
-                    src={isImageFile(c.file) ? c.file : c.defaultImage}
-                  />
-                )}
-                {c.ipfsImage && (
-                  <img
-                    className={styles.paperImage}
-                    alt={c.name}
-                    src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
-                  />
-                )}
-                {!c.file && !c.ipfsImage && (
-                  <img
-                    className={styles.paperImage}
-                    alt={c.name}
-                    src={c.defaultImage}
-                  />
-                )}
-              </div>
-            </Paper>
+            <NavLink to="/token">
+              <Paper className={cls.element}>
+                <div>
+                  {c.file && (
+                    <img
+                      className={styles.paperImage}
+                      alt={c.name}
+                      src={isImageFile(c.file) ? c.file : c.defaultImage}
+                    />
+                  )}
+                  {c.ipfsImage && (
+                    <img
+                      className={styles.paperImage}
+                      alt={c.name}
+                      src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
+                    />
+                  )}
+                  {!c.file && !c.ipfsImage && (
+                    <img
+                      className={styles.paperImage}
+                      alt={c.name}
+                      src={c.defaultImage}
+                    />
+                  )}
+                </div>
+              </Paper>
+            </NavLink>
           )}
           <Typography>{c.name}</Typography>
           <Typography>{c.description}</Typography>

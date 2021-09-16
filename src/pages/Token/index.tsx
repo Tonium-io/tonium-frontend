@@ -3,7 +3,7 @@ import { Container } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import Loader from '../../Components/Loader';
 // import CristallIcon from '../../img/cristall.svg';
 import AddIcon from '../../img/add.svg';
@@ -68,10 +68,10 @@ const Token = () => {
       ];
       setNftAuctions(dispatch, payload);
       setLoad(false);
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
-      });
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
 

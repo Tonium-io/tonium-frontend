@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -8,7 +8,11 @@ import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import HistoryIcon from '../../img/history.svg';
 import Loader from '../../Components/Loader';
-import { ContextApp, setUserAllTokens } from '../../store/reducer';
+import {
+  ContextApp,
+  setUserAllTokens,
+  setUserCollections,
+} from '../../store/reducer';
 import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from './styles.module.scss';
@@ -16,7 +20,7 @@ import cls from './styles.module.scss';
 type TokenItemType = {
   name: string;
   address: string;
-  img: string;
+  file: string;
   marked: boolean;
 };
 
@@ -74,7 +78,7 @@ const AntTab = withStyles((theme: Theme) =>
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const Own = () => {
-  const { state, dispatch } = useContext(ContextApp);
+  const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
 
@@ -82,66 +86,90 @@ const Own = () => {
     setValue(newValue);
   };
 
+  // console.log("collections:", state.userCollections)
+  // console.log("nfts", state.userAllTokens)
+
   useEffect(() => {
     if (state.auth) {
       setLoad(true);
-      // to do ajax
-      const payload = [
-        {
-          name: 'Test1',
-          address: '0:x12312312432534453',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          marked: true,
-        },
-        {
-          name: 'Test2',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          marked: true,
-        },
-        {
-          name: 'Test3',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          bided: true,
-        },
-        {
-          name: 'Test4',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test5',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test6',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test7',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test8',
-          address: '0:x12312332425532535',
-          img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-      ];
-      setUserAllTokens(dispatch, payload);
-      setLoad(false);
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
+
+      toniumNFT.actions.getUserCollections().then((data: any) => {
+        // eslint-disable-next-line no-console
+
+        setUserCollections(dispatch, data);
+
+        const newwlyOne: any = [];
+        data.forEach(async (element: any) => {
+          await toniumNFT.actions
+            .getInfoTokens(element.address)
+            .then((collection: any) => {
+              // eslint-disable-next-line no-console
+
+              collection.map((i: any) => newwlyOne.push(i));
+            });
+          setUserAllTokens(dispatch, newwlyOne);
+          setLoad(false);
+        });
       });
+
+      // to do ajax
+      // const payload = [
+      //   {
+      //     name: 'Test1',
+      //     address: '0:x12312312432534453',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     marked: true,
+      //   },
+      //   {
+      //     name: 'Test2',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     marked: true,
+      //   },
+      //   {
+      //     name: 'Test3',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     bided: true,
+      //   },
+      //   {
+      //     name: 'Test4',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     my: true,
+      //   },
+      //   {
+      //     name: 'Test5',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     my: true,
+      //   },
+      //   {
+      //     name: 'Test6',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     my: true,
+      //   },
+      //   {
+      //     name: 'Test7',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     my: true,
+      //   },
+      //   {
+      //     name: 'Test8',
+      //     address: '0:x12312332425532535',
+      //     img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+      //     my: true,
+      //   },
+      // ];
+      // setUserAllTokens(dispatch, payload);
+      // setLoad(false);
+
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
 
@@ -192,7 +220,7 @@ const Own = () => {
               <NavLink to="#" className={cls.tokens}>
                 <div
                   className={cls.three}
-                  style={{ backgroundImage: `url(${item.img})` }}
+                  style={{ backgroundImage: `url(${item.file})` }}
                 >
                   <NavLink to="/own/sell" className={cls.btnToken}>
                     Sell

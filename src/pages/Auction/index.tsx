@@ -4,7 +4,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import CristallIcon from '../../img/cristall.svg';
 import TimeIcon from '../../img/time.svg';
 import Loader from '../../Components/Loader';
@@ -116,10 +116,10 @@ const Auction = () => {
       ];
       setNftAuctions(dispatch, payload);
       setLoad(false);
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
-      });
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
   if (load) {

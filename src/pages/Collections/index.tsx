@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 import Typography from '@material-ui/core/Typography';
 
@@ -22,7 +22,6 @@ const Collections = () => {
       setLoad(true);
       toniumNFT.actions.getUserCollections().then((data: any) => {
         // eslint-disable-next-line no-console
-        console.log(data);
         const newData = data.map((i: any) => ({
           ...i,
           defaultImage: tonLogo,
@@ -30,10 +29,10 @@ const Collections = () => {
         setUserCollections(dispatch, newData);
         setLoad(false);
       });
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
-      });
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
 

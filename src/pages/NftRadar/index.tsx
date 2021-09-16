@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -137,10 +137,10 @@ const Radar = () => {
       ];
       setUserAllTokens(dispatch, payload);
       setLoad(false);
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
-      });
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
 
