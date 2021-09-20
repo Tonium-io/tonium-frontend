@@ -101,12 +101,11 @@ const MintNft = () => {
     }
 
     toniumNFT.actions
-      .createUserCollectionToken(
-        `0:${collection}`,
+      .createUserCollectionToken(`0:${collection}`, {
         name,
         tokenData,
         tokenFileAddress,
-      )
+      })
       .then((data: any) => {
         // eslint-disable-next-line no-console
         console.log(data, 'Success');

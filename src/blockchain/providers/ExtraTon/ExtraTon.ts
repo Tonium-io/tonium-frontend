@@ -187,7 +187,7 @@ class ExtraTon extends AbstractProvider {
     initialParams?: {},
     constructorParams?: {},
   ) {
-    if (contractName === 'controller') return null;
+    // if (contractName === 'controller') return null;
 
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
@@ -197,14 +197,15 @@ class ExtraTon extends AbstractProvider {
     );
 
     let publicKey: string;
-    if (contractName === 'rootToken') {
-      const randomKey = await this.tonClient.crypto.generate_random_sign_keys();
-      publicKey = randomKey.public;
+    if (contractName === 'TNFTCoreNftRoot') {
+      // const randomKey = await this.tonClient.crypto.generate_random_sign_keys();
+      // publicKey = null;
     } else {
       publicKey = this.getPublicKey(false);
+      contract.setInitialPublicKey(publicKey);
     }
 
-    contract.setInitialPublicKey(publicKey);
+    // contract.setInitialPublicKey(publicKey);
     contract.setInitialParams(initialParams);
     contract.setInitialAmount('7000000000');
     const realContract = await contract.deploy(constructorParams);

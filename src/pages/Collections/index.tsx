@@ -22,6 +22,7 @@ const Collections = () => {
       setLoad(true);
       toniumNFT.actions.getUserCollections().then((data: any) => {
         // eslint-disable-next-line no-console
+        console.log('dddd', data);
         const newData = data.map((i: any) => ({
           ...i,
           defaultImage: tonLogo,

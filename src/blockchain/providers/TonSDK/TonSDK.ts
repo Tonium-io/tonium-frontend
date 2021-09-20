@@ -93,12 +93,12 @@ class TonSDK extends AbstractProvider {
     this.init(initParams?.mnemonic);
   }
 
-  async getAddress(): Promise<string> {
+  async getAddress(publicKey = this.keys.keys.public): Promise<string> {
     const { address } = this;
 
     if (!address) {
       await this.whenReady();
-      if (!this.keys?.keys?.public) {
+      if (!publicKey) {
         return '0';
       }
       const rawContract = TonSDK.getContractRaw('controller');
@@ -110,7 +110,7 @@ class TonSDK extends AbstractProvider {
         deploy_set: {
           tvc: rawContract.tvc,
 
-          initial_pubkey: this.keys.keys.public,
+          initial_pubkey: publicKey,
         },
         call_set: {
           function_name: 'constructor',
@@ -471,7 +471,7 @@ class TonSDK extends AbstractProvider {
         tvc: rawContract.tvc,
         initial_data: initialParams,
         initial_pubkey:
-          contractName === 'rootToken'
+          contractName === 'TNFTCoreNftRoot'
             ? randomKey.public
             : this.keys.keys.public,
       },

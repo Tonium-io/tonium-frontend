@@ -31,7 +31,7 @@ const Collection = () => {
       setCollName(collectionData?.name);
       setNewRecord(collectionData?.totalSupply);
     }
-  }, [userCollection]);
+  }, []);
 
   useEffect(() => {
     if (state.auth && state.userCollectionTokens.length !== newRecord) {
