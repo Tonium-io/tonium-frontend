@@ -82,6 +82,7 @@ class ExtraTon extends AbstractProvider {
     address?: string,
   ) {
     const rawContract = ExtraTon.getContractRaw(contract);
+    console.log('rawContract', rawContract);
     if (!rawContract) {
       // eslint-disable-next-line no-console
       console.error('Contract not found', rawContract);
@@ -186,9 +187,11 @@ class ExtraTon extends AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    isUseRandomPublicKey?: false,
   ) {
     // if (contractName === 'controller') return null;
-
+    console.log('isUserRandKey', isUseRandomPublicKey);
+    debugger;
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
@@ -196,14 +199,13 @@ class ExtraTon extends AbstractProvider {
       rawContract.tvc,
     );
 
-    let publicKey: string;
-    if (contractName === 'TNFTCoreNftRoot') {
-      // const randomKey = await this.tonClient.crypto.generate_random_sign_keys();
-      // publicKey = null;
-    } else {
-      publicKey = this.getPublicKey(false);
-      contract.setInitialPublicKey(publicKey);
+    let publicKey = this.getPublicKey(false);
+    if (isUseRandomPublicKey) {
+      publicKey = await this.tonClient.crypto.generate_random_sign_keys();
+      publicKey = publicKey.public;
+      console.log('Rnadom key: ', publicKey);
     }
+    contract.setInitialPublicKey(publicKey);
 
     // contract.setInitialPublicKey(publicKey);
     contract.setInitialParams(initialParams);
@@ -212,6 +214,7 @@ class ExtraTon extends AbstractProvider {
     try {
       await realContract.getDeployProcessing().wait();
     } catch (e) {
+      console.log('Error:', e);
       return null;
     }
     return realContract.address;

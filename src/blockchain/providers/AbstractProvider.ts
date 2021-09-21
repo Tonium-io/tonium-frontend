@@ -98,6 +98,7 @@ abstract class AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    isUseRandomPublicKey?: boolean,
   ): Promise<string>;
 
   abstract sendMoney(address: string, value: number): Promise<any>;

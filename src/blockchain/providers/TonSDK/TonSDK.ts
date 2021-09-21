@@ -366,6 +366,7 @@ class TonSDK extends AbstractProvider {
     if (withLeadingHex) {
       key = `0x${key}`;
     }
+    console.log('key');
     return key;
   }
 
@@ -458,6 +459,7 @@ class TonSDK extends AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    // isUseRandomPublicKey?: false,
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);

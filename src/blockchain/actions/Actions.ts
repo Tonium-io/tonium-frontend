@@ -41,12 +41,12 @@ class Actions {
       collectionsData.push(this.getCollectionData(collection));
       // tokensData.push(this.getLastInfoTokenFiles(collection));
     });
-    console.log('colll', collectionsData);
 
     const [collections, tokens]: any = [
       await Promise.all(collectionsData),
       await Promise.all(tokensData),
     ];
+    console.log('colll', collections);
 
     return collections.map((collection: any, index: number) => ({
       ...collection,
@@ -231,6 +231,7 @@ class Actions {
         codeData: contracts.TNFTCoreData.tvc,
         codeIndex: contracts.TNFTCoreIndex.tvc,
       },
+      true,
     );
     console.log('Contract Address: ', contractAddress);
 
