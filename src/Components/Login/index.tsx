@@ -127,14 +127,9 @@ const Login = () => {
               style={{ margin: '40px 0 0' }}
             >
               <p className={styles.textSignature}>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Maiores quas vero fugit saepe nobis ex perferendis excepturi
-                illo, modi aspernatur animi, qui delectus labore commodi
-                laudantium earum ipsam incidunt perspiciatis. Repudiandae
-                accusantium exercitationem nesciunt obcaecati ut. Tenetur
-                adipisci doloremque illum ut hic minus quaerat nemo deleniti
-                vero ducimus, nihil quisquam magnam rerum, dolore odio
-                accusantium amet est fuga quam?
+                On next step the extraton extension will ask you to sign
+                authorization message. Please agree, as this allow website to
+                communicate with backend system.
               </p>
 
               <Button
