@@ -46,7 +46,6 @@ class Actions {
       await Promise.all(collectionsData),
       await Promise.all(tokensData),
     ];
-    console.log('colll', collections);
 
     return collections.map((collection: any, index: number) => ({
       ...collection,
@@ -56,19 +55,20 @@ class Actions {
     }));
   }
 
-  async deployNFTWallet(address: string) {
-    const provider = await this.getCurrentProvider();
-    const controllerAddress = await provider.getAddress();
-    const deployNFT = await provider.call(
-      'controller',
-      'deployNFT',
-      {
-        root_token: address,
-      },
-      controllerAddress,
-    );
-    return deployNFT;
-  }
+  // async deployNFTWallet(address: string) {
+  //   const provider = await this.getCurrentProvider();
+  //   const controllerAddress = await provider.getAddress();
+
+  //   const deployNFT = await provider.call(
+  //     'controller',
+  //     'deployNFT',
+  //     {
+  //       root_token: address,
+  //     },
+  //     controllerAddress,
+  //   );
+  //   return deployNFT;
+  // }
 
   async getLastInfoTokenFiles(address: string) {
     const provider = await this.getCurrentProvider();
@@ -137,6 +137,7 @@ class Actions {
       lastMintedToken -= 1;
     }
     results = await Promise.all(results);
+    console.log('results', results);
 
     let ipfsResults: any[] = [];
     let bcResults: any[] = [];
@@ -206,6 +207,22 @@ class Actions {
     return res;
   }
 
+  async checkController(
+    noMoneyFallback: (addr: string, value: number) => void,
+  ) {
+    const provider = await this.resolveProviderOrThrow();
+    const address = await provider.getAddress();
+    const balance = await provider.getBalance(address);
+    const accType = await provider.getContractStatus(address);
+    // const fallback =  noMoneyFallback(address,100000000);
+    if (balance < 3) {
+      provider.sendMoney(address, 5);
+    }
+    if (accType !== 1) {
+      provider.deployContract('controller', noMoneyFallback);
+    }
+  }
+
   async createUserCollections(
     name: string,
     // symbol: string,
@@ -217,12 +234,14 @@ class Actions {
     //   provider,
     // ).constructor.getContractRaw('wallet');
 
-    await provider.deployContract('controller', noMoneyFallback);
+    await this.checkController(noMoneyFallback);
 
     const contractAddress = await provider.deployContract(
       'TNFTCoreNftRoot',
       noMoneyFallback,
-      {},
+      {
+        randomKey: Math.floor(10000000000 + Math.random() * 900000000),
+      },
       {
         // name: web3Utils.utf8ToHex(name).replace('0x', ''),
         // symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
@@ -231,9 +250,8 @@ class Actions {
         codeData: contracts.TNFTCoreData.tvc,
         codeIndex: contracts.TNFTCoreIndex.tvc,
       },
-      true,
+      false,
     );
-    console.log('Contract Address: ', contractAddress);
 
     if (!contractAddress) {
       return null;
@@ -262,25 +280,26 @@ class Actions {
     // data: string,
   ) {
     const provider = await this.resolveProviderOrThrow();
-    // const addressWallet = await provider.getAddress();
+    const addressWallet = await provider.getAddress();
     // eslint-disable-next-line no-console
-    console.log('Mint token');
+    // console.log('Address Wallet', addressWallet);
     // const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
-    return provider.call(
+    const result = await provider.call(
       'controller',
-      'mintNft',
+      'mintNFT',
       {
         // tokenId: currentMintedToken,
         // name: web3Utils.utf8ToHex(name).replace('0x', ''),
         // metaData: web3Utils
         //   .utf8ToHex(JSON.stringify(jsonMeta))
         //   .replace('0x', ''),
-        metaData: '0x1234',
+        metadata: '1234',
         rootNFT: address,
         // data,
       },
-      address,
+      addressWallet,
     );
+    return result;
     // const wallets = await provider.run(
     //   'controller',
     //   'm_wallets',
@@ -332,7 +351,7 @@ class Actions {
 
   async getCollectionData(address: string) {
     const provider = await this.resolveProviderOrThrow();
-
+    console.log('provider', provider);
     const data = await Promise.all([
       provider.run('TNFTCoreNftRoot', '_totalMinted', {}, address),
       // provider.run('TNFTCoreNftRoot', 'getSymbol', {}, address),
@@ -357,7 +376,7 @@ class Actions {
       {},
       address,
     );
-
+    console.log('last Minted token', data);
     return data.value0;
   }
 

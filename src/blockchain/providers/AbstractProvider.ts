@@ -73,7 +73,9 @@ abstract class AbstractProvider {
 
   abstract getPublicKey(withLeadingHex: boolean): String;
 
-  abstract getBalance(): Promise<Number>;
+  abstract getBalance(address: string): Promise<Number>;
+
+  abstract getContractStatus(address: string): Promise<Number>;
 
   //  abstract getContractAtAddress():
 

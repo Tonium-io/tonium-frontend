@@ -384,8 +384,28 @@ class TonSDK extends AbstractProvider {
   //   return checkAccount?.result[0]?.acc_type;
   // }
 
-  async getBalance() {
-    const address = await this.getAddress();
+  async getContractStatus(address: string) {
+    if (address) {
+      const balance = await this.client.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: address,
+          },
+        },
+        result: 'acc_type',
+      });
+
+      if (balance.result?.length) {
+        const bln = balance.result[0].acc_type;
+        return bln;
+      }
+    }
+    return Number.NaN;
+  }
+
+  async getBalance(address: string) {
+    // const address = await this.getAddress();
     if (address) {
       const balance = await this.client.net.query_collection({
         collection: 'accounts',
@@ -538,8 +558,8 @@ class TonSDK extends AbstractProvider {
         throw new Error('Not enough money');
       }
 
-      const controllerBalance = await this.getBalance();
       const controllerAddress = await this.getAddress();
+      const controllerBalance = await this.getBalance(controllerAddress);
 
       const executorFeesInDec = executorFees / 1_000_000_000;
       if (controllerBalance < executorFeesInDec) {

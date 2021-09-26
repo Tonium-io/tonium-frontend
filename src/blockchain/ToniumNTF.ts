@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import ExtraTon from './providers/ExtraTon/ExtraTon';
 import TonSDK from './providers/TonSDK/TonSDK';
 import AbstractProvider from './providers/AbstractProvider';
@@ -56,10 +56,10 @@ class TiniumNFT {
 
     setLogin(this.dispatch, true);
 
-    toast.success('SUCCESS', {
-      position: 'bottom-right',
-      autoClose: 4000,
-    });
+    // toast.success('SUCCESS', {
+    //   position: 'bottom-right',
+    //   autoClose: 4000,
+    // });
     return true;
   }
 

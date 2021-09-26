@@ -151,7 +151,7 @@ const Header: React.FC = () => {
       const provider = toniumNFT.getCurrentProvider();
       const setInitialData = async () => {
         const addr = await provider.getAddress();
-        const bln = await provider.getBalance();
+        const bln = await provider.getBalance(addr);
         setAddress(addr);
         setBalance(bln);
         setLoad(false);
