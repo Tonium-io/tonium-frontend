@@ -351,7 +351,6 @@ class Actions {
 
   async getCollectionData(address: string) {
     const provider = await this.resolveProviderOrThrow();
-    console.log('provider', provider);
     const data = await Promise.all([
       provider.run('TNFTCoreNftRoot', '_totalMinted', {}, address),
       // provider.run('TNFTCoreNftRoot', 'getSymbol', {}, address),

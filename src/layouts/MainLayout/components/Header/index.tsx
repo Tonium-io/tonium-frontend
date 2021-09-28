@@ -25,6 +25,10 @@ import LanguageIcon from '@material-ui/icons/Language';
 import WalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import DownIcon from '@material-ui/icons/ExpandMore';
 import PowerInputIcon from '@material-ui/icons/PowerInput';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import { toast } from 'react-toastify';
 import CristallIcon from '../../../../img/cristall.svg';
 import getShortToken from '../../../../utils/getShortToken';
 
@@ -122,6 +126,9 @@ const Header: React.FC = () => {
   const trigger = useRef<any>(null);
   const [show, setShow] = useState(true);
 
+  const [warningModalOpen, setWarningModalOpen] = useState(false);
+  const [currentProvide, setCurrentProvide] = useState<any>(null);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
   };
@@ -155,7 +162,22 @@ const Header: React.FC = () => {
     };
   };
 
+  const handleWarningModalClose = () => {
+    setWarningModalOpen(false);
+  };
+
   useEffect(() => {
+    // At production side the Main Net button should open but at dev it's off
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      setState({
+        checkedB: false,
+      });
+    } else {
+      setState({
+        checkedB: true,
+      });
+    }
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -166,6 +188,19 @@ const Header: React.FC = () => {
     if (state.auth) {
       setLoad(true);
       const provider = toniumNFT.getCurrentProvider();
+      if (
+        (!states.checkedB &&
+          provider.signer?.network.server === 'main.ton.dev') ||
+        (states.checkedB && provider.signer?.network.server === 'net.ton.dev')
+      ) {
+        // console.log("Warninngg!!!!!")
+        setWarningModalOpen(true);
+        toast.warn('Warning', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+      }
+      setCurrentProvide(provider);
       const setInitialData = async () => {
         const addr = await provider.getAddress();
         const bln = await provider.getBalance(addr);
@@ -177,6 +212,28 @@ const Header: React.FC = () => {
       setInitialData();
     }
   }, [state.auth]);
+
+  useEffect(() => {
+    if (state.auth) {
+      const provider = toniumNFT.getCurrentProvider();
+
+      if (
+        (provider.signer &&
+          !states.checkedB &&
+          provider.signer?.network.server === 'main.ton.dev') ||
+        (states.checkedB && provider.signer?.network.server === 'net.ton.dev')
+      ) {
+        // console.log("Warninngg!!!!!")
+        setWarningModalOpen(true);
+        toast.warn('Warning', {
+          position: 'bottom-right',
+          autoClose: 4000,
+        });
+      }
+      setCurrentProvide(provider);
+      // console.log("New Provider: ", provider)
+    }
+  }, [states.checkedB]);
 
   return (
     <>
@@ -369,6 +426,24 @@ const Header: React.FC = () => {
             </div>
           )}
         </Toolbar>
+
+        <Dialog onClose={() => handleWarningModalClose} open={warningModalOpen}>
+          <Grid item xs={12} className={styles.popup}>
+            <DialogTitle>
+              {`Choose the correct Provider's network ${
+                currentProvide &&
+                currentProvide.signer?.network.server === 'net.ton.dev'
+                  ? 'Main.ton.dev'
+                  : 'net.ton.dev'
+              }`}
+            </DialogTitle>
+            <DialogActions>
+              <Button variant="outlined" onClick={handleWarningModalClose}>
+                OK
+              </Button>
+            </DialogActions>
+          </Grid>
+        </Dialog>
       </AppBar>
     </>
   );
