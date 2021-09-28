@@ -1,8 +1,9 @@
-import web3Utils from 'web3-utils';
+// import web3Utils from 'web3-utils';
 
 import { hexToUtf8 } from 'src/helpers';
 import { zeroAddress } from 'src/constants';
 import AbstractProvider from '../providers/AbstractProvider';
+import contracts from '../contracts.json';
 
 class Actions {
   private getCurrentProvider: () => AbstractProvider;
@@ -38,7 +39,7 @@ class Actions {
     const tokensData: any = [];
     userNFTs.forEach((collection: string) => {
       collectionsData.push(this.getCollectionData(collection));
-      tokensData.push(this.getLastInfoTokenFiles(collection));
+      // tokensData.push(this.getLastInfoTokenFiles(collection));
     });
 
     const [collections, tokens]: any = [
@@ -54,19 +55,20 @@ class Actions {
     }));
   }
 
-  async deployNFTWallet(address: string) {
-    const provider = await this.getCurrentProvider();
-    const controllerAddress = await provider.getAddress();
-    const deployNFT = await provider.call(
-      'controller',
-      'deployNFT',
-      {
-        root_token: address,
-      },
-      controllerAddress,
-    );
-    return deployNFT;
-  }
+  // async deployNFTWallet(address: string) {
+  //   const provider = await this.getCurrentProvider();
+  //   const controllerAddress = await provider.getAddress();
+
+  //   const deployNFT = await provider.call(
+  //     'controller',
+  //     'deployNFT',
+  //     {
+  //       root_token: address,
+  //     },
+  //     controllerAddress,
+  //   );
+  //   return deployNFT;
+  // }
 
   async getLastInfoTokenFiles(address: string) {
     const provider = await this.getCurrentProvider();
@@ -75,8 +77,8 @@ class Actions {
     if (lastMintedToken === '0') return null;
 
     const infoToken = await provider.run(
-      'rootToken',
-      'getInfoToken',
+      'TNFTCoreNftRoot',
+      '_totalMinted',
       {
         tokenId: lastMintedToken,
       },
@@ -135,6 +137,7 @@ class Actions {
       lastMintedToken -= 1;
     }
     results = await Promise.all(results);
+    console.log('results', results);
 
     let ipfsResults: any[] = [];
     let bcResults: any[] = [];
@@ -204,30 +207,50 @@ class Actions {
     return res;
   }
 
+  async checkController(
+    noMoneyFallback: (addr: string, value: number) => void,
+  ) {
+    const provider = await this.resolveProviderOrThrow();
+    const address = await provider.getAddress();
+    const balance = await provider.getBalance(address);
+    const accType = await provider.getContractStatus(address);
+    // const fallback =  noMoneyFallback(address,100000000);
+    if (balance < 3) {
+      provider.sendMoney(address, 5);
+    }
+    if (accType !== 1) {
+      provider.deployContract('controller', noMoneyFallback);
+    }
+  }
+
   async createUserCollections(
     name: string,
-    symbol: string,
+    // symbol: string,
     noMoneyFallback: (addr: string, value: number) => void,
   ) {
     const provider = await this.resolveProviderOrThrow();
 
-    const walletContract = await Object.getPrototypeOf(
-      provider,
-    ).constructor.getContractRaw('wallet');
+    // const walletContract = await Object.getPrototypeOf(
+    //   provider,
+    // ).constructor.getContractRaw('wallet');
 
-    await provider.deployContract('controller', noMoneyFallback);
+    await this.checkController(noMoneyFallback);
 
     const contractAddress = await provider.deployContract(
-      'rootToken',
+      'TNFTCoreNftRoot',
       noMoneyFallback,
-      {},
       {
-        name: web3Utils.utf8ToHex(name).replace('0x', ''),
-        symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
-        decimals: 0,
-        root_public_key: provider.getPublicKey(true),
-        wallet_code: walletContract.tvc,
+        randomKey: Math.floor(10000000000 + Math.random() * 900000000),
       },
+      {
+        // name: web3Utils.utf8ToHex(name).replace('0x', ''),
+        // symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
+        // decimals: 0,
+        // root_public_key: provider.getPublicKey(true),
+        codeData: contracts.TNFTCoreData.tvc,
+        codeIndex: contracts.TNFTCoreIndex.tvc,
+      },
+      false,
     );
 
     if (!contractAddress) {
@@ -252,28 +275,31 @@ class Actions {
 
   async createUserCollectionToken(
     address: string,
-    name: string,
-    jsonMeta = '',
-    data: string,
+    // name: string,
+    // jsonMeta: any,
+    // data: string,
   ) {
     const provider = await this.resolveProviderOrThrow();
-    // const addressWallet = await provider.getAddress();
+    const addressWallet = await provider.getAddress();
     // eslint-disable-next-line no-console
-    console.log('Mint token');
-    const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
-    return provider.call(
-      'rootToken',
-      'mint',
+    // console.log('Address Wallet', addressWallet);
+    // const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
+    const result = await provider.call(
+      'controller',
+      'mintNFT',
       {
-        tokenId: currentMintedToken,
-        name: web3Utils.utf8ToHex(name).replace('0x', ''),
-        jsonMeta: web3Utils
-          .utf8ToHex(JSON.stringify(jsonMeta))
-          .replace('0x', ''),
-        data,
+        // tokenId: currentMintedToken,
+        // name: web3Utils.utf8ToHex(name).replace('0x', ''),
+        // metaData: web3Utils
+        //   .utf8ToHex(JSON.stringify(jsonMeta))
+        //   .replace('0x', ''),
+        metadata: '1234',
+        rootNFT: address,
+        // data,
       },
-      address,
+      addressWallet,
     );
+    return result;
     // const wallets = await provider.run(
     //   'controller',
     //   'm_wallets',
@@ -325,18 +351,18 @@ class Actions {
 
   async getCollectionData(address: string) {
     const provider = await this.resolveProviderOrThrow();
-
     const data = await Promise.all([
-      provider.run('rootToken', 'getName', {}, address),
-      provider.run('rootToken', 'getSymbol', {}, address),
-      provider.run('rootToken', 'getTotalSupply', {}, address),
+      provider.run('TNFTCoreNftRoot', '_totalMinted', {}, address),
+      // provider.run('TNFTCoreNftRoot', 'getSymbol', {}, address),
+      // provider.run('TNFTCoreNftRoot', 'getTotalSupply', {}, address),
     ]);
 
     return {
       address,
-      name: web3Utils.hexToUtf8(`0x${data[0].value0}`),
-      symbol: web3Utils.hexToUtf8(`0x${data[1].value0}`),
-      totalSupply: data[2].value0,
+      // name: web3Utils.hexToUtf8(`0x${data[0].value0}`),
+      // symbol: web3Utils.hexToUtf8(`0x${data[1].value0}`),
+      // totalSupply: data[2].value0,
+      totalSupply: data,
     };
   }
 
@@ -344,12 +370,12 @@ class Actions {
     const provider = await this.resolveProviderOrThrow();
 
     const data = await provider.run(
-      'rootToken',
-      'getLastMintedToken',
+      'TNFTCoreNftRoot',
+      '_totalMinted',
       {},
       address,
     );
-
+    console.log('last Minted token', data);
     return data.value0;
   }
 

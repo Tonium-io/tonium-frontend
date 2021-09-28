@@ -47,7 +47,6 @@ class ExtraTon extends AbstractProvider {
       window.freeton,
     );
     this.signer = await this.provider.getSigner();
-
     if (!localStorage.getItem('tonium_signature')) {
       await this.signer.sign(this.signer.publicKey);
     }
@@ -82,6 +81,7 @@ class ExtraTon extends AbstractProvider {
     address?: string,
   ) {
     const rawContract = ExtraTon.getContractRaw(contract);
+    // console.log('rawContract', rawContract);
     if (!rawContract) {
       // eslint-disable-next-line no-console
       console.error('Contract not found', rawContract);
@@ -96,7 +96,7 @@ class ExtraTon extends AbstractProvider {
       rawContract.abi,
       realAddres,
     );
-
+    // console.log("Before re", tonContract)
     return tonContract;
   }
 
@@ -135,13 +135,84 @@ class ExtraTon extends AbstractProvider {
     return network.id;
   }
 
-  async getAddress() {
-    await this.whenReady();
-    return this.signer?.wallet.address;
+  // async getAddress() {
+  //   await this.whenReady();
+  //   return this.signer?.wallet.address;
+  // }
+
+  async getAddress(publicKey = this.getPublicKey(false)): Promise<string> {
+    const { address } = this;
+
+    if (!address) {
+      await this.whenReady();
+      if (!publicKey) {
+        return '0';
+      }
+      const rawContract = ExtraTon.getContractRaw('controller');
+      const deployOptions = {
+        abi: {
+          type: 'Contract',
+          value: rawContract.abi,
+        },
+        deploy_set: {
+          tvc: rawContract.tvc,
+
+          initial_pubkey: publicKey,
+        },
+        call_set: {
+          function_name: 'constructor',
+        },
+        signer: {
+          type: 'External',
+          public_key: publicKey,
+        },
+      } as const;
+
+      const result = await this.tonClient.abi
+        .encode_message(deployOptions)
+        .catch((e) => {
+          // eslint-disable-next-line no-console
+          console.error(deployOptions);
+          // eslint-disable-next-line no-console
+          console.error(e);
+        });
+
+      if (!result) {
+        // eslint-disable-next-line no-console
+        console.error('Not able to detect address');
+        throw new Error('Not able to detect address');
+      }
+
+      // eslint-disable-next-line no-console
+      console.log(`Future address of the contract will be: ${result.address}`);
+      this.address = result.address;
+    }
+
+    return this.address;
   }
 
-  async getBalance() {
-    const address = await this.getAddress();
+  async getContractStatus(address: string) {
+    if (address) {
+      const balance = await this.tonClient.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: address,
+          },
+        },
+        result: 'acc_type',
+      });
+
+      if (balance.result?.length) {
+        const bln = balance.result[0].acc_type;
+        return bln;
+      }
+    }
+    return Number.NaN;
+  }
+
+  async getBalance(address: string) {
+    // const address = await this.getAddress();
     if (address) {
       const balance = await this.tonClient.net.query_collection({
         collection: 'accounts',
@@ -167,7 +238,15 @@ class ExtraTon extends AbstractProvider {
   }
 
   getPublicKey(withLeadingHex = false) {
-    let key = this.signer.publicKey;
+    // console.log("At GetPublic:", this.signer)
+    let key;
+    if (this.signer) {
+      key = this.signer.publicKey;
+    } else {
+      key = localStorage.getItem('tonium_signature') as string;
+    }
+
+    // console.log("kkkkkkkkk key", key)
     if (withLeadingHex) {
       key = `0x${key}`;
     }
@@ -186,9 +265,11 @@ class ExtraTon extends AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    isUseRandomPublicKey?: false,
   ) {
-    if (contractName === 'controller') return null;
-
+    // if (contractName === 'controller') return null;
+    // console.log('isUserRandKey', isUseRandomPublicKey);
+    // debugger;
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,
@@ -196,21 +277,22 @@ class ExtraTon extends AbstractProvider {
       rawContract.tvc,
     );
 
-    let publicKey: string;
-    if (contractName === 'rootToken') {
-      const randomKey = await this.tonClient.crypto.generate_random_sign_keys();
-      publicKey = randomKey.public;
-    } else {
-      publicKey = this.getPublicKey(false);
+    let publicKey = this.getPublicKey(false);
+    if (isUseRandomPublicKey) {
+      publicKey = await this.tonClient.crypto.generate_random_sign_keys();
+      publicKey = publicKey.public;
+      // console.log('Rnadom key: ', publicKey);
     }
-
     contract.setInitialPublicKey(publicKey);
+
+    // contract.setInitialPublicKey(publicKey);
     contract.setInitialParams(initialParams);
     contract.setInitialAmount('7000000000');
     const realContract = await contract.deploy(constructorParams);
     try {
       await realContract.getDeployProcessing().wait();
     } catch (e) {
+      console.log('Error:', e);
       return null;
     }
     return realContract.address;

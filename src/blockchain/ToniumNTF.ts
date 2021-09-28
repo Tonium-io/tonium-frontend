@@ -52,14 +52,18 @@ class TiniumNFT {
     this.provider = new (this.getProviders()[providerName])(
       additionaInitParams,
     ) as AbstractProvider;
-    localStorage.setItem('tonium_provider', providerName);
 
     setLogin(this.dispatch, true);
 
-    toast.success('SUCCESS', {
-      position: 'bottom-right',
-      autoClose: 4000,
-    });
+    if (!localStorage.getItem('tonium_provider')) {
+      toast.success('SUCCESS', {
+        position: 'bottom-right',
+        autoClose: 4000,
+      });
+    }
+
+    localStorage.setItem('tonium_provider', providerName);
+
     return true;
   }
 

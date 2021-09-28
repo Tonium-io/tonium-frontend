@@ -73,7 +73,9 @@ abstract class AbstractProvider {
 
   abstract getPublicKey(withLeadingHex: boolean): String;
 
-  abstract getBalance(): Promise<Number>;
+  abstract getBalance(address: string): Promise<Number>;
+
+  abstract getContractStatus(address: string): Promise<Number>;
 
   //  abstract getContractAtAddress():
 
@@ -98,6 +100,7 @@ abstract class AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    isUseRandomPublicKey?: boolean,
   ): Promise<string>;
 
   abstract sendMoney(address: string, value: number): Promise<any>;

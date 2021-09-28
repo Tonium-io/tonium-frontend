@@ -17,22 +17,28 @@ const Collection = () => {
   const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
   const [collName, setCollName] = useState('');
+  const [userCollection, setuserCollection] = useState([]);
+  const [newRecord, setNewRecord] = useState(false);
 
   useEffect(() => {
     if (state.auth) {
-      const collectionData = state.userCollections?.find(
+      toniumNFT.actions.getUserCollections().then((data: any) => {
+        setuserCollection(data);
+      });
+      const collectionData: any = userCollection?.find(
         (c: any) => c.address === `0:${collection}`,
       );
-      setCollName(collectionData ? collectionData.name : collection);
+      setCollName(collectionData?.name);
+      setNewRecord(collectionData?.totalSupply);
     }
   }, []);
 
   useEffect(() => {
-    if (state.auth) {
+    if (state.auth && state.userCollectionTokens.length !== newRecord) {
       setLoad(true);
       toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
         // eslint-disable-next-line no-console
-        // console.log(data);
+        console.log(data);
         const newData = data.map((i: any) => ({
           ...i,
           defaultImage: tonLogo,
@@ -41,7 +47,7 @@ const Collection = () => {
         setLoad(false);
       });
     }
-  }, []);
+  }, [newRecord]);
 
   return (
     <>

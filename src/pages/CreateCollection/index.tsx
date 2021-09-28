@@ -19,11 +19,12 @@ const CreateCollection = () => {
     setSendMoneyDialog(dispatch, { visible: true, addr, value });
   };
 
-  const onSubmit = ({ name, symbol }: any) => {
+  const onSubmit = ({ name }: any) => {
     if (state.auth) {
       setLoad(true);
+      console.log('Name of collection', name);
       toniumNFT.actions
-        .createUserCollections(name, symbol, noMoneyFallback)
+        .createUserCollections(name, noMoneyFallback)
         .then((data: any) => {
           // eslint-disable-next-line no-console
           console.log(data, 'Success');

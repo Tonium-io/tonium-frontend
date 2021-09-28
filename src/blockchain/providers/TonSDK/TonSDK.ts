@@ -93,12 +93,12 @@ class TonSDK extends AbstractProvider {
     this.init(initParams?.mnemonic);
   }
 
-  async getAddress(): Promise<string> {
+  async getAddress(publicKey = this.keys.keys.public): Promise<string> {
     const { address } = this;
 
     if (!address) {
       await this.whenReady();
-      if (!this.keys?.keys?.public) {
+      if (!publicKey) {
         return '0';
       }
       const rawContract = TonSDK.getContractRaw('controller');
@@ -110,7 +110,7 @@ class TonSDK extends AbstractProvider {
         deploy_set: {
           tvc: rawContract.tvc,
 
-          initial_pubkey: this.keys.keys.public,
+          initial_pubkey: publicKey,
         },
         call_set: {
           function_name: 'constructor',
@@ -366,6 +366,7 @@ class TonSDK extends AbstractProvider {
     if (withLeadingHex) {
       key = `0x${key}`;
     }
+    console.log('key');
     return key;
   }
 
@@ -383,8 +384,28 @@ class TonSDK extends AbstractProvider {
   //   return checkAccount?.result[0]?.acc_type;
   // }
 
-  async getBalance() {
-    const address = await this.getAddress();
+  async getContractStatus(address: string) {
+    if (address) {
+      const balance = await this.client.net.query_collection({
+        collection: 'accounts',
+        filter: {
+          id: {
+            eq: address,
+          },
+        },
+        result: 'acc_type',
+      });
+
+      if (balance.result?.length) {
+        const bln = balance.result[0].acc_type;
+        return bln;
+      }
+    }
+    return Number.NaN;
+  }
+
+  async getBalance(address: string) {
+    // const address = await this.getAddress();
     if (address) {
       const balance = await this.client.net.query_collection({
         collection: 'accounts',
@@ -458,6 +479,7 @@ class TonSDK extends AbstractProvider {
     noMoneyFallback: (addr: string, value: number) => void,
     initialParams?: {},
     constructorParams?: {},
+    // isUseRandomPublicKey?: false,
   ) {
     await this.whenReady();
     const rawContract = TonSDK.getContractRaw(contractName);
@@ -471,7 +493,7 @@ class TonSDK extends AbstractProvider {
         tvc: rawContract.tvc,
         initial_data: initialParams,
         initial_pubkey:
-          contractName === 'rootToken'
+          contractName === 'TNFTCoreNftRoot'
             ? randomKey.public
             : this.keys.keys.public,
       },
@@ -536,8 +558,8 @@ class TonSDK extends AbstractProvider {
         throw new Error('Not enough money');
       }
 
-      const controllerBalance = await this.getBalance();
       const controllerAddress = await this.getAddress();
+      const controllerBalance = await this.getBalance(controllerAddress);
 
       const executorFeesInDec = executorFees / 1_000_000_000;
       if (controllerBalance < executorFeesInDec) {
