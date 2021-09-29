@@ -1,4 +1,4 @@
-// import web3Utils from 'web3-utils';
+import web3Utils from 'web3-utils';
 
 import { hexToUtf8 } from 'src/helpers';
 import { zeroAddress } from 'src/constants';
@@ -236,19 +236,35 @@ class Actions {
 
     await this.checkController(noMoneyFallback);
 
+    const addrOwner = await provider.getAddress();
+    console.log('Addr Owner', addrOwner);
+
+    const codeDataTvc = await provider.getCodeFromTvc(
+      contracts.TNFTCoreData.tvc,
+    );
+    console.log('codeDataTvc', codeDataTvc);
+
+    // console.log("vakuess", {
+    //   // randomKey: Math.floor(10000000000 + Math.random() * 900000000),
+    //   _name: web3Utils.utf8ToHex(name).replace('0x', ''),
+    //   _addrOwner: addrOwner,
+    // })
+
     const contractAddress = await provider.deployContract(
       'TNFTCoreNftRoot',
       noMoneyFallback,
       {
-        randomKey: Math.floor(10000000000 + Math.random() * 900000000),
+        // randomKey: Math.floor(10000000000 + Math.random() * 900000000),
+        _name: web3Utils.utf8ToHex(name).replace('0x', ''),
+        _addrOwner: addrOwner,
       },
       {
         // name: web3Utils.utf8ToHex(name).replace('0x', ''),
         // symbol: web3Utils.utf8ToHex(symbol).replace('0x', ''),
         // decimals: 0,
         // root_public_key: provider.getPublicKey(true),
-        codeData: contracts.TNFTCoreData.tvc,
-        codeIndex: contracts.TNFTCoreIndex.tvc,
+        codeData: codeDataTvc,
+        codeIndex: await provider.getCodeFromTvc(contracts.TNFTCoreIndex.tvc),
       },
       false,
     );
@@ -283,7 +299,8 @@ class Actions {
     const addressWallet = await provider.getAddress();
     // eslint-disable-next-line no-console
     // console.log('Address Wallet', addressWallet);
-    // const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;
+    // const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;wsx
+
     const result = await provider.call(
       'controller',
       'mintNFT',

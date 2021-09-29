@@ -93,7 +93,7 @@ class TonSDK extends AbstractProvider {
     this.init(initParams?.mnemonic);
   }
 
-  async getAddress(publicKey = this.keys.keys.public): Promise<string> {
+  async getAddress(publicKey = this.getPublicKey(false)): Promise<string> {
     const { address } = this;
 
     if (!address) {
@@ -116,8 +116,8 @@ class TonSDK extends AbstractProvider {
           function_name: 'constructor',
         },
         signer: {
-          type: 'Keys',
-          keys: this.keys.keys,
+          type: 'External',
+          public_key: publicKey,
         },
       } as const;
 
@@ -155,6 +155,8 @@ class TonSDK extends AbstractProvider {
     if (mnemonic) {
       const keys = await this.keyPairFromPhrase(mnemonic);
       this.keys = signerKeys(keys as KeyPair);
+      localStorage.setItem('tonSdkPublic', this.keys.keys.public);
+      console.log('this.keys: ', localStorage.getItem('tonSdkPublic'));
       localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
@@ -211,6 +213,13 @@ class TonSDK extends AbstractProvider {
   logout() {
     localStorage.removeItem('tonium_mnemonic');
     return true;
+  }
+
+  async getCodeFromTvc(tvc: string) {
+    const codeFromTvc = await this.client.boc.get_code_from_tvc({
+      tvc,
+    });
+    return codeFromTvc.code;
   }
 
   async getContractAtAddress(
@@ -362,11 +371,19 @@ class TonSDK extends AbstractProvider {
   // }
 
   getPublicKey(withLeadingHex: boolean) {
-    let key = this.keys.keys.public;
+    // let key = this.keys?.keys.public;
+
+    let key;
+    if (this.keys) {
+      key = this.keys.keys.publicKey;
+    } else {
+      key = localStorage.getItem('tonSdkPublic') as string;
+    }
+
     if (withLeadingHex) {
       key = `0x${key}`;
     }
-    console.log('key');
+    console.log('key', key);
     return key;
   }
 

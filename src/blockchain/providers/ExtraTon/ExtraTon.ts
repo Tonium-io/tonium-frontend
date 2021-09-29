@@ -283,11 +283,19 @@ class ExtraTon extends AbstractProvider {
       publicKey = publicKey.public;
       // console.log('Rnadom key: ', publicKey);
     }
-    contract.setInitialPublicKey(publicKey);
+    if (contractName !== 'TNFTCoreNftRoot') {
+      contract.setInitialPublicKey(publicKey);
+    }
 
     // contract.setInitialPublicKey(publicKey);
     contract.setInitialParams(initialParams);
     contract.setInitialAmount('7000000000');
+    // console.log("JSOn",JSON.stringify({
+    //   abi: contract.abi,
+    //   image: contract.imageBase64,
+    //   options: contract.options,
+    //   constructorParams,
+    //   }));
     const realContract = await contract.deploy(constructorParams);
     try {
       await realContract.getDeployProcessing().wait();
@@ -296,6 +304,13 @@ class ExtraTon extends AbstractProvider {
       return null;
     }
     return realContract.address;
+  }
+
+  async getCodeFromTvc(tvc: string) {
+    const codeFromTvc = await this.tonClient.boc.get_code_from_tvc({
+      tvc,
+    });
+    return codeFromTvc.code;
   }
 
   async getAddresInfo(address: string) {

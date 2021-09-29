@@ -78,6 +78,7 @@ abstract class AbstractProvider {
   abstract getContractStatus(address: string): Promise<Number>;
 
   //  abstract getContractAtAddress():
+  abstract getCodeFromTvc(tvc: string): Promise<string>;
 
   static getRequiredInitFields(): Array<{
     name: String;
