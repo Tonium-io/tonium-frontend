@@ -17,12 +17,12 @@ import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from './styles.module.scss';
 
-type TokenItemType = {
-  name: string;
-  address: string;
-  file: string;
-  marked: boolean;
-};
+// type TokenItemType = {
+//   name: string;
+//   address: string;
+//   file: string;
+//   marked: boolean;
+// };
 
 interface StyledTabProps {
   label: string;
@@ -101,7 +101,7 @@ const Own = () => {
         const newwlyOne: any = [];
         data.forEach(async (element: any) => {
           await toniumNFT.actions
-            .getInfoTokens(element.address)
+            .getMintNfts(element.address)
             .then((collection: any) => {
               // eslint-disable-next-line no-console
 
@@ -216,11 +216,17 @@ const Own = () => {
 
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
-            {state.userAllTokens.map((item: TokenItemType) => (
+            {state.userAllTokens.map((item: any) => (
               <NavLink to="#" className={cls.tokens}>
                 <div
                   className={cls.three}
-                  style={{ backgroundImage: `url(${item.file})` }}
+                  style={{
+                    backgroundImage: `url(${
+                      item.file
+                        ? item.file
+                        : 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg'
+                    })`,
+                  }}
                 >
                   <NavLink to="/own/sell" className={cls.btnToken}>
                     Sell
@@ -232,7 +238,9 @@ const Own = () => {
                     Edit
                   </NavLink>
                 </div>
-                <span className={cls.text}>{item.name}</span>
+                <span className={cls.text}>
+                  {item.metadata ? item.metadata.name : ''}
+                </span>
               </NavLink>
             ))}
           </div>

@@ -27,7 +27,7 @@ class TiniumNFT {
     if (localStorage.getItem('tonium_provider')) {
       this.setProvider(localStorage.getItem('tonium_provider') as string);
     }
-
+    console.log('hji');
     this.actions = new Actions(this.getCurrentProvider.bind(this));
     this.api = new Api(this.getApiSignature.bind(this));
   }
@@ -77,11 +77,12 @@ class TiniumNFT {
     if (!provider) {
       throw new Error('Please login by provider first');
     }
-
+    console.log('HIIII');
     const [network, publicKey] = await Promise.all([
       provider.getNetwork(),
       provider.getPublicKey(false),
     ]);
+    console.log('Byy');
     const message = await provider.signMessage({ network, publicKey });
 
     return `${publicKey}:${message}`;

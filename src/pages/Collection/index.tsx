@@ -25,9 +25,10 @@ const Collection = () => {
       toniumNFT.actions.getUserCollections().then((data: any) => {
         setuserCollection(data);
       });
-      const collectionData: any = userCollection?.find(
+      const collectionData: any = userCollection.find(
         (c: any) => c.address === `0:${collection}`,
       );
+      console.log('collectionData', collectionData);
       setCollName(collectionData?.name);
       setNewRecord(collectionData?.totalSupply);
     }
@@ -36,7 +37,7 @@ const Collection = () => {
   useEffect(() => {
     if (state.auth && state.userCollectionTokens.length !== newRecord) {
       setLoad(true);
-      toniumNFT.actions.getInfoTokens(`0:${collection}`).then((data: any) => {
+      toniumNFT.actions.getMintNfts(`0:${collection}`).then((data: any) => {
         // eslint-disable-next-line no-console
         console.log(data);
         const newData = data.map((i: any) => ({

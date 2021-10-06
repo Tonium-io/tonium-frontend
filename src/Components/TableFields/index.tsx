@@ -93,7 +93,7 @@ const TableFields = ({
                 </Paper>
               </NavLink>
             )}
-            <Typography>{c.name}</Typography>
+            <Typography>{c.metadata ? c.metadata.name : c.name}</Typography>
             <Typography>{c.description}</Typography>
           </ListItem>
         ))}

@@ -23,7 +23,6 @@ class Actions {
   // eslint-disable-next-line class-methods-use-this
   async getUserCollections() {
     let userNFTs = [];
-
     const localStorageCollections = localStorage.getItem('tonuim_userNFT');
     if (localStorageCollections) {
       try {
@@ -52,6 +51,61 @@ class Actions {
       ...tokens[index],
       name: collection.name,
       description: collection.symbol,
+    }));
+  }
+
+  async getMintNfts(address: string) {
+    let newUserNFTs = [];
+
+    const provider = await this.getCurrentProvider();
+
+    if (address) {
+      // newUserNFTs = JSON.parse(localStorageCollections);
+
+      // await Promise.all([
+      // ...newUserNFTs.map(async (elem: any) => {
+
+      const name = await provider.run('TNFTCoreNftRoot', '_name', {}, address);
+
+      const lastMintedToken = await this.getLastMintedToken(address);
+      /* eslint no-underscore-dangle: 0 */
+      // console.log("name & tojen", name._name, +lastMintedToken);
+
+      const newLsit = await Array.from(Array(+lastMintedToken).keys());
+
+      newUserNFTs = await newLsit.map(async (itr) => {
+        const val = await provider.run(
+          'TNFTCoreNftRoot',
+          'resolveData',
+          {
+            addrRoot: address,
+            name: name._name,
+            id: itr,
+          },
+          address,
+        );
+
+        const nextVal = await provider.run(
+          'TNFTCoreData',
+          'getInfo',
+          {},
+          val.addrData,
+        );
+
+        return nextVal;
+      });
+      // })
+      // ])
+
+      newUserNFTs = await Promise.all(newUserNFTs);
+
+      console.log('Minted Nfts: ', newUserNFTs);
+    }
+
+    // return newUserNFTs
+    return newUserNFTs.map((collection: any) => ({
+      ...collection,
+      metadata: JSON.parse(web3Utils.hexToUtf8(`0x${collection.metadata}`)),
     }));
   }
 
@@ -126,8 +180,8 @@ class Actions {
 
     while (lastMintedToken) {
       const getInfoToken = provider.run(
-        'rootToken',
-        'getInfoToken',
+        'TNFTCoreData',
+        'getInfo',
         {
           tokenId: lastMintedToken,
         },
@@ -137,7 +191,7 @@ class Actions {
       lastMintedToken -= 1;
     }
     results = await Promise.all(results);
-    console.log('results', results);
+    // console.log('results', results);
 
     let ipfsResults: any[] = [];
     let bcResults: any[] = [];
@@ -237,12 +291,12 @@ class Actions {
     await this.checkController(noMoneyFallback);
 
     const addrOwner = await provider.getAddress();
-    console.log('Addr Owner', addrOwner);
+    // console.log('Addr Owner', addrOwner);
 
     const codeDataTvc = await provider.getCodeFromTvc(
       contracts.TNFTCoreData.tvc,
     );
-    console.log('codeDataTvc', codeDataTvc);
+    // console.log('codeDataTvc', codeDataTvc);
 
     // console.log("vakuess", {
     //   // randomKey: Math.floor(10000000000 + Math.random() * 900000000),
@@ -292,9 +346,11 @@ class Actions {
   async createUserCollectionToken(
     address: string,
     // name: string,
-    // jsonMeta: any,
+    jsonMeta: any,
     // data: string,
   ) {
+    console.log('JSON META DATA: ', jsonMeta);
+    console.log('jjjj', web3Utils.utf8ToHex(JSON.stringify(jsonMeta)));
     const provider = await this.resolveProviderOrThrow();
     const addressWallet = await provider.getAddress();
     // eslint-disable-next-line no-console
@@ -307,10 +363,9 @@ class Actions {
       {
         // tokenId: currentMintedToken,
         // name: web3Utils.utf8ToHex(name).replace('0x', ''),
-        // metaData: web3Utils
-        //   .utf8ToHex(JSON.stringify(jsonMeta))
-        //   .replace('0x', ''),
-        metadata: '1234',
+        metadata: web3Utils
+          .utf8ToHex(JSON.stringify(jsonMeta))
+          .replace('0x', ''),
         rootNFT: address,
         // data,
       },
@@ -392,8 +447,8 @@ class Actions {
       {},
       address,
     );
-    console.log('last Minted token', data);
-    return data.value0;
+    /* eslint no-underscore-dangle: 0 */
+    return data._totalMinted;
   }
 
   // eslint-disable-next-line class-methods-use-this
