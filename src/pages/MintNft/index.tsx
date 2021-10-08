@@ -24,7 +24,7 @@ const MintNft = () => {
   const { toniumNFT, state } = useContext(ContextApp);
 
   useEffect(() => {
-    const nameCol = state.userCollections?.find(
+    const nameCol = state.userCollections.find(
       (c: any) => c.address === `0:${collection}`,
     )?.name;
     setCollName(nameCol);

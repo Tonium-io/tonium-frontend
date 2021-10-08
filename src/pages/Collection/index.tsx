@@ -17,20 +17,20 @@ const Collection = () => {
   const { userCollectionTokens }: any = state;
   const [load, setLoad] = useState(false);
   const [collName, setCollName] = useState('');
-  const [userCollection, setuserCollection] = useState([]);
+  // const [ setuserCollection] = useState([]);
   const [newRecord, setNewRecord] = useState(false);
 
   useEffect(() => {
     if (state.auth) {
+      let collectionData: any;
       toniumNFT.actions.getUserCollections().then((data: any) => {
-        setuserCollection(data);
+        // setuserCollection(data);
+        collectionData = data.find((c: any) => c.address === `0:${collection}`);
+
+        console.log('collectionData', collectionData);
+        setCollName(collectionData.name);
+        setNewRecord(collectionData.totalSupply);
       });
-      const collectionData: any = userCollection.find(
-        (c: any) => c.address === `0:${collection}`,
-      );
-      console.log('collectionData', collectionData);
-      setCollName(collectionData?.name);
-      setNewRecord(collectionData?.totalSupply);
     }
   }, []);
 

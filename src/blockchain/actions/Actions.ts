@@ -69,7 +69,7 @@ class Actions {
 
       const lastMintedToken = await this.getLastMintedToken(address);
       /* eslint no-underscore-dangle: 0 */
-      // console.log("name & tojen", name._name, +lastMintedToken);
+      console.log('name & tojen', name._name, lastMintedToken);
 
       const newLsit = await Array.from(Array(+lastMintedToken).keys());
 
@@ -91,6 +91,8 @@ class Actions {
           {},
           val.addrData,
         );
+
+        console.log('Next v', nextVal);
 
         return nextVal;
       });
@@ -363,14 +365,16 @@ class Actions {
       {
         // tokenId: currentMintedToken,
         // name: web3Utils.utf8ToHex(name).replace('0x', ''),
+        rootNFT: address,
         metadata: web3Utils
           .utf8ToHex(JSON.stringify(jsonMeta))
           .replace('0x', ''),
-        rootNFT: address,
         // data,
       },
       addressWallet,
     );
+
+    // console.log("Minted Token", result)
     return result;
     // const wallets = await provider.run(
     //   'controller',
@@ -429,9 +433,11 @@ class Actions {
       // provider.run('TNFTCoreNftRoot', 'getTotalSupply', {}, address),
     ]);
 
+    const name = await provider.run('TNFTCoreNftRoot', '_name', {}, address);
+
     return {
       address,
-      // name: web3Utils.hexToUtf8(`0x${data[0].value0}`),
+      name: web3Utils.hexToUtf8(`0x${name._name}`),
       // symbol: web3Utils.hexToUtf8(`0x${data[1].value0}`),
       // totalSupply: data[2].value0,
       totalSupply: data,
