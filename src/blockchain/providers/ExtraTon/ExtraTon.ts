@@ -255,9 +255,13 @@ class ExtraTon extends AbstractProvider {
 
   // todo full function
   async sendMoney(address: string, value: number) {
-    const key = this.signer.publicKey;
-    const result = address || value || key;
-    return !!result;
+    // const key = this.signer.publicKey;
+    // const result = address || value || key;
+    const val = value * 1000000000;
+    const res = await this.signer.wallet
+      .transfer(address, val.toString())
+      .catch((err: string) => console.log(err));
+    return res;
   }
 
   async deployContract(
@@ -269,7 +273,7 @@ class ExtraTon extends AbstractProvider {
   ) {
     // if (contractName === 'controller') return null;
     // console.log('isUserRandKey', isUseRandomPublicKey);
-    // debugger;
+    debugger;
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,

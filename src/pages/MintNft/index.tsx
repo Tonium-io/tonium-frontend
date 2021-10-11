@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import Typography from '@material-ui/core/Typography';
 
-import { ContextApp } from '../../store/reducer';
+import { ContextApp, setSendMoneyDialog } from '../../store/reducer';
 import Loader from '../../Components/Loader';
 import Breadcrumbs from '../../Components/Breadcrumbs';
 import { zeroAddress } from '../../constants';
@@ -21,7 +21,11 @@ const MintNft = () => {
   const { collection } = useParams<any>();
   const [load, setLoad] = useState(false);
   const [collName, setCollName] = useState('');
-  const { toniumNFT, state } = useContext(ContextApp);
+  const { toniumNFT, state, dispatch } = useContext(ContextApp);
+
+  const noMoneyFallback = (addr: string, value: number) => {
+    setSendMoneyDialog(dispatch, { visible: true, addr, value });
+  };
 
   useEffect(() => {
     const nameCol = state.userCollections.find(
@@ -105,6 +109,7 @@ const MintNft = () => {
         name,
         // tokenData,
         tokenFileAddress,
+        noMoneyFallback,
       })
       .then((data: any) => {
         // eslint-disable-next-line no-console

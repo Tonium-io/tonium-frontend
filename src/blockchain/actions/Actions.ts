@@ -69,7 +69,6 @@ class Actions {
 
       const lastMintedToken = await this.getLastMintedToken(address);
       /* eslint no-underscore-dangle: 0 */
-      console.log('name & tojen', name._name, lastMintedToken);
 
       const newLsit = await Array.from(Array(+lastMintedToken).keys());
 
@@ -92,23 +91,48 @@ class Actions {
           val.addrData,
         );
 
-        console.log('Next v', nextVal);
-
         return nextVal;
       });
       // })
       // ])
 
       newUserNFTs = await Promise.all(newUserNFTs);
-
-      console.log('Minted Nfts: ', newUserNFTs);
     }
 
-    // return newUserNFTs
-    return newUserNFTs.map((collection: any) => ({
+    newUserNFTs = await newUserNFTs.map((collection: any) => ({
       ...collection,
       metadata: JSON.parse(web3Utils.hexToUtf8(`0x${collection.metadata}`)),
     }));
+
+    newUserNFTs = await newUserNFTs.map(async (collection: any) => ({
+      ...collection,
+      metadata: {
+        name: collection.metadata.name,
+        tokenFileAddress: await Promise.all([
+          provider.run(
+            'files',
+            'm_raw_data_chunks',
+            {},
+            collection.metadata.tokenFileAddress,
+          ),
+        ]),
+      },
+    }));
+
+    newUserNFTs = await Promise.all(newUserNFTs);
+
+    newUserNFTs = await newUserNFTs.map(async (collection: any) => ({
+      ...collection,
+      metadata: {
+        name: collection.metadata.name,
+        tokenFileAddress: collection.metadata.tokenFileAddress.map((val: any) =>
+          val.m_raw_data_chunks.join(),
+        )[0],
+      },
+    }));
+    newUserNFTs = await Promise.all(newUserNFTs);
+
+    return newUserNFTs;
   }
 
   // async deployNFTWallet(address: string) {
@@ -272,10 +296,11 @@ class Actions {
     const accType = await provider.getContractStatus(address);
     // const fallback =  noMoneyFallback(address,100000000);
     if (balance < 3) {
-      provider.sendMoney(address, 5);
+      const money = await provider.sendMoney(address, 5);
+      console.log('Money', money);
     }
     if (accType !== 1) {
-      provider.deployContract('controller', noMoneyFallback);
+      await provider.deployContract('controller', noMoneyFallback);
     }
   }
 
@@ -350,13 +375,12 @@ class Actions {
     // name: string,
     jsonMeta: any,
     // data: string,
+    noMoneyFallback: (addr: string, value: number) => void,
   ) {
-    console.log('JSON META DATA: ', jsonMeta);
-    console.log('jjjj', web3Utils.utf8ToHex(JSON.stringify(jsonMeta)));
     const provider = await this.resolveProviderOrThrow();
     const addressWallet = await provider.getAddress();
+    await this.checkController(noMoneyFallback);
     // eslint-disable-next-line no-console
-    // console.log('Address Wallet', addressWallet);
     // const currentMintedToken = +(await this.getLastMintedToken(address)) + 1;wsx
 
     const result = await provider.call(
