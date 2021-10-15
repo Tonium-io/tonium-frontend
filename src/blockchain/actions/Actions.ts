@@ -58,7 +58,7 @@ class Actions {
     let newUserNFTs = [];
 
     const provider = await this.getCurrentProvider();
-
+    // console.log("Provider:", provider)
     if (address) {
       // newUserNFTs = JSON.parse(localStorageCollections);
 
@@ -69,7 +69,7 @@ class Actions {
 
       const lastMintedToken = await this.getLastMintedToken(address);
       /* eslint no-underscore-dangle: 0 */
-
+      // console.log("Name and Token", name, lastMintedToken)
       const newLsit = await Array.from(Array(+lastMintedToken).keys());
 
       newUserNFTs = await newLsit.map(async (itr) => {
@@ -78,12 +78,12 @@ class Actions {
           'resolveData',
           {
             addrRoot: address,
-            name: name._name,
             id: itr,
+            name: name._name,
           },
           address,
         );
-
+        // console.log("val", val)
         const nextVal = await provider.run(
           'TNFTCoreData',
           'getInfo',
@@ -111,7 +111,7 @@ class Actions {
         tokenFileAddress: await Promise.all([
           provider.run(
             'files',
-            'm_raw_data_chunks',
+            'getDetails',
             {},
             collection.metadata.tokenFileAddress,
           ),
@@ -125,9 +125,17 @@ class Actions {
       ...collection,
       metadata: {
         name: collection.metadata.name,
-        tokenFileAddress: collection.metadata.tokenFileAddress.map((val: any) =>
-          val.m_raw_data_chunks.join(),
-        )[0],
+        tokenFileAddress: {
+          chunks: web3Utils.hexToUtf8(
+            `0x${collection.metadata.tokenFileAddress[0].chunks.join('')}`,
+          ),
+          extension: web3Utils.hexToUtf8(
+            `0x${collection.metadata.tokenFileAddress[0].extension}`,
+          ),
+          mime: web3Utils.hexToUtf8(
+            `0x${collection.metadata.tokenFileAddress[0].mime}`,
+          ),
+        },
       },
     }));
     newUserNFTs = await Promise.all(newUserNFTs);
@@ -421,6 +429,8 @@ class Actions {
 
   async createUserCollectionTokenFile(
     chunks: any[],
+    mimeType: string,
+    extension: string,
     noMoneyFallback: (addr: string, value: number) => void,
   ) {
     const provider = await this.resolveProviderOrThrow();
@@ -430,7 +440,11 @@ class Actions {
       'files',
       noMoneyFallback,
       { nonce: Math.floor(Math.random() * 100000) },
-      { chunks_count: chunks.length },
+      {
+        chunks_count: chunks.length,
+        mime: web3Utils.utf8ToHex(mimeType).replace('0x', ''),
+        extension: web3Utils.utf8ToHex(extension).replace('0x', ''),
+      },
     );
     // eslint-disable-next-line no-console
     console.log('Files contract deploy success.', contractAddress);

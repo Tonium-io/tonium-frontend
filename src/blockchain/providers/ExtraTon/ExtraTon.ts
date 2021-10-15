@@ -273,7 +273,6 @@ class ExtraTon extends AbstractProvider {
   ) {
     // if (contractName === 'controller') return null;
     // console.log('isUserRandKey', isUseRandomPublicKey);
-    debugger;
     const rawContract = ExtraTon.getContractRaw(contractName);
     const contract = new freeton.ContractBuilder(
       this.signer,

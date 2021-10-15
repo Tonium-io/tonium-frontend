@@ -84,6 +84,8 @@ const MintNft = () => {
         tokenFileAddress =
           await toniumNFT.actions.createUserCollectionTokenFile(
             chunks,
+            file.type,
+            file.name.split('.').pop(),
             (addr: string, value: number) => {
               // eslint-disable-next-line no-console
               console.log(addr, value);

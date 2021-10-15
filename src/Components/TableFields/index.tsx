@@ -35,7 +35,7 @@ const TableFields = ({
         wrap="wrap"
       >
         {arrayItems.map((c: any) => (
-          <ListItem button key={c.time || c.address}>
+          <ListItem button key={c.time || c.address || c.addrData}>
             {clickCollectionsUrl ? (
               <NavLink
                 to={`/${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
@@ -86,7 +86,7 @@ const TableFields = ({
                       <img
                         className={styles.paperImage}
                         alt={c.name}
-                        src={c.defaultImage}
+                        src={c.metadata.tokenFileAddress.chunks}
                       />
                     )}
                   </div>

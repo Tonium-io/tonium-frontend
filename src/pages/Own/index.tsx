@@ -222,8 +222,8 @@ const Own = () => {
                   className={cls.three}
                   style={{
                     backgroundImage: `url(${
-                      item.file
-                        ? item.file
+                      item.metadata.tokenFileAddress.chunks
+                        ? item.metadata.tokenFileAddress.chunks
                         : 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg'
                     })`,
                   }}

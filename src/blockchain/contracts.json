@@ -459,11 +459,16 @@
     "address": { "1": "null", "2": "null" },
     "abi": {
       "ABI version": 2,
+      "version": "2.1",
       "header": ["time", "expire"],
       "functions": [
         {
           "name": "constructor",
-          "inputs": [{ "name": "chunks_count", "type": "uint32" }],
+          "inputs": [
+            { "name": "chunks_count", "type": "uint32" },
+            { "name": "mime", "type": "bytes" },
+            { "name": "extension", "type": "bytes" }
+          ],
           "outputs": []
         },
         {
@@ -481,6 +486,8 @@
             { "name": "chunks_count", "type": "uint128" },
             { "name": "cur_chunk_count", "type": "uint128" },
             { "name": "creator_pubkey", "type": "uint256" },
+            { "name": "mime", "type": "bytes" },
+            { "name": "extension", "type": "bytes" },
             { "name": "chunks", "type": "bytes[]" }
           ]
         },
@@ -496,9 +503,20 @@
         }
       ],
       "data": [{ "key": 1, "name": "nonce", "type": "uint64" }],
-      "events": []
+      "events": [],
+      "fields": [
+        { "name": "_pubkey", "type": "uint256" },
+        { "name": "_constructorFlag", "type": "bool" },
+        { "name": "value", "type": "uint256" },
+        { "name": "nonce", "type": "uint64" },
+        { "name": "m_chunks_count", "type": "uint32" },
+        { "name": "m_cur_chunk_count", "type": "uint32" },
+        { "name": "_mime", "type": "bytes" },
+        { "name": "_extension", "type": "bytes" },
+        { "name": "allowance_dest", "type": "address" },
+        { "name": "m_raw_data_chunks", "type": "bytes[]" }
     },
-    "tvc": "te6ccgECFwEAA4YAAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsUBQQWAnQh2zzTAAGOEoECANcYIPkBWPhCIPhl+RDyqN5TMNM/MzAh0x8zIPgjvvLgZTAhbCHTHwHbPPhHbvJ8EgYBOiLQ1wsDqTgA3CHHANwh1w0f8rwh3QHbPPhHbvJ8BgIoIIIQPLhlm7vjAiCCEEnj6f+64wIJBwOIMPhIbuMA0ds8JI4vJtDTAfpAMDHIz4cgznHPC2FeIVUwyM+TJ4+n/st/y3/L/wFvIgLLH/QAzclw+wCSXwTi4wB/+GcOCBAAIHBfMG1vAvhN+E74QvhQbEQEUCCCECJNrMy64wIgghAmrq0NuuMCIIIQL9X+QbrjAiCCEDy4ZZu64wIPDQwKAyIw+Ehu4wDTH9TR2zzbPH/4Zw4LEADM+EUgbpIwcN74Qrry4Gb4APhFIG6SMHDe+EK68uBmIfhQbxGAIPQP8rKCEP/////5QTAxqwLy0Gsh+E278uBq+E74Tbvy4Gz4APhQbyIjAVMSufKyI1mAIPQXbwL4cFv4TqS1H/huAV4w0ds8+FAhjiKNBHAAAAAAAAAAAAAAAAAr9X+QYMjOAW8iAssf9ADJcPsA3n/4Zw4BUjDR2zz4SyGOHI0EcAAAAAAAAAAAAAAAACmrq0NgyM7L/8lw+wDef/hnDgBo7UTQ0//TAPQE0//TP9Mf0x/U0dD6QNMf9ARZbwIB0fhw+G/4bvht+Gz4a/hqf/ho+Gb4YgNoMPhIbuMA+Ebyc3H4ZtMf0fhC8uBlIMIA8uBo+AAg+G1t+E1fII6A5DABbwL4cDDbPH/4ZxIREABg+FD4T/hO+E34TPhL+Er4RvhCyMv/ywD0AMv/yz/LH8sfWcjOAW8iAssf9ADNye1UARKliFMTgCD0FzMWAXbtRNAg10nCAY4x0//TAPQE0//TP9Mf0x/U0dD6QNMf9ARZbwIB0fhw+G/4bvht+Gz4a/hqf/ho+Gb4YhMAxI5f9AVt+Gpw+GtxIYBA9A6T1ws/kXDi+Gxw+G1w+G6NCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4b3BtbwL4cHABgED0DvK91wv/+GJw+GNw+GZ/+GjiAgr0pCD0oRYVABRzb2wgMC40NS4wAAA=",
+    "tvc": "te6ccgECGAEAA2oAAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsVBQQXAnrtRNDXScMB+GYh2zzTAAGOEoECANcYIPkBWPhCIPhl+RDyqN5TMNM/MzAh0x8zIPgjvvLgZVvTHwHbPPI8CQYDSu1E0NdJwwH4ZiLQ1wsDqTgA3CHHAOMCIdcNH/K8IeMDAds88jwUFAYCKCCCEDy4ZZu74wIgghBbDzrIuuMCCwcDbDD4Qm7jAPhG8nPTH9TU0fhC8uBlIsIA8uBo+ABY+Gxt+ExfII6A5DABbwL4cQH4bvhv2zzyAAkIEQESpYhTE4Ag9BczFwIW7UTQ10nCAYqOgOITCgK8cO1E0PQFcPhqcSGAQPQOk9cLP5Fw4vhrcPhscPhtiPhuiPhvjQhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE+HBwbW8C+HGAQPQO8r3XC//4YnD4YxcXBFAgghAdk9NduuMCIIIQJq6tDbrjAiCCEC/V/kG64wIgghA8uGWbuuMCEA8ODAMqMPhG8uBM+EJu4wDTH9TR2zzbPPIAEw0RAMr4RSBukjBw3vhCuvLgZvgA+EUgbpIwcN74Qrry4GYh+FFvEYAg9A/ysoIQ//////lBMDGrAvLQayH4TLvy4Gr4TfhMu/LgbPgA+FFvIlUCZiO58rIQI4Ag9BdvAvhx+E2ktR/4bQFcMNHbPPhRIY4ijQRwAAAAAAAAAAAAAAAAK/V/kGDIzgFvIgLLH/QAyXD7AN7yABMBUDDR2zz4SiGOHI0EcAAAAAAAAAAAAAAAACmrq0NgyM7L/8lw+wDe8gATA5Aw+Eby4Ez4Qm7jANHbPCaOLyjQ0wH6QDAxyM+HIM5xzwthXlDIz5J2T012y3/Lf8v/zMwBbyICyx/0AM3JcPsAkl8G4uMA8gATEhEAYPhR+FD4T/hO+E34TPhL+Er4QsjL/8+Dy//LP8sfyx/MzFnIzgFvIgLLH/QAzcntVAAY+Ez4TfhC+E74T/hRAGTtRNDT/9MAMdP/0z/TH9Mf1NTU0dD6QNMf9ARZbwIB0fhx+HD4b/hu+G34bPhr+Gr4YgAK+Eby4EwCCvSkIPShFxYAFHNvbCAwLjUwLjAAAA==",
     "zip": "https://github.com/Tonium-io/TON_Files/archive/refs/heads/master.zip#TON_Files-master/file"
   }
 }
