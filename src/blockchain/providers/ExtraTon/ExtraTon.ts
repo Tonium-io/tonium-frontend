@@ -260,7 +260,10 @@ class ExtraTon extends AbstractProvider {
     const val = value * 1000000000;
     const res = await this.signer.wallet
       .transfer(address, val.toString())
-      .catch((err: string) => console.log(err));
+      .catch((err: string) =>
+        // eslint-disable-next-line no-console
+        console.log(err),
+      );
     return res;
   }
 
@@ -303,6 +306,7 @@ class ExtraTon extends AbstractProvider {
     try {
       await realContract.getDeployProcessing().wait();
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.log('Error:', e);
       return null;
     }

@@ -156,7 +156,7 @@ class TonSDK extends AbstractProvider {
       const keys = await this.keyPairFromPhrase(mnemonic);
       this.keys = signerKeys(keys as KeyPair);
       localStorage.setItem('tonSdkPublic', this.keys.keys.public);
-      console.log('this.keys: ', localStorage.getItem('tonSdkPublic'));
+      // console.log('this.keys: ', localStorage.getItem('tonSdkPublic'));
       localStorage.setItem('tonium_mnemonic', mnemonic);
     } else {
       // todo grab from local storage and dencode it
@@ -383,6 +383,7 @@ class TonSDK extends AbstractProvider {
     if (withLeadingHex) {
       key = `0x${key}`;
     }
+    // eslint-disable-next-line no-console
     console.log('key', key);
     return key;
   }

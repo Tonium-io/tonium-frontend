@@ -22,7 +22,7 @@ const CreateCollection = () => {
   const onSubmit = ({ name }: any) => {
     if (state.auth) {
       setLoad(true);
-      console.log('Name of collection', name);
+      // console.log('Name of collection', name);
       toniumNFT.actions
         .createUserCollections(name, noMoneyFallback)
         .then((data: any) => {

@@ -116,6 +116,7 @@ const MintNft = () => {
       .then((data: any) => {
         // eslint-disable-next-line no-console
         console.log(data, 'Success');
+        // eslint-disable-next-line no-console
         console.log(tokenData);
         toast.success('Success', {
           position: 'bottom-right',

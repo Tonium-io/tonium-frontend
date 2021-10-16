@@ -26,7 +26,7 @@ const Collection = () => {
       toniumNFT.actions.getUserCollections().then((data: any) => {
         // setuserCollection(data);
         collectionData = data.find((c: any) => c.address === `0:${collection}`);
-
+        // eslint-disable-next-line no-console
         console.log('collectionData', collectionData);
         setCollName(collectionData.name);
         setNewRecord(collectionData.totalSupply);

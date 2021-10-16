@@ -305,6 +305,7 @@ class Actions {
     // const fallback =  noMoneyFallback(address,100000000);
     if (balance < 3) {
       const money = await provider.sendMoney(address, 5);
+      // eslint-disable-next-line no-console
       console.log('Money', money);
     }
     if (accType !== 1) {
