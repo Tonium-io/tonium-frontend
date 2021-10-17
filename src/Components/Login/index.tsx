@@ -22,6 +22,7 @@ const Login = () => {
   ] = useState(false);
   const [selectedProviderName, setSelectedProviderName] = useState<any>('');
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
+  const [activeProvider, setActiveProvider] = useState<any>(null);
   const [formValues, setFormValues] = useState<any>(null);
   const isMountedRef = useRef<any>(null);
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
@@ -74,8 +75,8 @@ const Login = () => {
       selectProvider(providerName);
       setSelectedProviderName('');
     }
+    setActiveProvider(providerName);
   };
-
   return (
     <>
       <Dialog
@@ -100,6 +101,9 @@ const Login = () => {
                     color="primary"
                     disabled={!provider.isAvailable()}
                     onClick={() => handleClickButton(providerName)}
+                    className={
+                      activeProvider === providerName ? styles.activeBtn : ''
+                    }
                   >
                     {providerName}
                   </Button>
