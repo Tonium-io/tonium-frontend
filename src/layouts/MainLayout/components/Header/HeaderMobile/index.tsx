@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { NavLink, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import PanToolIcon from '@material-ui/icons/PanTool';
@@ -93,10 +97,14 @@ const Header: React.FC = () => {
   const [show, setShow] = useState(true);
   const { triggerRef } = UseDetectClickOut();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({ ...states, [event.target.name]: event.target.checked });
-  };
+  const [warningModalOpen, setWarningModalOpen] = useState(false);
+  const [currentProvide, setCurrentProvide] = useState<any>(null);
 
+  const handleChange = () => {
+    setState({
+      checkedB: !states.checkedB,
+    });
+  };
   const handleClick = () => {
     const menu = document.querySelector(`.${styles.menuIcon}`);
     const menuActive = document.querySelector(
@@ -139,6 +147,16 @@ const Header: React.FC = () => {
   };
 
   useEffect(() => {
+    // At production side the Main Net button should open but at dev it's off
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      setState({
+        checkedB: false,
+      });
+    } else {
+      setState({
+        checkedB: true,
+      });
+    }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -164,6 +182,36 @@ const Header: React.FC = () => {
       setShowModal(false);
     });
   }, [state.auth, history]);
+
+  useEffect(() => {
+    if (state.auth) {
+      const provider = toniumNFT.getCurrentProvider();
+      setTimeout(() => {
+        if (
+          (currentProvide !== null &&
+            currentProvide?.signer &&
+            !states.checkedB &&
+            currentProvide?.signer.network.server === 'main.ton.dev') ||
+          (states.checkedB &&
+            currentProvide?.signer.network.server === 'net.ton.dev')
+        ) {
+          // console.log("Warninngg!!!!!")
+
+          setWarningModalOpen(true);
+          toast.warn('Warning', {
+            position: 'bottom-right',
+            autoClose: 4000,
+          });
+        }
+      }, 2000);
+      setCurrentProvide(provider);
+      // console.log("New Provider: ", provider)
+    }
+  }, [states.checkedB, currentProvide]);
+
+  const handleWarningModalClose = () => {
+    setWarningModalOpen(false);
+  };
 
   return (
     <>
@@ -279,10 +327,10 @@ const Header: React.FC = () => {
                     control={
                       <Switch
                         checked={states.checkedB}
-                        onChange={handleChange}
+                        onClick={handleChange}
                         size="small"
                         name="checkedB"
-                        color="primary"
+                        // color="primary"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />
                     }
@@ -361,6 +409,27 @@ const Header: React.FC = () => {
             </div>
           )}
         </Toolbar>
+
+        <Dialog onClose={() => handleWarningModalClose} open={warningModalOpen}>
+          <Grid item xs={12} className={styles.popup}>
+            <DialogTitle>
+              {`
+                Choose the correct Provider's network
+              `}
+              <span className={styles.derName}>{`${
+                currentProvide &&
+                currentProvide.signer?.network.server === 'net.ton.dev'
+                  ? 'Main Net'
+                  : 'Dev Net'
+              }`}</span>
+            </DialogTitle>
+            <DialogActions>
+              <Button variant="outlined" onClick={handleWarningModalClose}>
+                OK
+              </Button>
+            </DialogActions>
+          </Grid>
+        </Dialog>
       </AppBar>
     </>
   );

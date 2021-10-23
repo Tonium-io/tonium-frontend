@@ -188,18 +188,6 @@ const Header: React.FC = () => {
     if (state.auth) {
       setLoad(true);
       const provider = toniumNFT.getCurrentProvider();
-      if (
-        (!states.checkedB &&
-          provider.signer?.network.server === 'main.ton.dev') ||
-        (states.checkedB && provider.signer?.network.server === 'net.ton.dev')
-      ) {
-        // console.log("Warninngg!!!!!")
-        setWarningModalOpen(true);
-        toast.warn('Warning', {
-          position: 'bottom-right',
-          autoClose: 4000,
-        });
-      }
       setCurrentProvide(provider);
       const setInitialData = async () => {
         const addr = await provider.getAddress();
@@ -216,24 +204,28 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (state.auth) {
       const provider = toniumNFT.getCurrentProvider();
+      setTimeout(() => {
+        if (
+          (currentProvide !== null &&
+            currentProvide?.signer &&
+            !states.checkedB &&
+            currentProvide?.signer.network.server === 'main.ton.dev') ||
+          (states.checkedB &&
+            currentProvide?.signer.network.server === 'net.ton.dev')
+        ) {
+          // console.log("Warninngg!!!!!")
 
-      if (
-        (provider.signer &&
-          !states.checkedB &&
-          provider.signer?.network.server === 'main.ton.dev') ||
-        (states.checkedB && provider.signer?.network.server === 'net.ton.dev')
-      ) {
-        // console.log("Warninngg!!!!!")
-        setWarningModalOpen(true);
-        toast.warn('Warning', {
-          position: 'bottom-right',
-          autoClose: 4000,
-        });
-      }
+          setWarningModalOpen(true);
+          toast.warn('Warning', {
+            position: 'bottom-right',
+            autoClose: 4000,
+          });
+        }
+      }, 2000);
       setCurrentProvide(provider);
       // console.log("New Provider: ", provider)
     }
-  }, [states.checkedB]);
+  }, [states.checkedB, currentProvide]);
 
   return (
     <>
@@ -347,7 +339,7 @@ const Header: React.FC = () => {
                         onChange={handleChange}
                         size="small"
                         name="checkedB"
-                        color="primary"
+                        // color="primary"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />
                     }
@@ -430,12 +422,15 @@ const Header: React.FC = () => {
         <Dialog onClose={() => handleWarningModalClose} open={warningModalOpen}>
           <Grid item xs={12} className={styles.popup}>
             <DialogTitle>
-              {`Choose the correct Provider's network ${
+              {`
+                Choose the correct Provider's network
+              `}
+              <span className={styles.derName}>{`${
                 currentProvide &&
                 currentProvide.signer?.network.server === 'net.ton.dev'
-                  ? 'Main.ton.dev'
-                  : 'net.ton.dev'
-              }`}
+                  ? 'Main Net'
+                  : 'Dev Net'
+              }`}</span>
             </DialogTitle>
             <DialogActions>
               <Button variant="outlined" onClick={handleWarningModalClose}>
