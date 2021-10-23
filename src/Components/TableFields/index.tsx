@@ -105,7 +105,10 @@ const TableFields = ({
                   <div>
                     <AddBox />
                     <Typography>
-                      Create new <br /> NFT
+                      Create new <br />{' '}
+                      {history.location.pathname === '/collections'
+                        ? 'Collection'
+                        : 'NFT'}
                     </Typography>
                   </div>
                 </div>
