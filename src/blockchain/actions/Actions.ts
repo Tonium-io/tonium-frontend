@@ -109,12 +109,14 @@ class Actions {
       metadata: {
         name: collection.metadata.name,
         tokenFileAddress: await Promise.all([
-          provider.run(
-            'files',
-            'getDetails',
-            {},
-            collection.metadata.tokenFileAddress,
-          ),
+          collection.metadata.tokenFileAddress.includes('0:')
+            ? provider.run(
+                'files',
+                'getDetails',
+                {},
+                collection.metadata.tokenFileAddress,
+              )
+            : collection.metadata.tokenFileAddress,
         ]),
       },
     }));
@@ -125,17 +127,21 @@ class Actions {
       ...collection,
       metadata: {
         name: collection.metadata.name,
-        tokenFileAddress: {
-          chunks: web3Utils.hexToUtf8(
-            `0x${collection.metadata.tokenFileAddress[0].chunks.join('')}`,
-          ),
-          extension: web3Utils.hexToUtf8(
-            `0x${collection.metadata.tokenFileAddress[0].extension}`,
-          ),
-          mime: web3Utils.hexToUtf8(
-            `0x${collection.metadata.tokenFileAddress[0].mime}`,
-          ),
-        },
+        tokenFileAddress: collection.metadata.tokenFileAddress[0].chunks
+          ? {
+              chunks: web3Utils.hexToUtf8(
+                `0x${collection.metadata.tokenFileAddress[0].chunks.join('')}`,
+              ),
+              extension: web3Utils.hexToUtf8(
+                `0x${collection.metadata.tokenFileAddress[0].extension}`,
+              ),
+              mime: web3Utils.hexToUtf8(
+                `0x${collection.metadata.tokenFileAddress[0].mime}`,
+              ),
+            }
+          : {
+              ipfs: collection.metadata.tokenFileAddress[0],
+            },
       },
     }));
     newUserNFTs = await Promise.all(newUserNFTs);

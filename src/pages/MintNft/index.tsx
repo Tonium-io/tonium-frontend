@@ -55,6 +55,7 @@ const MintNft = () => {
       tokenData = isImage
         ? { ...tokenData, ipfsImage: ipfsFile.path }
         : { ...tokenData, ipfsFile: ipfsFile.path };
+      tokenFileAddress = ipfsFile.path;
     }
 
     if (checkbox === 'blockchain') {

@@ -75,11 +75,11 @@ const TableFields = ({
                         src={isImageFile(c.file) ? c.file : c.defaultImage}
                       />
                     )}
-                    {c.ipfsImage && (
+                    {c.metadata.tokenFileAddress.ipfs && (
                       <img
                         className={styles.paperImage}
                         alt={c.name}
-                        src={`https://ipfs.io/ipfs/${c.ipfsImage}`}
+                        src={`https://ipfs.io/ipfs/${c.metadata.tokenFileAddress.ipfs}`}
                       />
                     )}
                     {!c.file && !c.ipfsImage && (
@@ -106,7 +106,7 @@ const TableFields = ({
                     <AddBox />
                     <Typography>
                       Create new <br />{' '}
-                      {history.location.pathname === '/collections'
+                      {linkCreator === '/collections/new'
                         ? 'Collection'
                         : 'NFT'}
                     </Typography>
