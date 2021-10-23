@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import { Typography } from '@material-ui/core';
@@ -12,6 +12,7 @@ import Breadcrumbs from '../../Components/Breadcrumbs';
 import cls from '../../app.module.scss';
 
 const Collection = () => {
+  const history = useHistory();
   const { collection } = useParams<any>();
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const { userCollectionTokens }: any = state;
@@ -31,6 +32,14 @@ const Collection = () => {
         setCollName(collectionData.name);
         setNewRecord(collectionData.totalSupply);
       });
+    }
+    if (state.auth) {
+      if (history.location.pathname === `/collections/${collection}/`) {
+        setTimeout(() => {
+          history.push(`/collections/${collection}`);
+          window.location.reload();
+        }, 6000);
+      }
     }
   }, []);
 

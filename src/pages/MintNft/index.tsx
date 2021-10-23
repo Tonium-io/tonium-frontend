@@ -123,7 +123,7 @@ const MintNft = () => {
           position: 'bottom-right',
           autoClose: 4000,
         });
-        history.push(history.location.pathname.replace('/mint-add', ''));
+        history.push(history.location.pathname.replace('mint-add', ''));
       })
       .catch((e: any) => {
         // eslint-disable-next-line no-console
