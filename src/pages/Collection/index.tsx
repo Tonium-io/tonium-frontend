@@ -4,7 +4,11 @@ import { NavLink } from 'react-router-dom';
 
 import { Typography } from '@material-ui/core';
 
-import { ContextApp, setUserCollectionTokens } from '../../store/reducer';
+import {
+  ContextApp,
+  setUserCollectionTokens,
+  setCurrentCollection,
+} from '../../store/reducer';
 import tonLogo from '../../img/ton-logo.png';
 import Loader from '../../Components/Loader';
 import TableFields from '../../Components/TableFields';
@@ -28,9 +32,10 @@ const Collection = () => {
         // setuserCollection(data);
         collectionData = data.find((c: any) => c.address === `0:${collection}`);
         // eslint-disable-next-line no-console
-        console.log('collectionData', collectionData);
+        // console.log('collectionData', collectionData);
         setCollName(collectionData.name);
         setNewRecord(collectionData.totalSupply);
+        setCurrentCollection(dispatch, { name: collectionData.name });
       });
     }
     if (state.auth) {

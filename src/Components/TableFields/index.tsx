@@ -4,7 +4,12 @@ import { NavLink, useHistory } from 'react-router-dom';
 import { Grid, ListItem, Paper, Typography } from '@material-ui/core';
 import { AddBox } from '@material-ui/icons';
 
-import { ContextApp, setOpen } from 'src/store/reducer';
+import {
+  ContextApp,
+  setOpen,
+  setCurrentToken,
+  setCurrentCollection,
+} from 'src/store/reducer';
 import { isImageFile } from '../../helpers';
 import cls from '../../app.module.scss';
 import styles from './styles.module.scss';
@@ -24,6 +29,15 @@ const TableFields = ({
       setOpen(dispatch, true);
     }
   };
+
+  const handleCurrentCollection = (coll: any) => {
+    setCurrentCollection(dispatch, { name: coll.name });
+  };
+
+  const handleTokenClick = (val: any) => {
+    setCurrentToken(dispatch, { token: val });
+  };
+
   return (
     <div className={cls.collections}>
       <Grid
@@ -40,7 +54,10 @@ const TableFields = ({
               <NavLink
                 to={`/${clickCollectionsUrl}/${c.address.replace('0:', '')}`}
               >
-                <Paper className={cls.element}>
+                <Paper
+                  className={cls.element}
+                  onClick={() => handleCurrentCollection(c)}
+                >
                   {c.file && (
                     <img
                       className={styles.paperImage}
@@ -66,7 +83,10 @@ const TableFields = ({
               </NavLink>
             ) : (
               <NavLink to="/token">
-                <Paper className={cls.element}>
+                <Paper
+                  className={cls.element}
+                  onClick={() => handleTokenClick(c)}
+                >
                   <div>
                     {c.file && (
                       <img

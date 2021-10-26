@@ -9,6 +9,8 @@ export type StateType = {
   userCollections: any;
   userCollectionTokens: any;
   nftAuctions: any;
+  currentToken: any;
+  currentCollection: any;
 };
 export const initialState = {
   auth: false,
@@ -23,6 +25,8 @@ export const initialState = {
   userCollectionTokens: [],
   userAllTokens: [],
   nftAuctions: [],
+  currentToken: [],
+  currentCollection: [],
 };
 export const ContextApp = React.createContext<any>({
   state: initialState,
@@ -49,6 +53,8 @@ type Payload = {
   SET_USER_COLLECTION_TOKENS: {};
   SET_NFT_AUCTIONS: {};
   SET_USER_ALL_TOKENS: {};
+  SET_CURRENT_TOKEN: {};
+  SET_CURRENT_COLLECTION: '';
 };
 
 export type Actions = ActionMap<Payload>[keyof ActionMap<Payload>];
@@ -60,6 +66,8 @@ const SET_USER_COLLECTION_TOKENS = 'SET_USER_COLLECTION_TOKENS';
 const SET_USER_COLLECTIONS = 'SET_USER_COLLECTIONS';
 const SET_USER_ALL_TOKENS = 'SET_USER_ALL_TOKENS';
 const SET_NFT_AUCTIONS = 'SET_NFT_AUCTIONS';
+const SET_CURRENT_TOKEN = 'SET_CURRENT_TOKEN';
+const SET_CURRENT_COLLECTION = 'SET_CURRENT_COLLECTION';
 
 export const reducer = (state: StateType, action: Actions) => {
   switch (action.type) {
@@ -79,6 +87,10 @@ export const reducer = (state: StateType, action: Actions) => {
       return { ...state, nftAuctions: action.payload };
     case SET_USER_COLLECTIONS:
       return { ...state, userCollections: action.payload };
+    case SET_CURRENT_TOKEN:
+      return { ...state, currentToken: action.payload };
+    case SET_CURRENT_COLLECTION:
+      return { ...state, currentCollection: action.payload };
     default:
       return state;
   }
@@ -100,3 +112,7 @@ export const setUserAllTokens = (dispatch: any, payload: any) =>
   dispatch({ type: SET_USER_ALL_TOKENS, payload });
 export const setNftAuctions = (dispatch: any, payload: any) =>
   dispatch({ type: SET_NFT_AUCTIONS, payload });
+export const setCurrentToken = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_CURRENT_TOKEN, payload });
+export const setCurrentCollection = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_CURRENT_COLLECTION, payload });
