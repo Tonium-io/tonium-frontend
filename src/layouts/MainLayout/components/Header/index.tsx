@@ -131,6 +131,7 @@ const Header: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...states, [event.target.name]: event.target.checked });
+    localStorage.setItem('mainNet', JSON.stringify(event.target.checked));
   };
 
   const settingsClick = () => {
@@ -168,16 +169,15 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     // At production side the Main Net button should open but at dev it's off
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-      setState({
-        checkedB: false,
-      });
-    } else {
-      setState({
-        checkedB: true,
-      });
-    }
-
+    // if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    //   setState({
+    //     checkedB: false,
+    //   });
+    // } else {
+    //   setState({
+    //     checkedB: true,
+    //   });
+    // }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -202,29 +202,40 @@ const Header: React.FC = () => {
   }, [state.auth]);
 
   useEffect(() => {
-    if (state.auth) {
-      const provider = toniumNFT.getCurrentProvider();
-      setTimeout(() => {
-        if (
-          (currentProvide !== null &&
-            currentProvide?.signer &&
-            !states.checkedB &&
-            currentProvide?.signer.network.server === 'main.ton.dev') ||
-          (states.checkedB &&
-            currentProvide?.signer.network.server === 'net.ton.dev')
-        ) {
-          // console.log("Warninngg!!!!!")
-
-          setWarningModalOpen(true);
-          toast.warn('Warning', {
-            position: 'bottom-right',
-            autoClose: 4000,
+    async function checkProvider() {
+      if (state.auth) {
+        const provider = await toniumNFT.getCurrentProvider();
+        await setCurrentProvide(provider);
+        if (localStorage.getItem('mainNet') === 'false') {
+          await setState({
+            checkedB: false,
           });
+        } else {
+          await setState({
+            checkedB: true,
+          });
+          localStorage.setItem('mainNet', JSON.stringify(true));
         }
-      }, 2000);
-      setCurrentProvide(provider);
-      // console.log("New Provider: ", provider)
+
+        setTimeout(() => {
+          if (
+            (provider !== null &&
+              provider?.signer &&
+              !states.checkedB &&
+              provider?.signer?.network.server === 'main.ton.dev') ||
+            (states.checkedB &&
+              provider?.signer?.network.server === 'net.ton.dev')
+          ) {
+            setWarningModalOpen(true);
+            toast.warn('Warning', {
+              position: 'bottom-right',
+              autoClose: 4000,
+            });
+          }
+        }, 500);
+      }
     }
+    checkProvider();
   }, [states.checkedB, currentProvide]);
 
   return (

@@ -12,6 +12,8 @@ import {
   ContextApp,
   setUserAllTokens,
   setUserCollections,
+  setCurrentToken,
+  setCurrentSellToken,
 } from '../../store/reducer';
 import Breadcrumbs from '../../Components/Breadcrumbs';
 
@@ -176,6 +178,15 @@ const Own = () => {
   if (load) {
     return <Loader />;
   }
+
+  const handleTokenClick = (val: any) => {
+    setCurrentToken(dispatch, { token: val });
+  };
+
+  const handleSellToken = async (val: any) => {
+    // await localStorage.setItem('sellToken', JSON.stringify(val));
+    setCurrentSellToken(dispatch, { token: val });
+  };
   // eslint-disable-next-line no-console
   return (
     <div className={cls.own}>
@@ -225,14 +236,28 @@ const Own = () => {
                       item.metadata.tokenFileAddress.chunks
                         ? item.metadata.tokenFileAddress.chunks
                         : 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg'
+                      // `https://ipfs.io/ipfs/${item.metadata.tokenFileAddress.ipfs}`
                     })`,
                   }}
+                  key={item.addrData}
                 >
                   <NavLink to="/own/sell" className={cls.btnToken}>
-                    Sell
+                    <div
+                      onClick={() => handleSellToken(item)}
+                      onKeyPress={() => {}}
+                      role="presentation"
+                    >
+                      Sell
+                    </div>
                   </NavLink>
                   <NavLink to="/token" className={cls.btnToken}>
-                    Send
+                    <div
+                      onClick={() => handleTokenClick(item)}
+                      onKeyPress={() => {}}
+                      role="presentation"
+                    >
+                      Send
+                    </div>
                   </NavLink>
                   <NavLink to="#" className={cls.btnToken}>
                     Edit

@@ -152,7 +152,9 @@ const Token = () => {
         {state.nftAuctions.map((item: TokenItemType) => (
           <div className={cls.tokenPage}>
             <span className={cls.tokenName}>{item?.metadata.name}</span>
-            <span className={cls.tokenAdress}>{item.addrData}</span>
+            <span className={cls.tokenAdress}>
+              {item.addrData.replace('0:', '')}
+            </span>
 
             <form
               noValidate
@@ -218,7 +220,7 @@ const Token = () => {
                     <span className={cls.wrapSpan}>
                       <span className={cls.spanItem}>
                         <img src={AddIcon} alt="add" />
-                        <span className={cls.action}>{item.minted}</span>
+                        <span className={cls.action}>minted</span>
                         <span className={cls.tokenNameHistory}>
                           {item?.metadata.name}
                         </span>
@@ -233,13 +235,13 @@ const Token = () => {
                     <span className={cls.wrapSpan}>
                       <span className={cls.spanItem}>
                         <img src={ArrowIcon} alt="add" />
-                        <span className={cls.action}>{item.action}</span>
+                        <span className={cls.action}>bid win</span>
                         <span className={cls.tokenNameHistory}>
                           {item?.metadata.name}
                         </span>
                         <span className={cls.where}>by</span>
                         <span className={cls.userAdres}>
-                          {/* {getShortToken(item.addrOwner)} */}
+                          {getShortToken(item.addrOwner)}
                         </span>
                       </span>
                       <span className={cls.date}>17:01 14.05.2021</span>
@@ -248,17 +250,17 @@ const Token = () => {
                     <span className={cls.wrapSpan}>
                       <span className={cls.spanItem}>
                         <img src={HammerIcon} alt="add" />
-                        <span className={cls.action}>{item.transfer}</span>
+                        <span className={cls.action}>transfer</span>
                         <span className={cls.tokenNameHistory}>
                           {item.metadata.name}
                         </span>
                         <span className={cls.where}>from</span>
                         <span className={cls.userAdres}>
-                          {/* {getShortToken(item.addrOwner)} */}
+                          {getShortToken(item.addrOwner)}
                         </span>
                         <span className={cls.where}>to</span>
                         <span className={cls.userAdres}>
-                          {/* {getShortToken(item.addrOwner)} */}
+                          {getShortToken(item.addrOwner)}
                         </span>
                       </span>
                       <span className={cls.date}>17:01 14.05.2021</span>

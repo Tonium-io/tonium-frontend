@@ -11,6 +11,7 @@ export type StateType = {
   nftAuctions: any;
   currentToken: any;
   currentCollection: any;
+  currentSellToken: any;
 };
 export const initialState = {
   auth: false,
@@ -27,6 +28,7 @@ export const initialState = {
   nftAuctions: [],
   currentToken: [],
   currentCollection: [],
+  currentSellToken: [],
 };
 export const ContextApp = React.createContext<any>({
   state: initialState,
@@ -55,6 +57,7 @@ type Payload = {
   SET_USER_ALL_TOKENS: {};
   SET_CURRENT_TOKEN: {};
   SET_CURRENT_COLLECTION: '';
+  SET_CURRENT_SELL_TOKEN: {};
 };
 
 export type Actions = ActionMap<Payload>[keyof ActionMap<Payload>];
@@ -68,6 +71,7 @@ const SET_USER_ALL_TOKENS = 'SET_USER_ALL_TOKENS';
 const SET_NFT_AUCTIONS = 'SET_NFT_AUCTIONS';
 const SET_CURRENT_TOKEN = 'SET_CURRENT_TOKEN';
 const SET_CURRENT_COLLECTION = 'SET_CURRENT_COLLECTION';
+const SET_CURRENT_SELL_TOKEN = 'SET_CURRENT_SELL_TOKEN';
 
 export const reducer = (state: StateType, action: Actions) => {
   switch (action.type) {
@@ -91,6 +95,8 @@ export const reducer = (state: StateType, action: Actions) => {
       return { ...state, currentToken: action.payload };
     case SET_CURRENT_COLLECTION:
       return { ...state, currentCollection: action.payload };
+    case SET_CURRENT_SELL_TOKEN:
+      return { ...state, currentSellToken: action.payload };
     default:
       return state;
   }
@@ -116,3 +122,5 @@ export const setCurrentToken = (dispatch: any, payload: any) =>
   dispatch({ type: SET_CURRENT_TOKEN, payload });
 export const setCurrentCollection = (dispatch: any, payload: any) =>
   dispatch({ type: SET_CURRENT_COLLECTION, payload });
+export const setCurrentSellToken = (dispatch: any, payload: any) =>
+  dispatch({ type: SET_CURRENT_SELL_TOKEN, payload });
