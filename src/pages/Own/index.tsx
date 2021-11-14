@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 // import { toast } from 'react-toastify';
 import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
@@ -13,7 +13,7 @@ import {
   setUserAllTokens,
   setUserCollections,
   setCurrentToken,
-  setCurrentSellToken,
+  // setCurrentSellToken,
 } from '../../store/reducer';
 import Breadcrumbs from '../../Components/Breadcrumbs';
 
@@ -80,6 +80,7 @@ const AntTab = withStyles((theme: Theme) =>
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const Own = () => {
+  const history = useHistory();
   const { state, dispatch, toniumNFT } = useContext(ContextApp);
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
@@ -181,12 +182,13 @@ const Own = () => {
 
   const handleTokenClick = (val: any) => {
     setCurrentToken(dispatch, { token: val });
+    history.push('/token');
   };
 
-  const handleSellToken = async (val: any) => {
-    // await localStorage.setItem('sellToken', JSON.stringify(val));
-    setCurrentSellToken(dispatch, { token: val });
-  };
+  // const handleSellToken = async (val: any) => {
+  //   // await localStorage.setItem('sellToken', JSON.stringify(val));
+  //   setCurrentSellToken(dispatch, { token: val });
+  // };
   // eslint-disable-next-line no-console
   return (
     <div className={cls.own}>
@@ -228,7 +230,7 @@ const Own = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.userAllTokens.map((item: any) => (
-              <NavLink to="#" className={cls.tokens}>
+              <div className={cls.tokens}>
                 <div
                   className={cls.three}
                   style={{
@@ -238,10 +240,14 @@ const Own = () => {
                         : 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg'
                       // `https://ipfs.io/ipfs/${item.metadata.tokenFileAddress.ipfs}`
                     })`,
+                    cursor: 'pointer',
                   }}
                   key={item.addrData}
+                  onClick={() => handleTokenClick(item)}
+                  onKeyPress={() => {}}
+                  role="presentation"
                 >
-                  <NavLink to="/own/sell" className={cls.btnToken}>
+                  {/* <NavLink to="/own/sell" className={cls.btnToken}>
                     <div
                       onClick={() => handleSellToken(item)}
                       onKeyPress={() => {}}
@@ -261,12 +267,12 @@ const Own = () => {
                   </NavLink>
                   <NavLink to="#" className={cls.btnToken}>
                     Edit
-                  </NavLink>
+                  </NavLink> */}
                 </div>
                 <span className={cls.text}>
                   {item.metadata ? item.metadata.name : ''}
                 </span>
-              </NavLink>
+              </div>
             ))}
           </div>
         </TabPanel>

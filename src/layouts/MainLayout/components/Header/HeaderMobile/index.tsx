@@ -259,9 +259,9 @@ const Header: React.FC = () => {
                 className={styles.balance}
                 // variant="filled"
                 value={balance || '0'}
-                // InputProps={{
-                //   readOnly: true,
-                // }}
+                inputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
 
