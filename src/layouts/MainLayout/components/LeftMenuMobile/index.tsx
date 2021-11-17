@@ -85,6 +85,16 @@ const LeftMenu: React.FC = () => {
         button
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
+        to="/"
+        exact
+        // activeClassName={cls.activeLink}
+      >
+        <ListItemText primary="Home" />
+      </ListItem>
+      <ListItem
+        button
+        className={`${cls.panelButton} ${classes.styleBtn}`}
+        component={NavLink}
         to="/own"
         // activeClassName={cls.activeLink}
       >
@@ -108,7 +118,7 @@ const LeftMenu: React.FC = () => {
       >
         <ListItemText primary="Auction" />
       </ListItem>
-      <ListItem
+      {/* <ListItem
         button
         className={`${cls.panelButton} ${classes.styleBtn}`}
         component={NavLink}
@@ -116,7 +126,7 @@ const LeftMenu: React.FC = () => {
         // activeClassName={cls.activeLink}
       >
         <ListItemText primary="NFT radar" />
-      </ListItem>
+      </ListItem> */}
 
       <div className={cls.footer}>
         <Typography className={cls.socials}>

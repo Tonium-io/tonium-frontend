@@ -8,7 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import ToniumNFT from './blockchain/ToniumNTF';
 import { ContextApp, reducer, initialState } from './store/reducer';
 import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import Collections from './pages/Collections';
 import CreateCollection from './pages/CreateCollection';
 import MintNft from './pages/MintNft';
@@ -42,21 +42,22 @@ function App() {
             <Route exact path="/own/transaction">
               <Transaction />
             </Route>
-            <Route exact path="/own/sell">
+            <Route exact path="/sell">
               <SellToken />
             </Route>
             <Route exact path="/auction">
               <Auction />
             </Route>
-            <Route exact path="/auction/auction_token">
+            {/* <Route exact path="/auction/auction_token"> */}
+            <Route exact path="/sellToken">
               <AuctionToken />
             </Route>
             <Route exact path="/wp">
               <Wp />
             </Route>
-            <Route exact path="/">
+            {/* <Route exact path="/">
               <Home />
-            </Route>
+            </Route> */}
             <Route exact path="/collections">
               <Collections />
             </Route>
@@ -75,7 +76,7 @@ function App() {
             <Route exact path="/radar/token">
               <Token />
             </Route>
-            <Route exact path="/radar">
+            <Route exact path="/">
               <Radar />
             </Route>
           </Switch>

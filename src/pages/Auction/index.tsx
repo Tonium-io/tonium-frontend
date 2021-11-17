@@ -2,13 +2,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Container } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { useHistory } from 'react-router';
 import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 // import { toast } from 'react-toastify';
 import CristallIcon from '../../img/cristall.svg';
 import TimeIcon from '../../img/time.svg';
 import Loader from '../../Components/Loader';
-import { ContextApp, setNftAuctions } from '../../store/reducer';
+import {
+  ContextApp,
+  setNftAuctions,
+  setCurrentToken,
+} from '../../store/reducer';
 
 import cls from './styles.module.scss';
 
@@ -76,6 +81,7 @@ const AntTab = withStyles((theme: Theme) =>
 )((props: StyledTabProps) => <Tab disableRipple {...props} />);
 
 const Auction = () => {
+  const history = useHistory();
   const { state, dispatch } = useContext(ContextApp);
   const [value, setValue] = useState(0);
   const [load, setLoad] = useState(false);
@@ -94,24 +100,64 @@ const Auction = () => {
           address: '0:x12312312432534453',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           minted: true,
+          metadata: {
+            name: 'IPFS',
+            tokenFileAddress: {
+              ipfs: 'hi',
+            },
+          },
+          addrData:
+            '0:044f7425d70eb6235c38b39e35df2a03768950c1ee9bb54aeca5af407e0ccaee',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
         },
         {
           name: 'Test2',
           address: '0:x12312332425532535',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           minted: true,
+          metadata: {
+            name: 'IPFS',
+            tokenFileAddress: {
+              ipfs: 'hi',
+            },
+          },
+          addrData:
+            '0:044f7425d70eb6235c38b39e35df2a03768950c1ee9bb54aeca5af407e0ccaee',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
         },
         {
           name: 'Test3',
           address: '0:x12312332425532535',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           auctions: true,
+          metadata: {
+            name: 'IPFS',
+            tokenFileAddress: {
+              ipfs: 'hi',
+            },
+          },
+          addrData:
+            '0:044f7425d70eb6235c38b39e35df2a03768950c1ee9bb54aeca5af407e0ccaee',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
         },
         {
           name: 'Test4',
           address: '0:x12312332425532535',
           img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           auctions: true,
+          metadata: {
+            name: 'IPFS',
+            tokenFileAddress: {
+              ipfs: 'hi',
+            },
+          },
+          addrData:
+            '0:044f7425d70eb6235c38b39e35df2a03768950c1ee9bb54aeca5af407e0ccaee',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
         },
       ];
       setNftAuctions(dispatch, payload);
@@ -125,6 +171,11 @@ const Auction = () => {
   if (load) {
     return <Loader />;
   }
+
+  const handleTokenClick = (val: any) => {
+    setCurrentToken(dispatch, { token: val });
+    history.push('/token');
+  };
 
   return (
     <div className={cls.auction}>
@@ -156,10 +207,13 @@ const Auction = () => {
         <TabPanel value={value} index={0}>
           <div className={cls.wrapTokens}>
             {state.nftAuctions.map((item: TokenItemType) => (
-              <NavLink to="/auction/auction_token" className={cls.tokens}>
+              <div className={cls.tokens}>
                 <div
                   className={cls.three}
                   style={{ backgroundImage: `url(${item.img})` }}
+                  onClick={() => handleTokenClick(item)}
+                  onKeyPress={() => {}}
+                  role="presentation"
                 />
 
                 <span className={cls.text}>{item.name}</span>
@@ -176,7 +230,7 @@ const Auction = () => {
                     <span>last bid</span>
                   </span>
                 </div>
-              </NavLink>
+              </div>
             ))}
           </div>
         </TabPanel>

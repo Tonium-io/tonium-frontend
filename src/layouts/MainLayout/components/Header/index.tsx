@@ -340,7 +340,12 @@ const Header: React.FC = () => {
                   }}
                 />
 
-                <Grid className={classes.switch} item>
+                <Grid
+                  className={`${classes.switch} ${
+                    states.checkedB ? styles.toggleBtn : ''
+                  }`}
+                  item
+                >
                   <FormControlLabel
                     className={styles.switchWrap}
                     label="Main net"

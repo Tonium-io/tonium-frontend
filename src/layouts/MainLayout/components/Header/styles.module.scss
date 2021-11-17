@@ -211,6 +211,12 @@ input::placeholder,
     text-transform: uppercase;
     color: #ffffff;
     text-align: justify;
+    span {
+      color: #33a9fb;
+    }
+  }
+  .MuiSwitch-thumb {
+    color: #33a9fb;
   }
 }
 .menuItem {
@@ -275,4 +281,7 @@ input::placeholder,
 
 .derName {
   color: #ff00e0;
+}
+.toggleBtn > label > span:nth-child(1) > span:nth-child(2) {
+  background-color: #33a9fb !important;
 }

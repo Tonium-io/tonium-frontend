@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container } from '@material-ui/core';
+import { Container, FormControlLabel, Switch } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import Loader from '../../Components/Loader';
 import CristallIcon from '../../img/cristall.svg';
 import { ContextApp, setNftAuctions } from '../../store/reducer';
@@ -61,6 +61,9 @@ const AuctionToken = () => {
   const { state, dispatch } = useContext(ContextApp);
   const [load, setLoad] = useState(false);
   const classes = useStyles(0);
+  const [states, setState] = React.useState({
+    checkedB: true,
+  });
 
   useEffect(() => {
     if (state.auth) {
@@ -76,16 +79,20 @@ const AuctionToken = () => {
       ];
       setNftAuctions(dispatch, payload);
       setLoad(false);
-      toast.success('Success', {
-        position: 'bottom-right',
-        autoClose: 4000,
-      });
+      // toast.success('Success', {
+      //   position: 'bottom-right',
+      //   autoClose: 4000,
+      // });
     }
   }, []);
 
   if (load) {
     return <Loader />;
   }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({ ...states, [event.target.name]: event.target.checked });
+  };
 
   return (
     <div className={cls.auction}>
@@ -105,78 +112,132 @@ const AuctionToken = () => {
               <div className={cls.three} />
 
               <div className={cls.item}>
-                <h2 className={cls.subtitle}>Description</h2>
+                {/* <h2 className={cls.subtitle}>Description</h2> */}
                 <form noValidate className={classes.root} autoComplete="off">
-                  <TextField
+                  {/* <TextField
                     className={cls.wrapdesc}
                     id="standard-basic"
                     placeholder="Description"
-                  />
+                  /> */}
+                  <div
+                    className={`${states.checkedB ? cls.toggleBtn : ''} ${
+                      cls.auctionSlider
+                    }`}
+                  >
+                    <FormControlLabel
+                      className={cls.switchWrap}
+                      label="Auction"
+                      control={
+                        <Switch
+                          checked={states.checkedB}
+                          onChange={handleChange}
+                          size="small"
+                          name="checkedB"
+                          // color="primary"
+                          inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                      }
+                    />
+                  </div>
 
-                  <div className={cls.wrapPrice}>
-                    <div className={cls.price}>
-                      <h2 className={cls.subtitle}>SET start PRICE</h2>
-                      <div className={`${classes.root} ${cls.wrapFormPrice}`}>
-                        <TextField
-                          id="standard-number"
-                          type="number"
-                          className={cls.formPrice}
-                          defaultValue="2000000"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                        <img src={CristallIcon} alt="Cristall" />
-                      </div>
-                    </div>
+                  <div
+                    className={`${cls.wrapPrice} ${
+                      states.checkedB ? '' : cls.sellFlowContainer
+                    }`}
+                  >
+                    {states.checkedB ? (
+                      <>
+                        <div className={cls.price}>
+                          <h2 className={cls.subtitle}>SET start PRICE</h2>
+                          <div
+                            className={`${classes.root} ${cls.wrapFormPrice}`}
+                          >
+                            <TextField
+                              id="standard-number"
+                              type="number"
+                              className={cls.formPrice}
+                              defaultValue="2000000"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                            <img src={CristallIcon} alt="Cristall" />
+                          </div>
+                        </div>
 
-                    <div className={cls.step}>
-                      <h2 className={cls.subtitle}>SET STEP</h2>
-                      <div className={`${classes.root} ${cls.wrapFormPrice}`}>
-                        <TextField
-                          id="standard-number"
-                          type="number"
-                          defaultValue="200"
-                          className={cls.formPrice}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                        <img src={CristallIcon} alt="Cristall" />
-                      </div>
-                    </div>
+                        <div className={cls.step}>
+                          <h2 className={cls.subtitle}>SET STEP</h2>
+                          <div
+                            className={`${classes.root} ${cls.wrapFormPrice}`}
+                          >
+                            <TextField
+                              id="standard-number"
+                              type="number"
+                              defaultValue="200"
+                              className={cls.formPrice}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                            <img src={CristallIcon} alt="Cristall" />
+                          </div>
+                        </div>
 
-                    <h2 className={cls.subtitle}>SET finish date and time</h2>
-                    <div className={cls.date}>
-                      <div className={cls.formTime}>
-                        <TextField
-                          id="time"
-                          type="time"
-                          className={classes.root}
-                          defaultValue="00:00"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          inputProps={{
-                            step: 300,
-                          }}
-                        />
-                      </div>
-                      <div className={cls.formDate}>
-                        <TextField
-                          id="date"
-                          type="date"
-                          className={classes.root}
-                          defaultValue="2021-12-12"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </div>
-                    </div>
+                        <h2 className={cls.subtitle}>
+                          SET finish date and time
+                        </h2>
+                        <div className={cls.date}>
+                          <div className={cls.formTime}>
+                            <TextField
+                              id="time"
+                              type="time"
+                              className={classes.root}
+                              defaultValue="00:00"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              inputProps={{
+                                step: 300,
+                              }}
+                            />
+                          </div>
+                          <div className={cls.formDate}>
+                            <TextField
+                              id="date"
+                              type="date"
+                              className={classes.root}
+                              defaultValue="2021-12-12"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={cls.step}>
+                          <h2 className={cls.subtitle}>SET STEP</h2>
+                          <div
+                            className={`${classes.root} ${cls.wrapFormPrice}`}
+                          >
+                            <TextField
+                              id="standard-number"
+                              type="number"
+                              defaultValue="200"
+                              className={cls.formPrice}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                            <img src={CristallIcon} alt="Cristall" />
+                          </div>
+                        </div>
+                      </>
+                    )}
                     <button type="button" className={cls.btn}>
                       {' '}
-                      start AUCTION{' '}
+                      {states.checkedB ? 'start AUCTION' : 'SELL'}{' '}
                     </button>
                   </div>
                 </form>

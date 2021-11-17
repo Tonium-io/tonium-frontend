@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import Logo from '../../../../img/tonium-logo-dark-text.svg';
+import Theme from '../../../../img/theme.svg';
 import cls from '../../../../app.module.scss';
 
 const LeftMenu: React.FC = () => (
@@ -18,7 +19,18 @@ const LeftMenu: React.FC = () => (
       to="/home"
       // activeClassName={cls.activeLink}
     >
+      <img src={Theme} className={cls.theme} alt="theme" />
       <img src={Logo} alt="logo" />
+    </ListItem>
+    <ListItem
+      button
+      className={cls.panel_button}
+      component={NavLink}
+      to="/"
+      exact
+      activeClassName={cls.activeLink}
+    >
+      <ListItemText primary="Home" />
     </ListItem>
     <ListItem
       button
@@ -27,7 +39,7 @@ const LeftMenu: React.FC = () => (
       to="/own"
       activeClassName={cls.activeLink}
     >
-      <ListItemText primary="My own" />
+      <ListItemText primary="My NFT" />
     </ListItem>
     <ListItem
       button
@@ -47,7 +59,7 @@ const LeftMenu: React.FC = () => (
     >
       <ListItemText primary="Auction" />
     </ListItem>
-    <ListItem
+    {/* <ListItem
       button
       className={cls.panel_button}
       component={NavLink}
@@ -55,7 +67,7 @@ const LeftMenu: React.FC = () => (
       activeClassName={cls.activeLink}
     >
       <ListItemText primary="NFT radar" />
-    </ListItem>
+    </ListItem> */}
 
     <div className={cls.footer}>
       <Typography className={cls.socials}>

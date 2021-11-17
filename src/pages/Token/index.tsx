@@ -1,8 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Container } from '@material-ui/core';
+import {
+  Container,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 // import { toast } from 'react-toastify';
 import Loader from '../../Components/Loader';
 // import CristallIcon from '../../img/cristall.svg';
@@ -59,9 +66,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Token = () => {
+  const history = useHistory();
   const { state, dispatch } = useContext(ContextApp);
   const [load, setLoad] = useState(false);
   const classes = useStyles(0);
+  const [sendModalOpen, setSendModalOpen] = useState(false);
 
   useEffect(() => {
     if (state.auth) {
@@ -136,6 +145,10 @@ const Token = () => {
     return <Loader />;
   }
 
+  const handleSendModalClose = () => {
+    setSendModalOpen(!sendModalOpen);
+  };
+
   return (
     <div className={cls.tokenBody}>
       <Container className={cls.container}>
@@ -143,15 +156,15 @@ const Token = () => {
           <NavLink to="/">Home</NavLink>
           <NavLink to="/">...</NavLink>
           <NavLink to="../auction">
-            {state.currentCollection.name
-              ? state.currentCollection.name
+            {state.currentCollection?.name
+              ? state.currentCollection?.name
               : 'sexy beast'}
           </NavLink>
         </Breadcrumbs>
 
         {state.nftAuctions.map((item: TokenItemType) => (
           <div className={cls.tokenPage}>
-            <span className={cls.tokenName}>{item?.metadata.name}</span>
+            <span className={cls.tokenName}>{item?.metadata?.name}</span>
             <span className={cls.tokenAdress}>
               {item.addrData.replace('0:', '')}
             </span>
@@ -165,9 +178,10 @@ const Token = () => {
                 <div className={cls.wrapToken}>
                   <img
                     src={
-                      item.metadata.tokenFileAddress.chunks
-                        ? item.metadata.tokenFileAddress.chunks
-                        : `https://ipfs.io/ipfs/${item.metadata.tokenFileAddress.ipfs}`
+                      `https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg`
+                      // item.metadata.tokenFileAddress.chunks
+                      //   ? item.metadata.tokenFileAddress.chunks
+                      //   : `https://ipfs.io/ipfs/${item.metadata.tokenFileAddress.ipfs}`
                     }
                     className={cls.token}
                     id="downloadedID"
@@ -208,10 +222,18 @@ const Token = () => {
                   </div>
 
                   <div className={cls.wrapBtn}>
-                    <button className={cls.btn} type="button">
+                    <button
+                      className={cls.btn}
+                      type="button"
+                      onClick={handleSendModalClose}
+                    >
                       Send
                     </button>
-                    <button className={cls.btn} type="button">
+                    <button
+                      className={cls.btn}
+                      type="button"
+                      onClick={() => history.push('/sellToken')}
+                    >
                       Sell
                     </button>
                   </div>
@@ -234,7 +256,7 @@ const Token = () => {
 
                     <span className={cls.wrapSpan}>
                       <span className={cls.spanItem}>
-                        <img src={ArrowIcon} alt="add" />
+                        <img src={HammerIcon} alt="add" />
                         <span className={cls.action}>bid win</span>
                         <span className={cls.tokenNameHistory}>
                           {item?.metadata.name}
@@ -249,7 +271,7 @@ const Token = () => {
 
                     <span className={cls.wrapSpan}>
                       <span className={cls.spanItem}>
-                        <img src={HammerIcon} alt="add" />
+                        <img src={ArrowIcon} alt="add" />
                         <span className={cls.action}>transfer</span>
                         <span className={cls.tokenNameHistory}>
                           {item.metadata.name}
@@ -291,6 +313,25 @@ const Token = () => {
             </form>
           </div>
         ))}
+        <Dialog onClose={() => handleSendModalClose} open={sendModalOpen}>
+          <Grid item xs={12} className={cls.sendModal}>
+            <DialogTitle>
+              <div className={cls.sendModalContainer}>
+                <h2 className={cls.subtitle}>Enter Receiver Address</h2>
+                <TextField
+                  className={cls.formDescription}
+                  id="standard-description"
+                  placeholder="Address"
+                />
+              </div>
+            </DialogTitle>
+            <DialogActions>
+              <Button variant="outlined" onClick={handleSendModalClose}>
+                OK
+              </Button>
+            </DialogActions>
+          </Grid>
+        </Dialog>
       </Container>
     </div>
   );

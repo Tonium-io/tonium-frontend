@@ -19,7 +19,7 @@
   font-size: 12px;
   line-height: 14px;
   text-transform: uppercase;
-  color: #aeaeae;
+  color: #a9a9a9;
 }
 .forms {
   position: relative;
@@ -140,7 +140,7 @@ img {
 .userAdres {
   margin-right: 5px;
   text-decoration: underline;
-  color: #aeaeae;
+  color: #a9a9a9;
 }
 .date {
   font-size: 14px;
@@ -148,7 +148,7 @@ img {
   text-transform: uppercase;
   text-align: right;
   text-decoration: none;
-  color: #aeaeae;
+  color: #a9a9a9;
   font-weight: bold;
 }
 .itemAuction {
@@ -242,4 +242,11 @@ img {
   .wrapToken {
     text-align: center;
   }
+}
+.sendModal {
+  min-width: 320px;
+  padding: 10px;
+}
+.sendModalContainer {
+  width: 100%;
 }

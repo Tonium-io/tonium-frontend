@@ -8,7 +8,7 @@ import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 import Loader from '../../Components/Loader';
 import { ContextApp, setUserAllTokens } from '../../store/reducer';
-import Breadcrumbs from '../../Components/Breadcrumbs';
+// import Breadcrumbs from '../../Components/Breadcrumbs';
 
 import cls from './styles.module.scss';
 
@@ -91,49 +91,109 @@ const Radar = () => {
           address: '0:x12312312432534453',
           // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           marked: true,
+          addrRoot:
+            '0:fad272271d63dc0fe7bfc29e31df2e56c977cd5efa85341d98604e8d4f7a7830',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
+          addrData:
+            '0:3c5a0bbc4c9951f6c93f29e4589178545d2eee1900c121206b1bd7ca9422cacd',
+          metadata: {
+            name: 'sell TEST TOKEN #1',
+            tokenFileAddress: {
+              chunks:
+                'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+              extension: 'png',
+              mime: 'image/png',
+            },
+          },
         },
         {
           name: 'Test2',
           address: '0:x12312332425532535',
           // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           marked: true,
+          addrRoot:
+            '0:fad272271d63dc0fe7bfc29e31df2e56c977cd5efa85341d98604e8d4f7a7830',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
+          addrData:
+            '0:3c5a0bbc4c9951f6c93f29e4589178545d2eee1900c121206b1bd7ca9422cacd',
+          metadata: {
+            name: 'sell TEST TOKEN #1',
+            tokenFileAddress: {
+              chunks:
+                'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+              extension: 'png',
+              mime: 'image/png',
+            },
+          },
         },
         {
           name: 'Test3',
           address: '0:x12312332425532535',
           // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           bided: true,
+          addrRoot:
+            '0:fad272271d63dc0fe7bfc29e31df2e56c977cd5efa85341d98604e8d4f7a7830',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
+          addrData:
+            '0:3c5a0bbc4c9951f6c93f29e4589178545d2eee1900c121206b1bd7ca9422cacd',
+          metadata: {
+            name: 'sell TEST TOKEN #1',
+            tokenFileAddress: {
+              chunks:
+                'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+              extension: 'png',
+              mime: 'image/png',
+            },
+          },
         },
         {
           name: 'Test4',
           address: '0:x12312332425532535',
           // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
           my: true,
+          addrRoot:
+            '0:fad272271d63dc0fe7bfc29e31df2e56c977cd5efa85341d98604e8d4f7a7830',
+          addrOwner:
+            '0:e2dfc131f72f5a09b1bb864c906c217b0cb464dd83fb878862d887476ed11fd2',
+          addrData:
+            '0:3c5a0bbc4c9951f6c93f29e4589178545d2eee1900c121206b1bd7ca9422cacd',
+          metadata: {
+            name: 'sell TEST TOKEN #1',
+            tokenFileAddress: {
+              chunks:
+                'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+              extension: 'png',
+              mime: 'image/png',
+            },
+          },
         },
-        {
-          name: 'Test5',
-          address: '0:x12312332425532535',
-          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test6',
-          address: '0:x12312332425532535',
-          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test7',
-          address: '0:x12312332425532535',
-          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
-        {
-          name: 'Test8',
-          address: '0:x12312332425532535',
-          // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
-          my: true,
-        },
+        // {
+        //   name: 'Test5',
+        //   address: '0:x12312332425532535',
+        //   // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+        //   my: true,
+        // },
+        // {
+        //   name: 'Test6',
+        //   address: '0:x12312332425532535',
+        //   // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+        //   my: true,
+        // },
+        // {
+        //   name: 'Test7',
+        //   address: '0:x12312332425532535',
+        //   // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+        //   my: true,
+        // },
+        // {
+        //   name: 'Test8',
+        //   address: '0:x12312332425532535',
+        //   // img: 'https://pobedarf.ru/wp-content/uploads/2020/11/depositphotos_98492334_l-2015-pic4_zoom-1500x1500-71566.jpg',
+        //   my: true,
+        // },
       ];
       setUserAllTokens(dispatch, payload);
       setLoad(false);
@@ -151,9 +211,9 @@ const Radar = () => {
   return (
     <div className={cls.radar}>
       <Container className={cls.container}>
-        <Breadcrumbs>
+        {/* <Breadcrumbs>
           <NavLink to="/">Home</NavLink>
-        </Breadcrumbs>
+        </Breadcrumbs> */}
 
         <h1 className={cls.title}>Nft Radar</h1>
 
