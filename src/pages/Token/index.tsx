@@ -234,7 +234,7 @@ const Token = () => {
                       type="button"
                       onClick={() => history.push('/sellToken')}
                     >
-                      Sell
+                      Sell/Auction
                     </button>
                   </div>
 
